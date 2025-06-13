@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, '/my-random-app/build')));
+app.use(express.static(path.join(__dirname, '/my-test-app/build')));
 
 app.use((req, res) => {
     res.status(200).send('Sorry, failed to serve front-end!');
