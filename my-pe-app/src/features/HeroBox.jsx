@@ -7,7 +7,7 @@ export default function HeroBox() {
   return (
     <React.Fragment>
     <CssBaseline/>
-        <Box sx={{zIndex:"-1", bgcolor: '#cfe8fc', height: '100vh'}}/>
+        <Box sx={{ position:'absolute', top: 0, left: 0, bgcolor: '#cfe8fc', height: '100vh', width: '100vw' }}/>
     </React.Fragment>
   );
 }
