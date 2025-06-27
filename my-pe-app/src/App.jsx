@@ -3,13 +3,14 @@ import './App.css';
 import axios from 'axios';
 import HeroBox from './features/HeroBox.jsx';
 import ViteHomepage from './features/ViteHomepage.jsx';
-import Container from '@mui/material/Container';
+import NavBar from './components/NavBar.jsx';
 
 function App() {
 
 
   return (
     <>
+      <NavBar/>
       <HeroBox/>
       <ViteHomepage/>
     </>
