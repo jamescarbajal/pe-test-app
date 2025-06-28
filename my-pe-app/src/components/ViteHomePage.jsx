@@ -5,7 +5,7 @@ import '../App.css';
 import axios from 'axios';
 import HeroBox from './HeroBox.jsx';
 
-function App() {
+export default function ViteHomePage() {
   const [count, setCount] = useState(0);
   const [array, setArray] = useState([]);
 
@@ -18,6 +18,7 @@ function App() {
   useEffect(() => {
     fetchAPI();
   },[]);
+
 
   return (
     <div className="overlay">
@@ -50,5 +51,3 @@ function App() {
     </div>
   )
 }
-
-export default App
