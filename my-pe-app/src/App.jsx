@@ -3,10 +3,9 @@ import './App.css';
 import { Route, Routes } from 'react-router';
 import Layout from './pages/Layout.jsx'
 import Landing from './pages/Landing.jsx'
-import axios from 'axios';
-import HeroBox from './components/HeroBox.jsx';
-import ViteHomePage from './components/ViteHomePage.jsx';
-import NavBar from './components/NavBar.jsx';
+import Order from './pages/Order.jsx'
+import About from './pages/About.jsx'
+import PageNotFound from './pages/PageNotFound.jsx'
 
 function App() {
 
@@ -15,7 +14,10 @@ function App() {
     <>
       <Routes>
         <Route element={ <Layout/> }>
+          <Route path='*' element={ <PageNotFound/>} />
           <Route index element={ <Landing/> } />
+          <Route path="About" element={ <About/> } />
+          <Route path="Order" element={ <Order/> } />
         </Route>
       </Routes>
     </>
