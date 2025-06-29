@@ -1,14 +1,19 @@
-
+import HeroBox from '../components/HeroBox'
+import NavBar from '../components/NavBar'
 
 
 export default function Order() {
 
 
     return (
-
-        <h2>
-            ORDER PAGE
-        </h2>
-
+    <>
+        <NavBar/>
+        <HeroBox/>
+        <div className='overlay'>
+            <h2>
+                ORDER PAGE
+            </h2>
+        </div>
+    </>
     )
 }
