@@ -10,10 +10,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 export default function NavBar() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="absolute" zindex="10" sx={{ backgroundColor:'#000000' }}>
-        <Toolbar>
-          <IconButton
+    <Box sx={{ width: '100vw' }}>
+      <AppBar position="absolute" zindex="10" width="100vw" sx={{ backgroundColor:'#000000' }}>
+        <Toolbar sx={{ 
+          display: 'flex',
+          justifyContent: 'space-between'
+         }}>
+          {/* <IconButton       //Menu icon not yet needed
             size="large"
             edge="start"
             color="#000000"
@@ -29,8 +32,8 @@ export default function NavBar() {
             }}
           >
             <MenuIcon />
-          </IconButton>
-            <Typography sx={{ flexGrow:1 }}>
+          </IconButton> */}
+            <Typography>
               <Link to='/'>
                 <img src="../../public/PressedExpressionsLogo.png" style={{ marginTop: 5, maxWidth:60 }} />
               </Link>
