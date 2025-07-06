@@ -35,13 +35,15 @@ export default function NavBar() {
                 <img src="../../public/PressedExpressionsLogo.png" style={{ marginTop: 5, maxWidth:60 }} />
               </Link>
             </Typography>
-          <Button sx= {{ 
-            color:'#E49999',
+          <Button variant="outlined" sx={{
+            border: '2x solid #E49999',
             '&:hover': {
-              color: 'white'
-            }
+              borderColor:'white'
+            }          
           }}>
+              <Link to='Order'>
               Order
+              </Link>
           </Button>
         </Toolbar>
       </AppBar>
