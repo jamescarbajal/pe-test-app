@@ -17,9 +17,9 @@ const style = {
     p: 4,
 };
 
-export default function CustomModal({ open, setOpen }){
+export default function CustomModal(){
 
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 

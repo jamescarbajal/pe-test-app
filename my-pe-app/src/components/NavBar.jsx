@@ -44,7 +44,7 @@ export default function NavBar() {
               borderColor:'white'
             }          
           }}>
-              <Link to='Order'>
+              <Link to='/Order'>
               Order
               </Link>
           </Button>

@@ -10,17 +10,17 @@ export default function Order() {
 
     return (
     <>
+        <NavBar/>
+        <HeroBox/>
         <div>
-            <NavBar/>
-            <HeroBox/>
             <div style={{ position:'relative' }}>
                 <h2 style={{ marginLeft:'50%', marginTop:50, transform:'translateX(-50%)', zIndex:1000, color:'white' }}>
                     ORDER PAGE
                 </h2>
             </div>
-            <Button onClick={setOpen="true"}>
-                <CustomModal props={setOpen} />
-            </Button>
+        </div>
+        <div className='overlay'>
+            <CustomModal/>
         </div>
     </>
     )
