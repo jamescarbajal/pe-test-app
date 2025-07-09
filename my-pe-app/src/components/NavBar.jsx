@@ -35,7 +35,7 @@ export default function NavBar() {
           </IconButton> */}
             <Typography>
               <Link to='/'>
-                <img src="../../public/PressedExpressionsLogo.png" style={{ marginTop: 5, maxWidth:60 }} />
+                <img src="/PressedExpressionsLogo.png" style={{ marginTop: 5, maxWidth:60 }} />
               </Link>
             </Typography>
           <Button variant="outlined" sx={{
