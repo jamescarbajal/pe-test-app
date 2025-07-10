@@ -1,12 +1,17 @@
+import { useState } from 'react'
+import { Link } from 'react-router';
 import HeroBox from '../components/HeroBox'
 import NavBar from '../components/NavBar'
 import CircleCrop from '../components/CircleCrop'
-import CustomModal from '../components/customModal'
 import Button from '@mui/material/Button'
+import CustomModal from '../components/customModal';
 
 
 export default function Order() {
 
+    const [isOpen, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     return (
     <>

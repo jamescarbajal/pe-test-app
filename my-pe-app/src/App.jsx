@@ -5,6 +5,7 @@ import Layout from './pages/Layout.jsx'
 import Landing from './pages/Landing.jsx'
 import Order from './pages/Order.jsx'
 import About from './pages/About.jsx'
+import CustomModal from './components/CustomModal.jsx'
 import PageNotFound from './pages/PageNotFound.jsx'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route index element={ <Landing/> } />
           <Route path="About" element={ <About/> } />
           <Route path="Order" element={ <Order/> } />
+          <Route path="CustomModal" element={ <CustomModal/> } />
         </Route>
       </Routes>
     </>
