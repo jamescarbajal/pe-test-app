@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
+
 export default function NavBar() {
   return (
     <Box sx={{ width: '100vw' }}>
@@ -38,16 +39,20 @@ export default function NavBar() {
                 <img src="/PressedExpressionsLogo.png" style={{ marginTop: 5, maxWidth:60 }} />
               </Link>
             </Typography>
-          <Button variant="outlined" sx={{
-            border: '2x solid #E49999',
+          <Link to='/Order'>
+          <Button sx={{
+            color:'#E49999',
+            border:2,
+            borderColor: '#E49999',
             '&:hover': {
+              color:'white',
+              backgroundColor:'#E49999',
               borderColor:'white'
             }          
           }}>
-              <Link to='/Order'>
               Order
-              </Link>
           </Button>
+          </Link>
         </Toolbar>
       </AppBar>
     </Box>
