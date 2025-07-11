@@ -1,5 +1,6 @@
 import React from 'react'
 import Cropper from 'react-easy-crop'
+import placeHolderImage from '../assets/images/person-placeholder-image.jpg'
 
 
 export default function CircleCrop() {
@@ -19,9 +20,9 @@ export default function CircleCrop() {
   }
 
   return (
-    <div>
+    <div style={{ height:'100vh', width:'100%', borderRadius:10 }} >
         <Cropper
-          image="https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000"
+          image={placeHolderImage}
           crop={crop}
           zoom={zoom}
           aspect={1}
@@ -30,6 +31,7 @@ export default function CircleCrop() {
           onCropChange={onCropChange}
           onCropComplete={onCropComplete}
           onZoomChange={onZoomChange}
+          borderRadious={10}
         />
     </div>
   )

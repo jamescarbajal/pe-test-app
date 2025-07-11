@@ -17,13 +17,9 @@ export default function Order() {
     <>
         <HeroBox/>
         <NavBar/>
-        <div>
-            <div style={{ position:'relative' }}>
-                <h2 style={{ marginLeft:'50%', marginTop:50, transform:'translateX(-50%)', zIndex:1000, color:'white' }}>
-                    ORDER PAGE
-                </h2>
-            </div>
-        </div>
+        <h2 style={{ marginTop:50, color:'white' }}>
+            ORDER PAGE
+        </h2>
         <div className='overlay'>
             <CustomModal/>
         </div>

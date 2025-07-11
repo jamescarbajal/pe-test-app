@@ -3,24 +3,28 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import HeroBox from './HeroBox.jsx';
 import CircleCrop from './CircleCrop.jsx';
 
 
 const style = {
-    position: 'absolute',
+    position: 'relative',
+    display:'flex',
+    flexDirection:'column',
+    alignItems:'center',
+    justifyContent:'space-evenly',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '90vw',
-    height:'90vh',
-    bgcolor: 'background.paper',
+    height:700,
+    width:'99vw',
+    maxHeight:'50%',
     border: '2px solid #000',
-    boxShadow: 24,
+    borderRadius: 10,
+    boxShadow: 12,
     p: 4,
 };
 
-export default function CustomModal(props){
+export default function CustomModal(){
 
     const [isOpen, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -28,7 +32,7 @@ export default function CustomModal(props){
 
     return (
   <>
-      <div className='overlay'>
+      <div style={{ zIndex:1000 }}>
       <Button onClick={handleOpen}>
         Press Me
         <Modal
@@ -38,8 +42,13 @@ export default function CustomModal(props){
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            <HeroBox/>
-            <CircleCrop/>
+            <div style={{
+              position:'relative',
+              height:'80%',
+              width:'100%',
+            }}>
+              <CircleCrop/>
+            </div>
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Text in a modal
             </Typography>
