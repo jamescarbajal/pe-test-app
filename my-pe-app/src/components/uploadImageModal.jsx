@@ -12,12 +12,14 @@ const style = {
     flexDirection:'column',
     alignItems:'center',
     justifyContent:'space-evenly',
-    top: '50%',
+    top: '45%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     height:700,
-    width:'99vw',
-    maxHeight:'50%',
+    width:'fit-content',
+    maxWidth: '99vw',
+    height: 800,
+    maxHeight:'70%',
     border: '2px solid #000',
     borderRadius: 10,
     boxShadow: 12,
@@ -42,13 +44,13 @@ export default function CustomModal(){
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            <div style={{
+            <Box sx={{
               position:'relative',
               height:'80%',
               width:'100%',
             }}>
               <CircleCrop/>
-            </div>
+            </Box>
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Text in a modal
             </Typography>

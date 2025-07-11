@@ -20,7 +20,11 @@ export default function CircleCrop() {
   }
 
   return (
-    <div style={{ height:'100vh', width:'100%', borderRadius:10 }} >
+    <div style={{ 
+      height:'100%', 
+      width: 700,
+      maxWidth:'100%', 
+      borderRadius:10 }} >
         <Cropper
           image={placeHolderImage}
           crop={crop}
