@@ -4,7 +4,7 @@ import HeroBox from '../components/HeroBox'
 import NavBar from '../components/NavBar'
 import CircleCrop from '../components/CircleCrop'
 import Button from '@mui/material/Button'
-import CustomModal from '../components/uploadImageModal';
+import CustomModal from '../components/cropImageModal';
 
 
 export default function Order() {
