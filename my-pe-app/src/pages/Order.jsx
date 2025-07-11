@@ -15,8 +15,8 @@ export default function Order() {
 
     return (
     <>
-        <NavBar/>
         <HeroBox/>
+        <NavBar/>
         <div>
             <div style={{ position:'relative' }}>
                 <h2 style={{ marginLeft:'50%', marginTop:50, transform:'translateX(-50%)', zIndex:1000, color:'white' }}>
