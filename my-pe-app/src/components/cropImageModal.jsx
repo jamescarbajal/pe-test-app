@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CropOutlinedIcon from '@mui/icons-material/CropOutlined';
 import CancelIcon from '@mui/icons-material/Cancel';
 import Typography from '@mui/material/Typography';
 import CircleCrop from './CircleCrop.jsx';
@@ -36,8 +37,15 @@ export default function CustomModal(){
     return (
   <>
     <div>
-      <Button onClick={handleOpen}>
-        Press Me
+      <Button variant='outlined' onClick={handleOpen} 
+      sx={{ 
+        color:'black',
+        border:'2px solid black',
+        '&:hover':{
+          borderColor:'black'
+        }
+       }}>
+        <CropOutlinedIcon/>
       </Button>
         <Modal
           open={isOpen}
