@@ -20,11 +20,14 @@ export default function CircleCrop() {
   }
 
   return (
+
     <div style={{ 
-      height:'100%', 
+      position:'relative',
+      height:400,
+      maxHeight:'100%',
       width: 700,
-      maxWidth:'100%', 
-      borderRadius:10 }} >
+      maxWidth:'100%',
+      }} >
         <Cropper
           image={placeHolderImage}
           crop={crop}
@@ -35,8 +38,8 @@ export default function CircleCrop() {
           onCropChange={onCropChange}
           onCropComplete={onCropComplete}
           onZoomChange={onZoomChange}
-          borderRadious={10}
         />
     </div>
+
   )
 }

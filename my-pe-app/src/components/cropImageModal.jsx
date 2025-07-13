@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CancelIcon from '@mui/icons-material/Cancel';
 import Typography from '@mui/material/Typography';
 import CircleCrop from './CircleCrop.jsx';
 
@@ -11,7 +12,7 @@ const style = {
     display:'flex',
     flexDirection:'column',
     alignItems:'center',
-    justifyContent:'space-evenly',
+    justifyContent:'space-between',
     top: '45%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -21,9 +22,9 @@ const style = {
     height: 800,
     maxHeight:'70%',
     border: '2px solid #000',
-    borderRadius: 10,
+    borderRadius: 5,
     boxShadow: 12,
-    p: 4,
+    p:2
 };
 
 export default function CustomModal(){
@@ -34,9 +35,10 @@ export default function CustomModal(){
 
     return (
   <>
-      <div style={{ zIndex:1000 }}>
+    <div>
       <Button onClick={handleOpen}>
         Press Me
+      </Button>
         <Modal
           open={isOpen}
           onClose={handleClose}
@@ -45,10 +47,21 @@ export default function CustomModal(){
         >
           <Box sx={style}>
             <Box sx={{
-              position:'relative',
+                position:'relative',
+                top:0,
+                left:'47%',
+                aslignSelf:'right'
+              }}>
+              <Button onClick={handleClose} sx={{
+                color:'black'
+              }}>
+                <CancelIcon fontSize='large'/>
+              </Button>
+            </Box>
+            <Box sx={{
               height:'80%',
-              width:'100%',
-            }}>
+              width:'100%'
+              }}>
               <CircleCrop/>
             </Box>
             <Typography id="modal-modal-title" variant="h6" component="h2">
@@ -59,7 +72,6 @@ export default function CustomModal(){
             </Typography>
           </Box>
         </Modal>
-      </Button>
     </div>
   </>
 
