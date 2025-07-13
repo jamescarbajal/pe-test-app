@@ -8,14 +8,12 @@ export default function Layout() {
     <>
         <Box sx={{ 
             position:'absolute', 
-            top: 0, 
-            left: 0, 
+            top:0,
+            left:0,
             backgroundColor: '#E49999', 
             minHeight:'100vh',
             height: 'fit-content', 
             width: '100vw', 
-            pt:'5px',
-            pl:'3px'
             }}>
             <NavBar/>
             <Outlet/>

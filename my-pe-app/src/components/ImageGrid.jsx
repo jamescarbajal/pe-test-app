@@ -32,12 +32,28 @@ export default function ImageGrid(){
 
         <Box sx={{ 
                 position:'relative',
-                mt:'70px'
+                display:'flex',
+                flexDirection:'column',
+                justifyContent:'center',
+                alignItems:'center',
+                width:'fit-content',
+                m: 5
             }}>
             <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} sx={{ 
+                display:'flex',
+                flexDirection:'row',
+                justifyContent:'center',
+                alignContent:'center',
+                alignItems:'center',
+                width:'fit-content'
              }}>
             {Array.from(Array(9)).map((_, index) => (
-            <Grid key={index} size={{ xs: 12, sm: 4, md: 4 }}>
+            <Grid key={index} size={{ xs: 12, sm: 4, md: 4 }}
+                sx={{
+                    display:'flex',
+                    justifyContent:'center',
+                    alignItems:'center'
+                }}>
                 <Item>{index + 1}</Item>
             </Grid>
             ))}

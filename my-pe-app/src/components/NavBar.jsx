@@ -11,8 +11,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 export default function NavBar() {
   return (
-    <Box sx={{ width: '100vw' }}>
-      <AppBar position="absolute" zindex="10" width="100vw" sx={{ backgroundColor:'#000000' }}>
+    <Box sx={{ width: '100%' }}>
+      <AppBar position="relative" zindex="10" sx={{ 
+        width:'100%',
+        backgroundColor:'#000000' 
+        }}>
         <Toolbar sx={{ 
           display: 'flex',
           justifyContent: 'space-between'
