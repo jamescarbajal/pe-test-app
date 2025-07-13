@@ -28,7 +28,7 @@ const style = {
     p:2
 };
 
-export default function CustomModal(){
+export default function CropImageModal(){
 
     const [isOpen, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);

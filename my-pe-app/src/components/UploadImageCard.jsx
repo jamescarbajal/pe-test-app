@@ -7,11 +7,11 @@ import Button from '@mui/material/Button';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardActions from '@mui/material/CardActions';
 
-export default function MultiActionAreaCard() {
+export default function UploadImage() {
 
-    
+
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card variant="solid" sx={{ backgroundColor:'white', maxWidth: 345 }}>
       <CardActionArea>
         <CardMedia
           component="img"
@@ -30,7 +30,7 @@ export default function MultiActionAreaCard() {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" variant="contained" color="black">
           Share
         </Button>
       </CardActions>

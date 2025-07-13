@@ -7,8 +7,6 @@ export default function Landing() {
     return (
 
         <>
-            <NavBar/>
-            <HeroBox/>
             <ViteHomePage/>
         </>
     )
