@@ -6,9 +6,12 @@ import CropOutlinedIcon from '@mui/icons-material/CropOutlined';
 import CancelIcon from '@mui/icons-material/Cancel';
 import Typography from '@mui/material/Typography';
 import CircleCrop from './CircleCrop.jsx';
+import HeroBox from './HeroBox.jsx';
+
 
 
 const style = {
+    zIndex:1000,
     position: 'relative',
     display:'flex',
     flexDirection:'column',
@@ -17,15 +20,15 @@ const style = {
     top: '45%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    height:700,
     width:'fit-content',
-    maxWidth: '99vw',
-    height: 800,
+    maxWidth:'90%',
+    height:550,
     maxHeight:'70%',
     border: '2px solid #000',
     borderRadius: 5,
     boxShadow: 12,
-    p:2
+    p:2,
+    backgroundColor:'#E49999'
 };
 
 export default function CropImageModal(){
@@ -58,7 +61,8 @@ export default function CropImageModal(){
                 position:'relative',
                 top:0,
                 left:'47%',
-                aslignSelf:'right'
+                m:0,
+                p:0
               }}>
               <Button onClick={handleClose} sx={{
                 color:'black'
@@ -67,17 +71,28 @@ export default function CropImageModal(){
               </Button>
             </Box>
             <Box sx={{
-              height:'80%',
-              width:'100%'
+              minHeight: 400,
+              maxHeight:'80%',
+              width:'100%',
               }}>
               <CircleCrop/>
             </Box>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Text in a modal
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
+            <Box sx={{
+              display:'flex',
+              flexDirection:'column',
+              justifyContent:'center',
+              alignItems:'center',
+            }}>
+              <Typography id="modal-modal-title" variant="h6" component="h2"
+              sx={{
+                margin:0
+              }}>
+                Text in a modal
+              </Typography>
+              <Typography id="modal-modal-description">
+                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+              </Typography>
+            </Box>
           </Box>
         </Modal>
     </div>

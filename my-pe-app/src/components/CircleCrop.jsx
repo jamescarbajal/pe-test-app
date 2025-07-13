@@ -23,10 +23,12 @@ export default function CircleCrop() {
 
     <div style={{ 
       position:'relative',
-      height:400,
-      maxHeight:'100%',
+      display:'flex',
+      justifyContent:'center',
+      alignContent:'center',
+      height:'100%', 
       width: 700,
-      maxWidth:'100%',
+      maxWidth:'100%', 
       }} >
         <Cropper
           image={placeHolderImage}
@@ -38,6 +40,7 @@ export default function CircleCrop() {
           onCropChange={onCropChange}
           onCropComplete={onCropComplete}
           onZoomChange={onZoomChange}
+
         />
     </div>
 

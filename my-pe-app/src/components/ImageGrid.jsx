@@ -53,8 +53,11 @@ export default function ImageGrid(){
                     display:'flex',
                     justifyContent:'center',
                     alignItems:'center'
+                    
                 }}>
-                <Item>{index + 1}</Item>
+                <Item>
+                    <UploadImageCard/>
+                </Item>
             </Grid>
             ))}
             </Grid>

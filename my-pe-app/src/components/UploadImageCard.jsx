@@ -6,17 +6,19 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardActions from '@mui/material/CardActions';
+import CropImageModal from './cropImageModal';
+import lizardImage from '../assets/images/iguanas-on-rocks-stockcake.jpg';
 
 export default function UploadImage() {
 
 
   return (
-    <Card variant="solid" sx={{ backgroundColor:'white', maxWidth: 345 }}>
+    <Card variant="solid" sx={{ backgroundColor:'white', maxWidth: 345, maxHeight:'100%' }}>
       <CardActionArea>
         <CardMedia
           component="img"
-          height="140"
-          image="/static/images/cards/contemplative-reptile.jpg"
+          height="100px"
+          image={lizardImage}
           alt="green iguana"
         />
         <CardContent>
@@ -29,10 +31,18 @@ export default function UploadImage() {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions>
+      <CardActions 
+        sx={{
+          display:'flex',
+          flexDirection:'row',
+          alignContent:'center',
+          justifyContent:'space-evenly',
+          width:'100%',
+        }}>
         <Button size="small" variant="contained" color="black">
           Share
         </Button>
+        <CropImageModal/>
       </CardActions>
     </Card>
   );
