@@ -9,8 +9,7 @@ import Paper from '@mui/material/Paper';
 
 const Item = styled(Paper)(({ theme }) => ({
     height:275,
-    width:250,
-    maxWidth:'fit-content',
+    width:225,
     display:'flex',
     flexDirection:'column',
     justifyContent:'space-between',
@@ -41,13 +40,12 @@ export default function ImageGrid(){
             <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} sx={{ 
                 display:'flex',
                 flexDirection:'row',
-                justifyContent:'center',
                 alignContent:'center',
                 alignItems:'center',
                 width:'fit-content',
                 borderRadius:10
              }}>
-            {Array.from(Array(9)).map((_, index) => (
+            {Array.from(Array(5)).map((_, index) => (
             <Grid key={index} size={{ xs: 12, sm: 4, md: 4 }}
                 sx={{
                     display:'flex',
@@ -56,6 +54,11 @@ export default function ImageGrid(){
                     height:'fit-content',
                 }}>
                 <Item>
+                    <h4 style={{
+                        marginTop:0,
+                        marginBottom:10
+                    }}>Image {index + 1}
+                    </h4>
                     <UploadImageCard/>
                 </Item>
             </Grid>

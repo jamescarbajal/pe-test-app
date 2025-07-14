@@ -17,8 +17,7 @@ export default function UploadImageCard() {
     <Card variant="solid" sx={{ 
         position:'relative',
         backgroundColor:'white', 
-        width:250,
-        maxWidth: 345, 
+        width:225,
         display:'flex',
         flexDirection:'column',
         alignContent:'center',
@@ -28,7 +27,7 @@ export default function UploadImageCard() {
       <CardActionArea>
         <CardMedia
           component="img"
-          height="200px"
+          height="175px"
           image={lizardImage}
           alt="green iguana"
         />
@@ -38,6 +37,7 @@ export default function UploadImageCard() {
           display:'flex',
           justifyContent:'space-between',
           height:'fit-content',
+          mt:2
         }}>
         <Button size="medium" variant="outlined" 
         style={{
