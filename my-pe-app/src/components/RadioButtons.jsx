@@ -4,18 +4,27 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
-export default function RadioButtonsGroup() {
+export default function RadioButtons() {
   return (
-    <FormControl>
-      <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
+    <FormControl sx={{
+            display:'flex',
+            flexDirection:'column',
+            justifyContent:'start',
+
+        }}>
+      <FormLabel id="demo-radio-buttons-group-label"
+        sx={{
+                mb:3
+            }}>
+        Product Type
+        </FormLabel>
       <RadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
-        defaultValue="female"
         name="radio-buttons-group"
       >
-        <FormControlLabel value="female" control={<Radio />} label="Female" />
-        <FormControlLabel value="male" control={<Radio />} label="Male" />
-        <FormControlLabel value="other" control={<Radio />} label="Other" />
+        <FormControlLabel value="productKeychain" control={<Radio />} label="Kechains" />
+        <FormControlLabel value="productMagnets" control={<Radio />} label="Magnets" />
+        <FormControlLabel value="productPinbacks" control={<Radio />} label="Pinback Buttons" />
       </RadioGroup>
     </FormControl>
   );
