@@ -6,11 +6,10 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import RadioButtons from '../components/RadioButtons';
+import keychainImage from '../assets/images/keychain-example.jpg'
 
 
 export default function Order() {
-
-
 
 
     return (
@@ -25,7 +24,7 @@ export default function Order() {
             p:5
         }}>
             <Box sx={{ flexGrow:1 }}>
-
+                
             </Box>
             <Paper sx={{
                 minWidth:300,
