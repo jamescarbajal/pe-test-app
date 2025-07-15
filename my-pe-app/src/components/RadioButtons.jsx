@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -6,14 +6,18 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
 
-export default function RadioButtons() {
+export default function RadioButtons( {radioValue} ) {
     
-    const [ imageValue, setImageValue ] = useState('');
+    const [ selectedOption, setSelectedOption ] = useState('productMagnets')
 
-    function handleExampleImage(e) {
-        setImageValue(e.target.value);
+    function handleSelect(e) {
+        setSelectedOption(e.target.value)
     };
 
+    useEffect( () => {
+        radioValue(selectedOption);
+        console.log('Selected product type is ' + selectedOption);
+    }, [ selectedOption ] )
 
   return (
     <FormControl sx={{
@@ -22,19 +26,39 @@ export default function RadioButtons() {
             justifyContent:'start',
 
         }}>
-      <FormLabel id="demo-radio-buttons-group-label"
+      <FormLabel id="products-radio-options"
         sx={{
                 mb:3
             }}>
         Product Type
         </FormLabel>
       <RadioGroup
-        aria-labelledby="demo-radio-buttons-group-label"
+        aria-labelledby="products-radio-options"
         name="radio-buttons-group"
+        defaultValue="productMagnets"
+        value={selectedOption}
       >
-        <FormControlLabel value="productKeychain" control={<Radio />} label="Kechains" onChange={handleExampleImage} />
-        <FormControlLabel value="productMagnets" control={<Radio />} label="Magnets" onChange={handleExampleImage} />
-        <FormControlLabel value="productPinbacks" control={<Radio />} label="Pinback Buttons" onChange={handleExampleImage} />
+        <FormControlLabel 
+            value="productMagnets" 
+            control={<Radio />} 
+            label="Magnets" 
+            checked={selectedOption == 'productMagnets' } 
+            onChange={handleSelect} 
+        />
+        <FormControlLabel 
+            value="productKeychains" 
+            control={<Radio />} 
+            label="Keychains" 
+            checked={selectedOption == 'productKeychains' } 
+            onChange={handleSelect} 
+        />
+        <FormControlLabel 
+            value="productPinbacks" 
+            control={<Radio />} 
+            label="Pinback Buttons" 
+            checked={selectedOption == 'productPinbacks' } 
+            onChange={handleSelect} 
+        />
       </RadioGroup>
     </FormControl>
   );
