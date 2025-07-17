@@ -1,0 +1,39 @@
+import * as React from 'react';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
+export default function QuantitySelect() {
+  const [quantity, setQuantity] = React.useState('');
+
+  const handleChange = (event) => {
+    setQuantity(event.target.value);
+  };
+
+  return (
+    <div>
+      <FormControl sx={{ m: 1, minWidth:200, maxWidth:'100%' }}>
+        <InputLabel id="quantity-select-dropdown">Quantity</InputLabel>
+        <Select
+          labelId="quantity-select"
+          id="quantity-select"
+          value={quantity}
+          label="quantity"
+          onChange={handleChange}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={9}>9 Images - $25</MenuItem>
+          <MenuItem value={18}>18 Images - $50</MenuItem>
+          <MenuItem value={27}>27 Images - $70</MenuItem>
+          <MenuItem value={36}>36 Images - $90</MenuItem>
+          <MenuItem value={45}>45 Images - $110</MenuItem>
+        </Select>
+        <FormHelperText>Select image count</FormHelperText>
+      </FormControl>
+    </div>
+  );
+}

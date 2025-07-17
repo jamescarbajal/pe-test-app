@@ -6,31 +6,27 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
 
-export default function RadioButtons( {radioValue} ) {
+export default function RadioButtons( {onRadioChange} ) {
     
     const [ selectedOption, setSelectedOption ] = useState('productMagnets')
 
-    function handleSelect(e) {
-        setSelectedOption(e.target.value)
+    const handleSelect= (e) => {
+        setSelectedOption(e.target.value);
+        onRadioChange(e.target.value);
     };
-
-    useEffect( () => {
-        radioValue(selectedOption);
-        console.log('Selected product type is ' + selectedOption);
-    }, [ selectedOption ] )
 
   return (
     <FormControl sx={{
             display:'flex',
             flexDirection:'column',
             justifyContent:'start',
-
+            p:2
         }}>
       <FormLabel id="products-radio-options"
         sx={{
                 mb:3
             }}>
-        Product Type
+        Select Product Type
         </FormLabel>
       <RadioGroup
         aria-labelledby="products-radio-options"
