@@ -11,7 +11,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 export default function NavBar() {
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ 
+        width: '100vw' 
+      }}>
       <AppBar position="relative" zindex="10" sx={{ 
         width:'100%',
         backgroundColor:'#000000' 

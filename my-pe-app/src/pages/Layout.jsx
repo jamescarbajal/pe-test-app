@@ -13,7 +13,7 @@ export default function Layout() {
             backgroundColor: '#E49999', 
             minHeight:'100vh',
             height: 'fit-content', 
-            width: '100vw', 
+            maxWidth: '100vw', 
             }}>
             <NavBar/>
             <Outlet/>
