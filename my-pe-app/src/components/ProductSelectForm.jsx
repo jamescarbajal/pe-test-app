@@ -1,19 +1,35 @@
 import { useState, useEffect } from 'react';
+import Button from '@mui/material/Button';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import QuantitySelect from './QuantitySelect';
 
 
-export default function RadioButtons( {onRadioChange} ) {
+export default function ProductSelectForm( { onRadioChange } ) {
     
     const [ selectedOption, setSelectedOption ] = useState('productMagnets')
-
-    const handleSelect= (e) => {
+    const handleSelect = (e) => {
         setSelectedOption(e.target.value);
         onRadioChange(e.target.value);
     };
+
+    const [ qty, setQty ] = useState(0);
+    const handleQty = (value) => {
+      setQty(value);
+    };
+
+    const [ submitData, setSubmitData ] = useState(['']);
+    const handleSubmit = () => {
+      setSubmitData(selectedOption, qty);
+    };
+
+    useEffect( () => {
+      console.log('Submit data: ' + selectedOption + '\nQuantity: ' + qty );
+    }, [ selectedOption, qty ] );
+    
 
   return (
     <FormControl sx={{
@@ -31,7 +47,7 @@ export default function RadioButtons( {onRadioChange} ) {
       <RadioGroup
         aria-labelledby="products-radio-options"
         name="radio-buttons-group"
-        defaultValue="productMagnets"
+        required
         value={selectedOption}
       >
         <FormControlLabel 
@@ -56,6 +72,18 @@ export default function RadioButtons( {onRadioChange} ) {
             onChange={handleSelect} 
         />
       </RadioGroup>
+        <QuantitySelect qtyCallback={handleQty} />
+        <Button 
+          type="submit" 
+          onClick={handleSubmit} 
+          variant='contained' 
+          sx={{
+            m:1,
+            color:'black',
+            backgroundColor:'#E49999'
+        }}>
+            Continue
+        </Button>
     </FormControl>
   );
 }
