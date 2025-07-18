@@ -21,14 +21,15 @@ export default function ProductSelectForm( { onRadioChange } ) {
       setQty(value);
     };
 
-    const [ submitData, setSubmitData ] = useState(['']);
+    const [ submitData, setSubmitData ] = useState([]);
     const handleSubmit = () => {
-      setSubmitData(selectedOption, qty);
+      const newArray = [ selectedOption, qty ];
+      setSubmitData(newArray);
     };
 
     useEffect( () => {
-      console.log('Submit data: ' + selectedOption + '\nQuantity: ' + qty );
-    }, [ selectedOption, qty ] );
+      console.log('SUBMIT DATA\nProduct Type: '+ submitData[0] + '\nQuantity: ' + submitData[1]);
+    }, [ submitData ] );
     
 
   return (
