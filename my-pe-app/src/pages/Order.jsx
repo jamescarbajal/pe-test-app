@@ -35,7 +35,7 @@ export default function Order() {
             flexDirection:'row',
             flexWrap:'wrap',
             justifyContent:'center',
-            alignItems:'start',
+            alignItems:'start'
             }}>
             <Box 
                 sx={{ 
