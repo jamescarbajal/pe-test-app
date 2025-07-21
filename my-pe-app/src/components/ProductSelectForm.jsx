@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
+import { Link } from 'react-router';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -71,17 +72,20 @@ export default function ProductSelectForm( { onRadioChange } ) {
         />
       </RadioGroup>
         <QuantitySelect qtyCallback={handleQty} />
-        <Button 
-          type="submit" 
-          onClick={handleSubmit} 
-          variant='contained' 
-          sx={{
-            m:1,
-            color:'black',
-            backgroundColor:'#E49999'
-        }}>
-            Continue
-        </Button>
+        <Link to="/Images">
+          <Button 
+            type="submit" 
+            onClick={handleSubmit} 
+            variant='contained' 
+
+            sx={{
+              m:1,
+              color:'black',
+              backgroundColor:'#E49999'
+          }}>
+              Continue
+          </Button>
+        </Link>
     </FormControl>
   );
 }

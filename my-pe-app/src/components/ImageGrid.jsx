@@ -51,9 +51,12 @@ export default function ImageGrid(){
                     display:'flex',
                     justifyContent:'center',
                     alignItems:'center',
-                    height:'fit-content',
+                    height:'fit-content'
                 }}>
-                <Item>
+                <Item sx={{
+                    width:'fit-content',
+                    height:'fit-content'
+                }}>
                     <h4 style={{
                         marginTop:0,
                         marginBottom:10

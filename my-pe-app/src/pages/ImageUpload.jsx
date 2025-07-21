@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import UploadImageCard from "../components/UploadImageCard"
+import ImageGrid from "../components/ImageGrid"
 import Box from "@mui/material/Box"
 
 export default function ImageUpload(){
@@ -8,16 +8,16 @@ export default function ImageUpload(){
         
                 <Box sx={{
             position:'relative',
-            width:'100%',
-            maxWidth:'100vw',
+            width:'100vW%',
             height:'91vh',
             display:'flex',
             flexDirection:'row',
             flexWrap:'wrap',
             justifyContent:'center',
             alignItems:'start',
+            p:2
             }}>
-                <UploadImageCard/>
+                <ImageGrid/>
             </Box>
 
     )
