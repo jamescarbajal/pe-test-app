@@ -23,6 +23,7 @@ export default function UploadImageCard() {
         alignContent:'center',
         justifyContent:'space-between',
         height:'100%',
+        maxHeight:250
       }}>
       <CardActionArea>
         <CardMedia

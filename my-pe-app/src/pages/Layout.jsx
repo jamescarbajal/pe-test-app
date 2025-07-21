@@ -5,7 +5,9 @@ import NavBar from '../components/NavBar';
 import Box from '@mui/material/Box';
 
 
+
 export default function Layout() {
+
 
     const lightTheme = createTheme({
         palette:{

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import UploadImageCard from "../components/UploadImageCard"
+import Box from "@mui/material/Box"
 
 export default function ImageUpload(){
 
