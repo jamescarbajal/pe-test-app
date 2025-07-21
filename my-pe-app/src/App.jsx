@@ -13,7 +13,6 @@ function App() {
 
   return (
     <>
-    <ReactRouterAppProvider style={{ all:'unset' }}>
         <Routes>
           <Route element={ <Layout/> }>
             <Route path='*' element={ <PageNotFound/>} />
@@ -22,7 +21,6 @@ function App() {
             <Route path="Order" element={ <Order/> } />
           </Route>
         </Routes>
-      </ReactRouterAppProvider>
     </>
   )
 }

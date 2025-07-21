@@ -39,10 +39,7 @@ export default function ProductSelectForm( { onRadioChange } ) {
             justifyContent:'start',
             p:2
         }}>
-      <FormLabel id="products-radio-options"
-        sx={{
-                mb:3
-            }}>
+      <FormLabel id="products-radio-options">
         Select Product Type
         </FormLabel>
       <RadioGroup
@@ -56,7 +53,7 @@ export default function ProductSelectForm( { onRadioChange } ) {
             control={<Radio />} 
             label="Magnets" 
             checked={selectedOption == 'productMagnets' } 
-            onChange={handleSelect} 
+            onChange={handleSelect}
         />
         <FormControlLabel 
             value="productKeychains" 

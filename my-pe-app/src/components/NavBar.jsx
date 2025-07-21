@@ -20,7 +20,8 @@ export default function NavBar() {
         }}>
         <Toolbar sx={{ 
           display: 'flex',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          backgroundColor:'#000000'
          }}>
           {/* <IconButton       //Menu icon not yet needed
             size="large"
