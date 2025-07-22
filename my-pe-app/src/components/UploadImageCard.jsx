@@ -1,8 +1,6 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardActions from '@mui/material/CardActions';
@@ -17,7 +15,7 @@ export default function UploadImageCard() {
     <Card variant="solid" sx={{ 
         position:'relative',
         backgroundColor:'white', 
-        width:225,
+        minWidth:'fit-content',
         display:'flex',
         flexDirection:'column',
         alignContent:'center',
@@ -25,22 +23,30 @@ export default function UploadImageCard() {
         height:'100%',
         maxHeight:250
       }}>
-      <CardActionArea>
+      <CardActionArea sx={{
+        height:'fit-content',
+        width:'fit-content',
+        m:'auto'
+      }}>
         <CardMedia
           component="img"
-          height="175px"
           image={lizardImage}
           alt="green iguana"
+          sx={{
+            width:200,
+            height:200,
+            borderRadius:'50%',
+            m:0
+          }}
         />
       </CardActionArea>
       <CardActions 
         sx={{
           display:'flex',
           justifyContent:'space-between',
-          height:'fit-content',
-          mt:2
+          height:'fit-content'
         }}>
-        <Button size="medium" variant="outlined" 
+        <Button size="small" variant="outlined" 
         style={{
           color:'black',
           fontWeight:'bold',

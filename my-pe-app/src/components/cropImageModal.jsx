@@ -40,7 +40,7 @@ export default function CropImageModal(){
     return (
   <>
     <div>
-      <Button variant='outlined' onClick={handleOpen} 
+      <Button size="small" variant='outlined' onClick={handleOpen} 
       sx={{ 
         color:'black',
         border:'2px solid black',

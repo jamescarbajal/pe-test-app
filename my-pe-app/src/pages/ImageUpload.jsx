@@ -8,8 +8,9 @@ export default function ImageUpload(){
         
                 <Box sx={{
             position:'relative',
-            width:'100vW%',
-            height:'91vh',
+            width:'100vw',
+            minHeight:'91vh',
+            height:'fit-content',
             display:'flex',
             flexDirection:'row',
             flexWrap:'wrap',

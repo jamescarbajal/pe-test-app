@@ -27,7 +27,7 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function ImageGrid(){
 
         return (
-
+    <>
         <Box sx={{ 
                 position:'relative',
                 display:'flex',
@@ -35,39 +35,39 @@ export default function ImageGrid(){
                 justifyContent:'center',
                 alignItems:'center',
                 width:'fit-content',
-                m: 5
+                height:'fit-content',
             }}>
-            <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} sx={{ 
+            <Grid container spacing={{ xs: 3, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} sx={{ 
                 display:'flex',
                 flexDirection:'row',
                 alignContent:'center',
                 alignItems:'center',
                 width:'fit-content',
-                borderRadius:10
+                height:'fit-content'
              }}>
             {Array.from(Array(5)).map((_, index) => (
-            <Grid key={index} size={{ xs: 12, sm: 4, md: 4 }}
+            <Grid key={index} size={{ xs: 2, sm: 4, md: 4 }}
                 sx={{
                     display:'flex',
+                    flexDirection:'column',
                     justifyContent:'center',
                     alignItems:'center',
-                    height:'fit-content'
+                    height:'fit-content',
+                    m:0
                 }}>
-                <Item sx={{
-                    width:'fit-content',
-                    height:'fit-content'
-                }}>
+
                     <h4 style={{
                         marginTop:0,
-                        marginBottom:10
+                        marginBottom:0,
+                        color:'black'
                     }}>Image {index + 1}
                     </h4>
                     <UploadImageCard/>
-                </Item>
+
             </Grid>
             ))}
             </Grid>
         </Box>
-
+    </>
     )
 }
