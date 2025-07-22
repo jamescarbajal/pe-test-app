@@ -4,6 +4,7 @@ import placeHolderImage from '../assets/images/person-placeholder-image.jpg'
 
 
 export default function CircleCrop() {
+
   const [crop, setCrop] = React.useState({ x: 0, y: 0 })
   const [zoom, setZoom] = React.useState(1)
 

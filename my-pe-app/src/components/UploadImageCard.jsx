@@ -2,6 +2,7 @@ import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
+import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardActions from '@mui/material/CardActions';
 import CropImageModal from './cropImageModal';
@@ -46,13 +47,18 @@ export default function UploadImageCard() {
           justifyContent:'space-between',
           height:'fit-content'
         }}>
-        <Button size="small" variant="outlined" 
+        <Button 
+        component="label"
+        size="small" 
+        variant="outlined" 
         style={{
+          display:'flex',
           color:'black',
           fontWeight:'bold',
           border:'2px solid black'
         }}>
-          Upload
+          <FileUploadOutlinedIcon/>
+        <input hidden type="file" accept="image/*"/>
         </Button>
         <CropImageModal/>
       </CardActions>
