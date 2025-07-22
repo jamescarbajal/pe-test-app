@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSessionStorageState } from '@toolpad/core/useSessionStorageState';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router';
 import Radio from '@mui/material/Radio';
@@ -29,8 +30,12 @@ export default function ProductSelectForm( { onRadioChange } ) {
     };
 
     useEffect( () => {
-      console.log('SUBMIT DATA\nProduct Type: '+ submitData[0] + '\nQuantity: ' + submitData[1]);
-    }, [ submitData ] );
+      const orderOptions = {
+        Type: selectedOption,
+        Quantity: qty
+      }
+      sessionStorage.setItem('orderOptions', JSON.stringify(orderOptions));
+    });
     
 
   return (

@@ -1,30 +1,14 @@
-import { styled } from '@mui/material/styles';
-import { useState } from 'react';
 import Box from '@mui/material/Box';
 import UploadImageCard from './UploadImageCard';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-
-
-
-const Item = styled(Paper)(({ theme }) => ({
-    height:275,
-    width:225,
-    display:'flex',
-    flexDirection:'column',
-    justifyContent:'space-between',
-    backgroundColor: '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: (theme.vars ?? theme).palette.text.secondary,
-    ...theme.applyStyles('dark', {
-    backgroundColor: '#1A2027'
-  }),
-}));
 
 
 export default function ImageGrid(){
+
+    const orderData = sessionStorage.getItem('orderOptions');
+    const parsedData = JSON.parse(orderData);
+    const imageCount = parsedData.Quantity;
+
 
         return (
     <>
@@ -45,7 +29,7 @@ export default function ImageGrid(){
                 width:'fit-content',
                 height:'fit-content'
              }}>
-            {Array.from(Array(5)).map((_, index) => (
+            {Array.from(Array(imageCount)).map((_, index) => (
             <Grid key={index} size={{ xs: 2, sm: 4, md: 4 }}
                 sx={{
                     display:'flex',
