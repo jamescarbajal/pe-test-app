@@ -19,6 +19,7 @@ export default function ImageGrid(){
                 justifyContent:'center',
                 alignItems:'center',
                 width:'fit-content',
+                maxWidth:900,
                 height:'fit-content',
             }}>
             <Grid container spacing={{ xs: 3, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} sx={{ 
