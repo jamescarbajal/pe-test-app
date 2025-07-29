@@ -1,6 +1,6 @@
 import React from 'react'
 import Cropper from 'react-easy-crop'
-import placeHolderImage from '../assets/images/person-placeholder-image.jpg'
+import placeHolderImage from '../assets/images/P-Rex Logo.png'
 
 
 export default function CircleCrop() {

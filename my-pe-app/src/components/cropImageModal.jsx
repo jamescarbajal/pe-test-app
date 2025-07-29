@@ -2,11 +2,9 @@ import { useState } from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import CropOutlinedIcon from '@mui/icons-material/CropOutlined';
 import CancelIcon from '@mui/icons-material/Cancel';
 import Typography from '@mui/material/Typography';
 import CircleCrop from './CircleCrop.jsx';
-import HeroBox from './HeroBox.jsx';
 import UploadImageCard from './UploadImageCard.jsx';
 
 
