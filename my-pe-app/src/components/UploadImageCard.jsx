@@ -1,21 +1,28 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
+import { useState, useEffect } from 'react';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardActions from '@mui/material/CardActions';
 import CropImageModal from './cropImageModal';
 import lizardImage from '../assets/images/iguanas-on-rocks-stockcake.jpg';
+import placeHolderImage from '../assets/images/placeholder600x600.png';
 
 export default function UploadImageCard() {
 
+  const [ uploadedImage, setUploadedImage ] = useState('');
+  // const handleUploadedImage = () => {
+
+  // }
 
   return (
     <>
     <Card variant="solid" sx={{ 
         position:'relative',
-        backgroundColor:'white', 
+        backgroundColor:'rgb(0,0,0,0)', 
         minWidth:'fit-content',
         display:'flex',
         flexDirection:'column',
@@ -24,14 +31,10 @@ export default function UploadImageCard() {
         height:'100%',
         maxHeight:250
       }}>
-      <CardActionArea sx={{
-        height:'fit-content',
-        width:'fit-content',
-        m:'auto'
-      }}>
+
         <CardMedia
           component="img"
-          image={lizardImage}
+          image={placeHolderImage}
           alt="green iguana"
           sx={{
             width:200,
@@ -40,28 +43,7 @@ export default function UploadImageCard() {
             m:0
           }}
         />
-      </CardActionArea>
-      <CardActions 
-        sx={{
-          display:'flex',
-          justifyContent:'space-between',
-          height:'fit-content'
-        }}>
-        <Button 
-        component="label"
-        size="small" 
-        variant="outlined" 
-        style={{
-          display:'flex',
-          color:'black',
-          fontWeight:'bold',
-          border:'2px solid black'
-        }}>
-          <FileUploadOutlinedIcon/>
-        <input hidden type="file" accept="image/*"/>
-        </Button>
-        <CropImageModal/>
-      </CardActions>
+          Click to edit      
     </Card>
     </>
   );

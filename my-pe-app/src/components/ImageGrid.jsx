@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import UploadImageCard from './UploadImageCard';
 import Grid from '@mui/material/Grid';
+import CropImageModal from './cropImageModal';
 
 
 export default function ImageGrid(){
@@ -47,8 +48,7 @@ export default function ImageGrid(){
                         color:'black'
                     }}>Image {index + 1}
                     </h4>
-                    <UploadImageCard/>
-
+                    <CropImageModal/>
             </Grid>
             ))}
             </Grid>

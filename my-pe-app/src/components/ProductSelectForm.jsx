@@ -18,7 +18,7 @@ export default function ProductSelectForm( { onRadioChange } ) {
         onRadioChange(e.target.value);
     };
 
-    const [ qty, setQty ] = useState(0);
+    const [ qty, setQty ] = useState('');
     const handleQty = (value) => {
       setQty(value);
     };

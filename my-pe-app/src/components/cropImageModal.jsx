@@ -7,6 +7,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import Typography from '@mui/material/Typography';
 import CircleCrop from './CircleCrop.jsx';
 import HeroBox from './HeroBox.jsx';
+import UploadImageCard from './UploadImageCard.jsx';
 
 
 
@@ -40,15 +41,11 @@ export default function CropImageModal(){
     return (
   <>
     <div>
-      <Button size="small" variant='outlined' onClick={handleOpen} 
-      sx={{ 
-        color:'black',
-        border:'2px solid black',
-        '&:hover':{
-          borderColor:'black'
-        }
+      <Button onClick={handleOpen} 
+      sx={{
+        width:200
        }}>
-        <CropOutlinedIcon/>
+        <UploadImageCard/>
       </Button>
         <Modal
           open={isOpen}
