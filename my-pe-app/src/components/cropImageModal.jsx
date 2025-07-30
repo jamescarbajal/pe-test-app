@@ -3,9 +3,9 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CancelIcon from '@mui/icons-material/Cancel';
-import Typography from '@mui/material/Typography';
+import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import CircleCrop from './CircleCrop.jsx';
-import UploadImageCard from './UploadImageCard.jsx';
+import UploadImageCard from './ImageCard.jsx';
 
 
 
@@ -74,19 +74,16 @@ export default function CropImageModal(){
             </Box>
             <Box sx={{
               display:'flex',
-              flexDirection:'column',
+              flexDirection:'row',
               justifyContent:'center',
               alignItems:'center',
+              width:'100%'
             }}>
-              <Typography id="modal-modal-title" variant="h6" component="h2"
-              sx={{
-                margin:0
-              }}>
-                Text in a modal
-              </Typography>
-              <Typography id="modal-modal-description">
-                Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-              </Typography>
+              <Button 
+                startIcon={ <FileUploadOutlinedIcon /> }
+              >
+                <input hidden type="file" />
+              </Button>
             </Box>
           </Box>
         </Modal>

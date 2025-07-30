@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import UploadImageCard from './UploadImageCard';
+import UploadImageCard from './ImageCard';
 import Grid from '@mui/material/Grid';
 import CropImageModal from './cropImageModal';
 
