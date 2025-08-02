@@ -1,15 +1,23 @@
+import { useState, useEffect } from 'react';
 import ImageUploading from 'react-images-uploading';
 
-export default function UploadedImages() {
+export default function UserImages() {
+
+  const orderData = sessionStorage.getItem('orderOptions');
+  const parsedData = JSON.parse(orderData);
+  const imageCount = parsedData.Quantity;
 
   const [images, setImages] = useState([]);
-  const maxNumber = 69;
-
   const onChange = (imageList, addUpdateIndex) => {
     // data for submit
     console.log(imageList, addUpdateIndex);
     setImages(imageList);
   };
+
+    useEffect( () => {
+    const sessionImages = images;
+    sessionStorage.setItem('sessionImages', JSON.stringify(sessionImages));
+  });
 
   return (
     <div className="App">
@@ -17,7 +25,7 @@ export default function UploadedImages() {
         multiple
         value={images}
         onChange={onChange}
-        maxNumber={maxNumber}
+        maxNumber={imageCount}
         dataURLKey="data_url"
       >
         {({
@@ -37,17 +45,15 @@ export default function UploadedImages() {
               onClick={onImageUpload}
               {...dragProps}
             >
-              Click or Drop here
+              Upload
             </button>
             &nbsp;
-            <button onClick={onImageRemoveAll}>Remove all images</button>
+            <button onClick={() => onImageUpdate(index)}>Replace</button>
+            &nbsp;
+            <button onClick={() => onImageRemove(index)}>Delete</button>
             {imageList.map((image, index) => (
               <div key={index} className="image-item">
                 <img src={image['data_url']} alt="" width="100" />
-                <div className="image-item__btn-wrapper">
-                  <button onClick={() => onImageUpdate(index)}>Update</button>
-                  <button onClick={() => onImageRemove(index)}>Remove</button>
-                </div>
               </div>
             ))}
           </div>

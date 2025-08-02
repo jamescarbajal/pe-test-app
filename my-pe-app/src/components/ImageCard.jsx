@@ -3,11 +3,11 @@ import Card from '@mui/material/Card';
 import { useState, useEffect } from 'react';
 import CardMedia from '@mui/material/CardMedia';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import placeHolderImage from '../assets/images/placeholder600x600.png';
+import placeHolderImage from '../assets/images/P-Rex Logo.png';
 
 export default function ImageCard() {
 
-  const [ uploadedImage, setUploadedImage ] = useState('');
+  const [ uploadedImage, setUploadedImage ] = useState('placeHolderImage');
   // const handleUploadedImage = () => {
 
   // }
@@ -33,10 +33,12 @@ export default function ImageCard() {
             width:200,
             height:200,
             borderRadius:'50%',
-            m:0
+            border: '2px solid black',
+            m:0,
+            boxShadow: 5
           }}
         />
-          Click to edit      
+          <p>Click to edit</p>
     </Card>
     </>
   );

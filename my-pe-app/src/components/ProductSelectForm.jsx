@@ -11,14 +11,28 @@ import QuantitySelect from './QuantitySelect';
 
 
 export default function ProductSelectForm( { onRadioChange } ) {
-    
-    const [ selectedOption, setSelectedOption ] = useState('productMagnets')
+  
+  const sessionOrderOptions = JSON.parse(sessionStorage.getItem('orderOptions'));
+
+  const sessionOrderType = () => {
+    if (sessionOrderOptions && sessionOrderOptions.Type) {
+      return sessionOrderOptions.Type
+    }
+    else return "productMagnets";
+  }
+
+  const sessionQuantity = () => {
+    if (sessionOrderOptions && sessionOrderOptions.Quantity) {
+      return sessionOrderOptions.Quantity
+  }}
+
+    const [ selectedOption, setSelectedOption ] = useState(sessionOrderType)
     const handleSelect = (e) => {
         setSelectedOption(e.target.value);
         onRadioChange(e.target.value);
     };
 
-    const [ qty, setQty ] = useState('');
+    const [ qty, setQty ] = useState(sessionQuantity);
     const handleQty = (value) => {
       setQty(value);
     };
@@ -33,7 +47,7 @@ export default function ProductSelectForm( { onRadioChange } ) {
       const orderOptions = {
         Type: selectedOption,
         Quantity: qty
-      }
+      };
       sessionStorage.setItem('orderOptions', JSON.stringify(orderOptions));
     });
     

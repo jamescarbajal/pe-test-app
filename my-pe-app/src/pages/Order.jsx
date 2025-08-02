@@ -49,8 +49,7 @@ export default function Order() {
                     <Box sx={{
                         border:'2px solid black'
                         }}>
-                        <CircularProgress color="secondary"
-                        />
+                        <CircularProgress color="secondary"/>
                     </Box>
                 )}
                     <CardMedia

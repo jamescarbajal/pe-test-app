@@ -6,9 +6,19 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+
 export default function QuantitySelect( { qtyCallback } ) {
 
-  const [quantity, setQuantity] = useState('');
+  const sessionQuantity = () => {
+    const data = sessionStorage.getItem('orderOptions');
+    const parsedData = JSON.parse(data);
+    if (parsedData && parsedData.Quantity) {
+      return parsedData.Quantity
+    }
+    else return ''
+  }
+
+  const [quantity, setQuantity] = useState(sessionQuantity);
   const handleChange = (e) => {
     setQuantity(e.target.value);
     qtyCallback(e.target.value);
@@ -28,9 +38,6 @@ export default function QuantitySelect( { qtyCallback } ) {
           label="quantity"
           onChange={handleChange}
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
           <MenuItem value={9}>9 Images - $25</MenuItem>
           <MenuItem value={18}>18 Images - $50</MenuItem>
           <MenuItem value={27}>27 Images - $70</MenuItem>

@@ -6,6 +6,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import CircleCrop from './CircleCrop.jsx';
 import UploadImageCard from './ImageCard.jsx';
+import UserImages from './UserImages.jsx';
 
 
 
@@ -79,11 +80,7 @@ export default function CropImageModal(){
               alignItems:'center',
               width:'100%'
             }}>
-              <Button 
-                startIcon={ <FileUploadOutlinedIcon /> }
-              >
-                <input hidden type="file" />
-              </Button>
+              <UserImages/>
             </Box>
           </Box>
         </Modal>
