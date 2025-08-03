@@ -3,7 +3,7 @@ import Cropper from 'react-easy-crop'
 import placeHolderImage from '../assets/images/P-Rex Logo.png'
 
 
-export default function CircleCrop() {
+export default function CircleCrop( {imageIndex} ) {
 
   const [crop, setCrop] = React.useState({ x: 0, y: 0 })
   const [zoom, setZoom] = React.useState(1)
@@ -20,6 +20,10 @@ export default function CircleCrop() {
     setZoom(zoom)
   }
 
+  const workingImage = JSON.parse(sessionStorage.getItem('sessionImages'))[imageIndex].data_url;
+
+
+
   return (
 
     <div style={{ 
@@ -32,7 +36,7 @@ export default function CircleCrop() {
       maxWidth:'100%', 
       }} >
         <Cropper
-          image={placeHolderImage}
+          image={workingImage}
           crop={crop}
           zoom={zoom}
           aspect={1}

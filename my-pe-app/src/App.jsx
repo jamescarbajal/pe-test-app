@@ -5,7 +5,7 @@ import Landing from './pages/Landing.jsx'
 import Order from './pages/Order.jsx'
 import About from './pages/About.jsx'
 import PageNotFound from './pages/PageNotFound.jsx'
-import ImageUpload from './pages/ImageUpload.jsx'
+import ImageUpload from './pages/Images.jsx'
 
 
 function App() {

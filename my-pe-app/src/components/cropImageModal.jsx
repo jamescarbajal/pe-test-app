@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import CancelIcon from '@mui/icons-material/Cancel';
-import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import CircleCrop from './CircleCrop.jsx';
-import UploadImageCard from './ImageCard.jsx';
-import UserImages from './UserImages.jsx';
+import placeHolderImage from '../assets/images/P-Rex Logo.png';
 
 
 
@@ -31,11 +31,18 @@ const style = {
     backgroundColor:'#E49999'
 };
 
-export default function CropImageModal(){
+export default function CropImageModal( {imageIndex} ){
 
     const [isOpen, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const sessionImageList = JSON.parse(sessionStorage.getItem('sessionImages'));
+    const previewImage = (data) => {
+      const indexedImage = sessionImageList[data].data_url;
+      if (indexedImage !== null && indexedImage !== ''){
+        return indexedImage;
+    }}
 
     return (
   <>
@@ -44,7 +51,32 @@ export default function CropImageModal(){
       sx={{
         width:200
        }}>
-        <UploadImageCard/>
+            <Card variant="solid" sx={{ 
+        position:'relative',
+        backgroundColor:'rgb(0,0,0,0)', 
+        minWidth:'fit-content',
+        display:'flex',
+        flexDirection:'column',
+        alignContent:'center',
+        justifyContent:'space-between',
+        height:'100%',
+        maxHeight:250
+      }}>
+        <CardMedia
+          component="img"
+          image={previewImage(imageIndex)}
+          alt="uploaded image"
+          sx={{
+            width:200,
+            height:200,
+            borderRadius:'50%',
+            border: '2px solid black',
+            m:0,
+            boxShadow: 5
+          }}
+        />
+          <p>This is image {imageIndex +1}</p>
+    </Card>
       </Button>
         <Modal
           open={isOpen}
@@ -71,7 +103,7 @@ export default function CropImageModal(){
               maxHeight:'80%',
               width:'100%',
               }}>
-              <CircleCrop/>
+              <CircleCrop imageIndex={imageIndex}/>
             </Box>
             <Box sx={{
               display:'flex',
@@ -80,7 +112,6 @@ export default function CropImageModal(){
               alignItems:'center',
               width:'100%'
             }}>
-              <UserImages/>
             </Box>
           </Box>
         </Modal>

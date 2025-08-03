@@ -5,7 +5,10 @@ import CardMedia from '@mui/material/CardMedia';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import placeHolderImage from '../assets/images/P-Rex Logo.png';
 
-export default function ImageCard() {
+export default function ImageCard( {imageIndex} ) {
+
+  const imageArray = JSON.parse(sessionStorage.getItem('sessionImages'));
+
 
   const [ uploadedImage, setUploadedImage ] = useState('placeHolderImage');
   // const handleUploadedImage = () => {
@@ -38,7 +41,7 @@ export default function ImageCard() {
             boxShadow: 5
           }}
         />
-          <p>Click to edit</p>
+          <p>This is image {imageIndex}</p>
     </Card>
     </>
   );
