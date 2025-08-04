@@ -46,9 +46,7 @@ export default function Order() {
                     m:2,
                 }}>
                 {!loaded && (
-                    <Box sx={{
-                        border:'2px solid black'
-                        }}>
+                    <Box>
                         <CircularProgress color="secondary"/>
                     </Box>
                 )}

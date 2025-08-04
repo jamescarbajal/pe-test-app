@@ -38,8 +38,8 @@ export default function CropImageModal( {imageIndex} ){
     const handleClose = () => setOpen(false);
 
     const sessionImageList = JSON.parse(sessionStorage.getItem('sessionImages'));
-    const previewImage = (data) => {
-      const indexedImage = sessionImageList[data].data_url;
+    const previewImage = (e) => {
+      const indexedImage = sessionImageList[e].data_url;
       if (indexedImage !== null && indexedImage !== ''){
         return indexedImage;
     }}
@@ -51,7 +51,7 @@ export default function CropImageModal( {imageIndex} ){
       sx={{
         width:200
        }}>
-            <Card variant="solid" sx={{ 
+        <Card variant="solid" sx={{ 
         position:'relative',
         backgroundColor:'rgb(0,0,0,0)', 
         minWidth:'fit-content',
