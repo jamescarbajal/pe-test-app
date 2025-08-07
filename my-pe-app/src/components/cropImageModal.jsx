@@ -46,7 +46,6 @@ export default function CropImageModal( {imageIndex} ){
 
     return (
   <>
-    <div>
       <Button onClick={handleOpen} 
       sx={{
         width:200
@@ -115,7 +114,6 @@ export default function CropImageModal( {imageIndex} ){
             </Box>
           </Box>
         </Modal>
-    </div>
   </>
 
     )

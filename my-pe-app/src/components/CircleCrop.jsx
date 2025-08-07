@@ -1,31 +1,27 @@
-import React from 'react'
-import Cropper from 'react-easy-crop'
-import placeHolderImage from '../assets/images/P-Rex Logo.png'
+import { useState, useEffect } from 'react';
+import Cropper from 'react-easy-crop';
 
 
 export default function CircleCrop( {imageIndex} ) {
 
-  const [crop, setCrop] = React.useState({ x: 0, y: 0 })
-  const [zoom, setZoom] = React.useState(1)
+  const [crop, setCrop] = useState({ x: 0, y: 0 })
+  const [initialCroppedArea, setInitialCroppedArea] = useState(undefined)
+  const [zoom, setZoom] = useState(1)
 
-  const onCropChange = (crop) => {
-    setCrop(crop)
-  }
+  const pulledArray = JSON.parse(sessionStorage.getItem('sessionImages'));
+  const workingImage = pulledArray[imageIndex].data_url;
+
+  useEffect(() => {
+    const croppedArea = JSON.parse(sessionStorage.getItem('croppedArea'))
+    setInitialCroppedArea(croppedArea)
+  }, [])
 
   const onCropComplete = (croppedArea, croppedAreaPixels) => {
-    console.log(croppedAreaPixels.width / croppedAreaPixels.height)
+    console.log(croppedArea, croppedAreaPixels)
+    // sessionStorage.setItem('croppedArea', JSON.stringify(croppedArea))
   }
-
-  const onZoomChange = (zoom) => {
-    setZoom(zoom)
-  }
-
-  const workingImage = JSON.parse(sessionStorage.getItem('sessionImages'))[imageIndex].data_url;
-
-
 
   return (
-
     <div style={{ 
       position:'relative',
       display:'flex',
@@ -37,17 +33,15 @@ export default function CircleCrop( {imageIndex} ) {
       }} >
         <Cropper
           image={workingImage}
+          cropShape="round"
           crop={crop}
           zoom={zoom}
           aspect={1}
-          cropShape="round"
-          showGrid={false}
-          onCropChange={onCropChange}
+          onCropChange={setCrop}
           onCropComplete={onCropComplete}
-          onZoomChange={onZoomChange}
+          onZoomChange={setZoom}
 
         />
     </div>
-
   )
 }

@@ -19,16 +19,16 @@ export default function ImageGrid(){
                 flexDirection:'column',
                 justifyContent:'center',
                 alignItems:'center',
-                width:'fit-content',
-                maxWidth:900,
+                width:'90vw',
                 height:'fit-content',
+                backgroundColor:'black'
             }}>
             <Grid container spacing={{ xs: 3, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} sx={{ 
                 display:'flex',
                 flexDirection:'row',
-                alignContent:'center',
-                alignItems:'center',
-                width:'fit-content',
+                justifyContent: 'space-evenly',
+                alignItems:'space-evenly',
+                width:'100%',
                 height:'fit-content'
              }}>
             {Array.from(Array(imageCount)).map((_, index) => (
@@ -38,8 +38,7 @@ export default function ImageGrid(){
                     flexDirection:'column',
                     justifyContent:'center',
                     alignItems:'center',
-                    height:'fit-content',
-                    m:0
+                    height:'fit-content'
                 }}>
 
                     <h4 style={{
@@ -48,7 +47,7 @@ export default function ImageGrid(){
                         color:'black'
                     }}>Image {index + 1}
                     </h4>
-                    <CropImageModal/>
+                    <CropImageModal imageIndex={index}/>
             </Grid>
             ))}
             </Grid>

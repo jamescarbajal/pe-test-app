@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import ImageGrid from "../components/ImageGrid"
 import Box from "@mui/material/Box"
 import UserImages from "../components/UserImages"
+import CropImages from "../components/CropImages";
 
 export default function ImageUpload(){
 
