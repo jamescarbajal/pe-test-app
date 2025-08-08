@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react"
-import ImageGrid from "../components/ImageGrid"
 import Box from "@mui/material/Box"
 import UserImages from "../components/UserImages"
-import CropImages from "../components/CropImages";
 
 export default function ImageUpload(){
 
     const sessionFormData = JSON.parse(sessionStorage.getItem('orderOptions'));
     const imageCount = sessionFormData.Quantity;
+    const checkCroppedImages = sessionStorage.getItem('croppedImages');
+    const checkSessionImages = sessionStorage.getItem('sessionImages');
 
     return(
         

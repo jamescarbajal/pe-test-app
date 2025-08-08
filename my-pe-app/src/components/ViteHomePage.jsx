@@ -3,7 +3,6 @@ import reactLogo from '../assets/react.svg';
 import viteLogo from '/vite.svg';
 import '../App.css';
 import axios from 'axios';
-import HeroBox from './HeroBox.jsx';
 
 export default function ViteHomePage() {
   const [count, setCount] = useState(0);

@@ -4,21 +4,22 @@ import Cropper from 'react-easy-crop';
 
 export default function CircleCrop( {imageIndex} ) {
 
+  const orderOptions = JSON.parse(sessionStorage.getItem('orderOptions'));
+  const orderQty = orderOptions.Quantity;
+
+  useEffect( () => {
+    sessionStorage.setItem('croppedImages', []);
+  }, []);
+
   const [crop, setCrop] = useState({ x: 0, y: 0 })
-  const [initialCroppedArea, setInitialCroppedArea] = useState(undefined)
   const [zoom, setZoom] = useState(1)
 
   const pulledArray = JSON.parse(sessionStorage.getItem('sessionImages'));
-  const workingImage = pulledArray[imageIndex].data_url;
+  const workingImageURL = pulledArray[imageIndex].data_url;
 
-  useEffect(() => {
-    const croppedArea = JSON.parse(sessionStorage.getItem('croppedArea'))
-    setInitialCroppedArea(croppedArea)
-  }, [])
+  const onCropAreaChange = (croppedArea, croppedAreaPixels) => {
+    // console.log(croppedArea, croppedAreaPixels)
 
-  const onCropComplete = (croppedArea, croppedAreaPixels) => {
-    console.log(croppedArea, croppedAreaPixels)
-    // sessionStorage.setItem('croppedArea', JSON.stringify(croppedArea))
   }
 
   return (
@@ -32,13 +33,14 @@ export default function CircleCrop( {imageIndex} ) {
       maxWidth:'100%', 
       }} >
         <Cropper
-          image={workingImage}
+          image={workingImageURL}
+          showGrid={false}
           cropShape="round"
           crop={crop}
           zoom={zoom}
           aspect={1}
           onCropChange={setCrop}
-          onCropComplete={onCropComplete}
+          onCropAreaChange={onCropAreaChange}
           onZoomChange={setZoom}
 
         />

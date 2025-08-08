@@ -6,7 +6,6 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CircleCrop from './CircleCrop.jsx';
-import placeHolderImage from '../assets/images/P-Rex Logo.png';
 
 
 
@@ -34,15 +33,19 @@ const style = {
 export default function CropImageModal( {imageIndex} ){
 
     const [isOpen, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
 
-    const sessionImageList = JSON.parse(sessionStorage.getItem('sessionImages'));
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => {
+      setOpen(false);
+    }
+    
     const previewImage = (e) => {
-      const indexedImage = sessionImageList[e].data_url;
-      if (indexedImage !== null && indexedImage !== ''){
-        return indexedImage;
-    }}
+        const sessionImageList = JSON.parse(sessionStorage.getItem('sessionImages'));
+        if (sessionImageList !== null){
+        return sessionImageList[e].data_url;
+      }
+    }
+
 
     return (
   <>
@@ -112,6 +115,16 @@ export default function CropImageModal( {imageIndex} ){
               width:'100%'
             }}>
             </Box>
+              <Box sx={{
+                width: '100%',
+                maxWidth: 500,
+                height: 50,
+                display: 'flex',
+                justifyContent:'space-evenly'
+              }}>
+                <button style={{ width:100 }}>Reset</button>
+                <button style={{ width:100 }}>Crop</button>
+              </Box>
           </Box>
         </Modal>
   </>

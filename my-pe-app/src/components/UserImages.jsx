@@ -16,9 +16,7 @@ export default function UserImages() {
     const pulledArray = JSON.parse(sessionStorage.getItem('sessionImages'));
     console.log('Pulled array: ', pulledArray);
     if (pulledArray){
-    console.log('Image List: ', imageList)
     setImages(imageList);
-    console.log('Images: ', images);
     sessionStorage.setItem('sessionImages', JSON.stringify(imageList));
     } else {
       setImages(imageList)
@@ -26,9 +24,8 @@ export default function UserImages() {
     }
   };
 
-
   const sessionImageList = JSON.parse(sessionStorage.getItem('sessionImages'));
-  console.log('Session Image List: ', sessionImageList);
+  // console.log('Session Image List: ', sessionImageList);
 
   return (
     <div className="App">
