@@ -5,8 +5,8 @@ export const OrderContext = createContext();
 
 export const OrderProvider = ({children}) => {
 
-    const [ orderType, setOrderType ] = useState(null);
-    const [ orderQuantity, setOrderQuantity ] = useState(null);
+    const [ orderType, setOrderType ] = useState('productMagnets');
+    const [ orderQuantity, setOrderQuantity ] = useState('');
 
     const orderObject = {
         orderType,
@@ -17,7 +17,7 @@ export const OrderProvider = ({children}) => {
 
     return (
 
-        <OrderContext.Provider value={{ orderObject }}>
+        <OrderContext.Provider value={{ orderType, setOrderType, orderQuantity, setOrderQuantity }}>
             {children}
         </OrderContext.Provider>
 

@@ -1,29 +1,22 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { OrderContext } from '../contexts/OrderContext';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Order from '../pages/Order';
 
 
-export default function QuantitySelect( { qtyCallback } ) {
+export default function QuantitySelect() {
 
-  const sessionQuantity = () => {
-    const data = sessionStorage.getItem('orderOptions');
-    const parsedData = JSON.parse(data);
-    if (parsedData && parsedData.Quantity) {
-      return parsedData.Quantity
-    }
-    else return ''
-  }
+  const { orderQuantity, setOrderQuantity } = useContext(OrderContext);
 
-  const [quantity, setQuantity] = useState(sessionQuantity);
   const handleChange = (e) => {
-    setQuantity(e.target.value);
-    qtyCallback(e.target.value);
+    setOrderQuantity(e.target.value);
   };
 
+  console.log('Quantity Context: ', orderQuantity);
 
   return (
     <div>
@@ -34,7 +27,7 @@ export default function QuantitySelect( { qtyCallback } ) {
           fullWidth
           labelId="quantity-select"
           id="quantity-select"
-          value={quantity}
+          value={orderQuantity}
           label="quantity"
           onChange={handleChange}
         >
