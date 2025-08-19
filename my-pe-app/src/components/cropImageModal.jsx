@@ -33,16 +33,21 @@ const style = {
 export default function CropImageModal( {imageIndex} ){
 
     const [isOpen, setOpen] = useState(false);
+    const [workingImages, setWorkingImages] = useState([]);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
       setOpen(false);
     }
-    
+
     const previewImage = (e) => {
-        const sessionImageList = JSON.parse(sessionStorage.getItem('sessionImages'));
-        if (sessionImageList !== null){
-        return sessionImageList[e].data_url;
+      if (!workingImages) {
+        setWorkingImages(JSON.parse(sessionStorage.getItem('croppedImages')));
+        return workingImages[e].data_url;
+      }
+      else {
+        const sessionImages = JSON.parse(sessionStorage.getItem('sessionImages'));
+        return sessionImages[e].data_url;
       }
     }
 
@@ -105,7 +110,7 @@ export default function CropImageModal( {imageIndex} ){
               maxHeight:'80%',
               width:'100%',
               }}>
-              <CircleCrop imageIndex={imageIndex}/>
+              <CircleCrop imageIndex={imageIndex} />
             </Box>
             <Box sx={{
               display:'flex',

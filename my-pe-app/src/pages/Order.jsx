@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
-import keychainImage from '../assets/images/keychain-example.jpg';
-import pinbackImage from '../assets/images/pinback-example.jpg';
-import magnetImage from '../assets/images/magnet-example.jpg';
+import productKeychains from '../assets/images/keychain-example.jpg';
+import productPinbacks from '../assets/images/pinback-example.jpg';
+import productMagnets from '../assets/images/magnet-example.jpg';
 import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -12,11 +12,14 @@ import ProductSelectForm from '../components/productSelectForm';
 
 export default function Order() {
     
-    const [ imageSrc, setImageSource ] = useState(magnetImage);
+    const sessionOrderOptions = JSON.parse(sessionStorage.getItem('orderOptions'));
+
+    const [ imageSrc, setImageSource ] = useState(productMagnets);
+
     const handleRadioSelect = (value) => {
-        if (value == "productMagnets"){ setImageSource(magnetImage) };
-        if (value == "productKeychains"){ setImageSource(keychainImage) };
-        if (value == "productPinbacks"){ setImageSource(pinbackImage) };
+        if (value == "productMagnets"){ setImageSource(productMagnets) };
+        if (value == "productKeychains"){ setImageSource(productKeychains) };
+        if (value == "productPinbacks"){ setImageSource(productPinbacks) };
     };
 
     const [loaded, setLoaded] = useState(false);
