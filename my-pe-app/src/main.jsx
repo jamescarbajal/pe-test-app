@@ -7,7 +7,7 @@ import './index.css'
 import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+
     <OrderProvider>
       <ImagesProvider>
         <BrowserRouter>
@@ -15,5 +15,5 @@ createRoot(document.getElementById('root')).render(
         </BrowserRouter>
       </ImagesProvider>
     </OrderProvider>
-  </StrictMode>,
+
 )

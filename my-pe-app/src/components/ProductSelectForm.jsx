@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
-import { useSessionStorageState } from '@toolpad/core/useSessionStorageState';
+import { useState, useEffect, useContext } from 'react';
+import { OrderContext } from '../contexts/OrderContext';
 import Button from '@mui/material/Button';
+import { Alert, AlertTitle } from '@mui/material'
 import { Form, Link } from 'react-router';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -10,46 +11,29 @@ import FormLabel from '@mui/material/FormLabel';
 import QuantitySelect from './QuantitySelect';
 
 
-export default function ProductSelectForm( { onRadioChange } ) {
+export default function ProductSelectForm() {
   
-  const sessionOrderOptions = JSON.parse(sessionStorage.getItem('orderOptions'));
+    const { orderType, setOrderType, orderQuantity, setOrderQuantity } = useContext(OrderContext);
 
-  const sessionOrderType = () => {
-    if (sessionOrderOptions && sessionOrderOptions.Type) {
-      return sessionOrderOptions.Type
-    }
-    else return "productMagnets";
-  }
+    const [ selectedOption, setSelectedOption ] = useState(orderType)
 
-  const sessionQuantity = () => {
-    if (sessionOrderOptions && sessionOrderOptions.Quantity) {
-      return sessionOrderOptions.Quantity
-  }}
-
-    const [ selectedOption, setSelectedOption ] = useState(sessionOrderType)
-    const handleSelect = (e) => {
-        setSelectedOption(e.target.value);
-        onRadioChange(e.target.value);
+    const handleRadioSelect = (e) => {
+      const value = e.target.value;
+      setOrderType(value);
+      setSelectedOption(value);
     };
 
-    const [ qty, setQty ] = useState(sessionQuantity);
-    const handleQty = (value) => {
-      setQty(value);
+  const [ showAlert, setShowAlert ] = useState(false)
+
+    const handleSubmit = (event) => {
+      if (!orderType || !orderQuantity) {
+        event.preventDefault()
+        setShowAlert(true);
+      }
     };
 
-    const [ submitData, setSubmitData ] = useState([]);
-    const handleSubmit = () => {
-      const newArray = [ selectedOption, qty ];
-      setSubmitData(newArray);
-    };
-
-    useEffect( () => {
-      const orderOptions = {
-        Type: selectedOption,
-        Quantity: qty
-      };
-      sessionStorage.setItem('orderOptions', JSON.stringify(orderOptions));
-    });
+  useEffect( () => {
+  }, [orderType]);
     
 
   return (
@@ -73,30 +57,29 @@ export default function ProductSelectForm( { onRadioChange } ) {
             control={<Radio />} 
             label="Magnets" 
             checked={selectedOption == 'productMagnets' } 
-            onChange={handleSelect}
+            onChange={handleRadioSelect}
         />
         <FormControlLabel 
             value="productKeychains" 
             control={<Radio />} 
             label="Keychains" 
             checked={selectedOption == 'productKeychains' } 
-            onChange={handleSelect} 
+            onChange={handleRadioSelect} 
         />
         <FormControlLabel 
             value="productPinbacks" 
             control={<Radio />} 
             label="Pinback Buttons" 
             checked={selectedOption == 'productPinbacks' } 
-            onChange={handleSelect} 
+            onChange={handleRadioSelect} 
         />
       </RadioGroup>
-        <QuantitySelect qtyCallback={handleQty} />
+        <QuantitySelect />
         <Link to="/Images">
           <Button 
             type="submit" 
             onClick={handleSubmit} 
             variant='contained' 
-
             sx={{
               m:1,
               color:'black',
@@ -105,6 +88,14 @@ export default function ProductSelectForm( { onRadioChange } ) {
               Continue
           </Button>
         </Link>
+        {showAlert && (
+          <Alert
+            severity='warning'
+            onClose={() => setShowAlert(false)}
+          >
+            <AlertTitle>Please select both item and quantity.</AlertTitle>
+          </Alert>
+        )}
     </FormControl>
   );
 }

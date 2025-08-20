@@ -16,8 +16,6 @@ export default function QuantitySelect() {
     setOrderQuantity(e.target.value);
   };
 
-  console.log('Quantity Context: ', orderQuantity);
-
   return (
     <div>
       <FormControl sx={{ m: 1, minWidth:200, maxWidth:'100%' }}>

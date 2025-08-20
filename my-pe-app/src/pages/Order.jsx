@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { OrderContext } from '../contexts/OrderContext';
 import Paper from '@mui/material/Paper';
 import productKeychains from '../assets/images/keychain-example.jpg';
 import productPinbacks from '../assets/images/pinback-example.jpg';
@@ -12,20 +13,22 @@ import ProductSelectForm from '../components/productSelectForm';
 
 export default function Order() {
     
-    const sessionOrderOptions = JSON.parse(sessionStorage.getItem('orderOptions'));
+    const orderDetails = useContext(OrderContext);
+    const { orderType, setOrderType } = useContext(OrderContext);
 
-    const [ imageSrc, setImageSource ] = useState(productMagnets);
-
-    const handleRadioSelect = (value) => {
-        if (value == "productMagnets"){ setImageSource(productMagnets) };
-        if (value == "productKeychains"){ setImageSource(productKeychains) };
-        if (value == "productPinbacks"){ setImageSource(productPinbacks) };
-    };
+    const checkImageSource = (e) => {
+        if (e == 'productKeychains') return productKeychains;
+        if (e == 'productPinbacks') return productPinbacks;
+        if (e == 'productMagnets') return productMagnets;
+        else return productMagnets;
+    }
 
     const [loaded, setLoaded] = useState(false);
     const handleImageLoad = () => {
         setLoaded(true);
     };
+
+    console.table(orderDetails);
 
     return (
     <>
@@ -55,7 +58,7 @@ export default function Order() {
                 )}
                     <CardMedia
                         component="img"
-                        image={imageSrc}
+                        image={checkImageSource(orderType)}
                         onLoad={handleImageLoad}
                         sx={{ 
                             borderRadius:2,
@@ -73,7 +76,7 @@ export default function Order() {
                         height:'100%',
                         m:2
                     }}>
-                        <ProductSelectForm onRadioChange={handleRadioSelect}/>
+                        <ProductSelectForm/>
                     </Paper>
                 </Box>
         </Box>

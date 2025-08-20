@@ -8,13 +8,6 @@ export const OrderProvider = ({children}) => {
     const [ orderType, setOrderType ] = useState('productMagnets');
     const [ orderQuantity, setOrderQuantity ] = useState('');
 
-    const orderObject = {
-        orderType,
-        setOrderType,
-        orderQuantity,
-        setOrderQuantity
-    };
-
     return (
 
         <OrderContext.Provider value={{ orderType, setOrderType, orderQuantity, setOrderQuantity }}>
