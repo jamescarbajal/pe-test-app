@@ -93,7 +93,7 @@ export default function ProductSelectForm() {
             severity='warning'
             onClose={() => setShowAlert(false)}
           >
-            <AlertTitle>Please select both item and quantity.</AlertTitle>
+            Please select both Type and Quantity.
           </Alert>
         )}
     </FormControl>
