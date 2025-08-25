@@ -13,6 +13,8 @@ export default function UserImages() {
 
   const [images, setImages] = useState(JSON.parse(sessionStorage.getItem('sessionImages')));
 
+  console.log('Images: ', images);
+
   const onChange = (imageList, addUpdateIndex) => {
     const pulledArray = JSON.parse(sessionStorage.getItem('sessionImages'));
     console.log('Pulled array: ', pulledArray);
@@ -26,6 +28,12 @@ export default function UserImages() {
   };
 
   const sessionImageList = JSON.parse(sessionStorage.getItem('sessionImages'));
+
+  const imagesRemaining = (data) => {
+    if (data) { 
+      return (imageCount - data.length);
+    } else return imageCount;
+  }
 
   return (
     <div className="App">
@@ -54,6 +62,8 @@ export default function UserImages() {
             alignItems: 'center',
             width:'90vw'
           }}>
+            <p>{imagesRemaining(images)} images remaining.</p>
+            <br/>
             <Box sx={{
               display: 'flex',
               flexDirection: 'row',
