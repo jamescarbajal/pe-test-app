@@ -102,9 +102,24 @@ export default function UserImages() {
                     </h4>
                     
                     <CropImageModal imageIndex={index}/>
-                    <Box>
-                      <button onClick={() => onImageRemove(index)} style={{ width:100 }}>Delete</button>
-                      <button onClick={() => onImageUpdate(index)} style={{ width:100 }}>Replace</button>
+                    <Box sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                      width: 175,
+                      minWidth: 'fit-content'
+                    }}>
+                      <button
+                        onClick={() => onImageRemove(index)} 
+                        style={{ 
+                          width:75,
+                          padding: 5
+                      }}>Delete</button>
+                      <button onClick={() => onImageUpdate(index)} 
+                        style={{ 
+                          width:75, 
+                          padding: 5
+                      }}>Replace</button>
                     </Box>
                 </Grid>
                 ))

@@ -82,7 +82,11 @@ export default function CropImageModal( {imageIndex} ){
             boxShadow: 5
           }}
         />
-          <p>This is image {imageIndex +1}</p>
+          <p
+          style={{
+            padding:0,
+            marginTop: 5
+          }}>Click to crop</p>
     </Card>
       </Button>
         <Modal
