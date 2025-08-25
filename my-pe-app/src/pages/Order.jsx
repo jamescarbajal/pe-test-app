@@ -12,6 +12,12 @@ import ProductSelectForm from '../components/productSelectForm';
 
 export default function Order() {
 
+    const createObject = {
+        Type: 'productMagnets',
+        Quantity: '',
+      };
+      sessionStorage.setItem('orderDetails', JSON.stringify(createObject));
+
     const sessionOrderDetails = JSON.parse(sessionStorage.getItem('orderDetails'));
 
     const [ exampleImage, setExampleImage ] = useState(productMagnets)
