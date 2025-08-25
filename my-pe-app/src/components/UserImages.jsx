@@ -4,10 +4,11 @@ import Grid from '@mui/material/Grid';
 import CropImageModal from './cropImageModal';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
+import { Button } from '@mui/material';
 
 export default function UserImages() {
 
-  const orderData = JSON.parse(sessionStorage.getItem('orderOptions'));
+  const orderData = JSON.parse(sessionStorage.getItem('orderDetails'));
   const imageCount = orderData.Quantity;
 
   const [images, setImages] = useState(JSON.parse(sessionStorage.getItem('sessionImages')));
@@ -16,8 +17,8 @@ export default function UserImages() {
     const pulledArray = JSON.parse(sessionStorage.getItem('sessionImages'));
     console.log('Pulled array: ', pulledArray);
     if (pulledArray){
-    setImages(imageList);
-    sessionStorage.setItem('sessionImages', JSON.stringify(imageList));
+      setImages(imageList);
+      sessionStorage.setItem('sessionImages', JSON.stringify(imageList));
     } else {
       setImages(imageList)
       sessionStorage.setItem('sessionImages', JSON.stringify(imageList));
@@ -25,7 +26,6 @@ export default function UserImages() {
   };
 
   const sessionImageList = JSON.parse(sessionStorage.getItem('sessionImages'));
-  // console.log('Session Image List: ', sessionImageList);
 
   return (
     <div className="App">
@@ -54,13 +54,24 @@ export default function UserImages() {
             alignItems: 'center',
             width:'90vw'
           }}>
-            <button
-              style={isDragging ? { color: 'red' } : undefined}
-              onClick={onImageUpload}
-              {...dragProps}
-            >
-              Upload
-            </button>
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              width: 300,
+              minWidth: 'fit-content'
+            }}>
+              <button
+                style={ (isDragging ? { color: 'red' } : undefined) }
+                onClick={onImageUpload}
+                {...dragProps}
+              >
+                Upload
+              </button>
+              <button onClick={onImageRemoveAll}>
+                Clear All
+              </button>
+            </Box>
             <Grid container spacing={{ xs: 3, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} sx={{ 
                 position:'relative',
                 display:'flex',
@@ -89,13 +100,20 @@ export default function UserImages() {
                         color:'black'
                     }}>Image {index + 1}
                     </h4>
+                    
                     <CropImageModal imageIndex={index}/>
+                    <Box>
+                      <button onClick={() => onImageRemove(index)} style={{ width:100 }}>Delete</button>
+                      <button onClick={() => onImageUpdate(index)} style={{ width:100 }}>Replace</button>
+                    </Box>
                 </Grid>
                 ))
               )
               :
               (
+              <>                
                 <div>Upload to preview.</div>
+              </>
               ) 
             }
             </Grid>

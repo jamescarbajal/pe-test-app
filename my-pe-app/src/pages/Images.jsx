@@ -1,13 +1,23 @@
-import { useState, useEffect } from "react"
-import Box from "@mui/material/Box"
-import UserImages from "../components/UserImages"
+import { useState, useEffect, useContext } from "react"
+import { ImagesContext } from "../contexts/ImagesContext";
+import Box from "@mui/material/Box";
+import UserImages from "../components/UserImages";
 
 export default function ImageUpload(){
 
-    const sessionFormData = JSON.parse(sessionStorage.getItem('orderOptions'));
-    const imageCount = sessionFormData.Quantity;
-    const checkCroppedImages = sessionStorage.getItem('croppedImages');
+    const { originalImages, setOriginalImages, croppedImages, setCroppedImages } = useContext(ImagesContext);
+
+    const sessionFormData = JSON.parse(sessionStorage.getItem('orderDetails'));
     const checkSessionImages = sessionStorage.getItem('sessionImages');
+
+    const imagesRemaining = (data) => {
+        if (checkSessionImages) { 
+            return (data - JSON.parse(checkSessionImages).length);
+        } else return sessionFormData.Quantity;
+    }
+
+    useEffect( () => {
+    }, [sessionFormData]);
 
     return(
         
@@ -23,7 +33,7 @@ export default function ImageUpload(){
             alignItems:'center',
             p:2
             }}>
-            <p>Please select {imageCount} images.</p>
+            <p>Please select {imagesRemaining(sessionFormData.Quantity)} more images.</p>
             <br/>
             <UserImages />
         </Box>

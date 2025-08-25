@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react';
-import { OrderContext } from '../contexts/OrderContext';
 import Button from '@mui/material/Button';
 import { Alert, AlertTitle } from '@mui/material'
 import { Form, Link } from 'react-router';
@@ -12,28 +11,32 @@ import QuantitySelect from './QuantitySelect';
 
 
 export default function ProductSelectForm() {
-  
-    const { orderType, setOrderType, orderQuantity, setOrderQuantity } = useContext(OrderContext);
 
-    const [ selectedOption, setSelectedOption ] = useState(orderType)
+    const [ selectedOption, setSelectedOption ] = useState('productMagnets');
 
     const handleRadioSelect = (e) => {
       const value = e.target.value;
-      setOrderType(value);
+      const sessionOrderDetails = JSON.parse(sessionStorage.getItem('orderDetails'));
+      const updatedArray = { ...sessionOrderDetails, Type: value };
+      sessionStorage.setItem('orderDetails', JSON.stringify(updatedArray));
+      console.log('orderDetails in Product Select: ', updatedArray);
       setSelectedOption(value);
     };
 
-  const [ showAlert, setShowAlert ] = useState(false)
+    const [ showAlert, setShowAlert ] = useState(false)
 
     const handleSubmit = (event) => {
+      const sessionOrderDetails = JSON.parse(sessionStorage.getItem('orderDetails'));
+      const orderType = sessionOrderDetails.Type;
+      const orderQuantity = sessionOrderDetails.Quantity;
       if (!orderType || !orderQuantity) {
         event.preventDefault()
         setShowAlert(true);
       }
     };
 
-  useEffect( () => {
-  }, [orderType]);
+    useEffect( () => {
+    }, [handleRadioSelect]);
     
 
   return (

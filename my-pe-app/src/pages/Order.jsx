@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react';
-import { OrderContext } from '../contexts/OrderContext';
 import Paper from '@mui/material/Paper';
 import productKeychains from '../assets/images/keychain-example.jpg';
 import productPinbacks from '../assets/images/pinback-example.jpg';
@@ -12,23 +11,18 @@ import ProductSelectForm from '../components/productSelectForm';
 
 
 export default function Order() {
-    
-    const orderDetails = useContext(OrderContext);
-    const { orderType, setOrderType } = useContext(OrderContext);
 
-    const checkImageSource = (e) => {
-        if (e == 'productKeychains') return productKeychains;
-        if (e == 'productPinbacks') return productPinbacks;
-        if (e == 'productMagnets') return productMagnets;
-        else return productMagnets;
-    }
+    const sessionOrderDetails = JSON.parse(sessionStorage.getItem('orderDetails'));
+
+    const [ exampleImage, setExampleImage ] = useState(productMagnets)
 
     const [loaded, setLoaded] = useState(false);
     const handleImageLoad = () => {
         setLoaded(true);
     };
 
-    console.table(orderDetails);
+    useEffect( () => {
+    }, [sessionOrderDetails]);
 
     return (
     <>
@@ -58,7 +52,7 @@ export default function Order() {
                 )}
                     <CardMedia
                         component="img"
-                        image={checkImageSource(orderType)}
+                        image={exampleImage}
                         onLoad={handleImageLoad}
                         sx={{ 
                             borderRadius:2,
@@ -76,7 +70,7 @@ export default function Order() {
                         height:'100%',
                         m:2
                     }}>
-                        <ProductSelectForm/>
+                        <ProductSelectForm />
                     </Paper>
                 </Box>
         </Box>

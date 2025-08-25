@@ -4,7 +4,7 @@ import Cropper from 'react-easy-crop';
 
 export default function CircleCrop( {imageIndex} ) {
 
-  const orderOptions = JSON.parse(sessionStorage.getItem('orderOptions'));
+  const orderOptions = JSON.parse(sessionStorage.getItem('orderDetails'));
   const orderQty = orderOptions.Quantity;
 
   const [crop, setCrop] = useState({ x: 0, y: 0 })

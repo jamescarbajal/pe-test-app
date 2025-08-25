@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react';
-import { OrderContext } from '../contexts/OrderContext';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -10,10 +9,15 @@ import Order from '../pages/Order';
 
 export default function QuantitySelect() {
 
-  const { orderQuantity, setOrderQuantity } = useContext(OrderContext);
+  const sessionOrderDetails = JSON.parse(sessionStorage.getItem('orderDetails'));
+
+  const [ value, setValue ] = useState('');
 
   const handleChange = (e) => {
-    setOrderQuantity(e.target.value);
+    const newQty = e.target.value;
+    const newArray = { ...sessionOrderDetails, Quantity: newQty };
+    sessionStorage.setItem('orderDetails', JSON.stringify(newArray));
+    setValue(newQty);
   };
 
   return (
@@ -25,7 +29,7 @@ export default function QuantitySelect() {
           fullWidth
           labelId="quantity-select"
           id="quantity-select"
-          value={orderQuantity}
+          value={value}
           label="quantity"
           onChange={handleChange}
         >
