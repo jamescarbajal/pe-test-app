@@ -3,7 +3,7 @@ import Cropper from 'react-easy-crop';
 import getCroppedImg from './ImageOutput';
 
 
-export default function CircleCrop( {imageIndex, getCroppedArea} ) {
+export default function CircleCrop( {imageIndex, getCroppedArea, resetCrop} ) {
 
   const orderOptions = JSON.parse(sessionStorage.getItem('orderDetails'));
   const orderQty = orderOptions.Quantity;
@@ -19,6 +19,9 @@ export default function CircleCrop( {imageIndex, getCroppedArea} ) {
     setCroppedAreaPixels(croppedAreaPixels);
     getCroppedArea(croppedAreaPixels);
   }
+
+  useEffect( () => {
+  }, [pulledArray]);
 
   return (
     <div style={{ 

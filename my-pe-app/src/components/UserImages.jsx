@@ -1,9 +1,11 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import ImageUploading from 'react-images-uploading';
 import Grid from '@mui/material/Grid';
 import CropImageModal from './cropImageModal';
 import Box from '@mui/material/Box';
 import { ImagesContext } from '../contexts/ImagesContext';
+import { Button } from '@mui/material';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
 export default function UserImages() {
 
@@ -13,20 +15,23 @@ export default function UserImages() {
   const [images, setImages] = useState(JSON.parse(sessionStorage.getItem('workingImages')));
   const { editedImages, setEditedImages } = useContext(ImagesContext);
 
+  const previewImages = JSON.parse(sessionStorage.getItem('workingImages'))
+
   const onChange = (imageList, addUpdateIndex) => {
-      setImages(imageList);
-      setEditedImages(imageList);
       sessionStorage.setItem('sessionImages', JSON.stringify(imageList));
       sessionStorage.setItem('workingImages', JSON.stringify(imageList));
+      setImages(imageList);
+      setEditedImages(imageList);
   };
-
-  const previewImageList = JSON.parse(sessionStorage.getItem('workingImages'));
 
   const imagesRemaining = (data) => {
     if (data) { 
       return (imageCount - data.length);
     } else return imageCount;
   }
+
+  useEffect( () => {
+  }, [images]);
 
   return (
     <div className="App">
@@ -84,9 +89,9 @@ export default function UserImages() {
                 height:'fit-content',
                 pt: 2
              }}>
-            { previewImageList ? 
+            { previewImages ? 
               (
-                previewImageList.map((image, index) => (
+                previewImages.map((image, index) => (
                 <Grid key={index} size={{ xs: 2, sm: 4, md: 6 }}
                   sx={{
                       position:'relative',
@@ -97,13 +102,27 @@ export default function UserImages() {
                       height:'fit-content',
                       maxWidth:200
                   }}>
+                    <Box sx={{
+                      display: 'relative',
+                      width: 'fit-content'
+                    }}>
+                      <Button onClick={() => onImageRemove(index)} 
+                        style={{
+                          display: 'abolute',
+                          top: 35,
+                          left: 80,
+                          color: 'red'
+                        }}>
+                          <RemoveCircleOutlineIcon sx={{ fontSize: 30 }} />
+                        </Button>
+                    </Box>
                     <h4 style={{
-                        marginTop:0,
-                        marginBottom:0,
-                        color:'black'
-                    }}>Image {index + 1}
+                          marginTop:0,
+                          marginBottom:0,
+                          color:'black'
+                    }}>
+                        Image {index + 1}
                     </h4>
-                    
                     <CropImageModal imageIndex={index}/>
                     <Box sx={{
                       display: 'flex',
@@ -113,11 +132,11 @@ export default function UserImages() {
                       minWidth: 'fit-content'
                     }}>
                       <button
-                        onClick={() => onImageRemove(index)} 
+                         
                         style={{ 
                           width:75,
                           padding: 5
-                      }}>Delete</button>
+                      }}>Duplicate</button>
                       <button onClick={() => onImageUpdate(index)} 
                         style={{ 
                           width:75, 

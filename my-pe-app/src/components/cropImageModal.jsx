@@ -35,8 +35,6 @@ const style = {
 export default function CropImageModal( {imageIndex} ){
 
     const [isOpen, setOpen] = useState(false);
-    const [workingImages, setWorkingImages] = useState([]);
-    const [croppedImage, setCroppedImage] = useState(null);
     const [recievedAreaData, setReceivedAreaData] = useState(null);
 
     const handleOpen = () => setOpen(true);
@@ -47,16 +45,18 @@ export default function CropImageModal( {imageIndex} ){
         return workingImages[e].data_url;
     }
 
-    const resetImage = (imageIndex) => {
+    const resetImage = () => {
       const originalImages = JSON.parse(sessionStorage.getItem('sessionImages'));
       console.log('originalImageIndex: ', originalImages[imageIndex]);
-      const workingImageList = JSON.parse(sessionStorage.getItem('workingImages'));
-      const newArray = workingImageList.map((item, index) => {
+      const oldImageList = JSON.parse(sessionStorage.getItem('workingImages'));
+      const newImageList = oldImageList.map((item, index) => {
         if (index === imageIndex) {
+          console.log('Replacing image ', item);
           return originalImages[imageIndex];
         } else return item;
       })
-      sessionStorage.setItem('workingImages', JSON.stringify(newArray));
+      sessionStorage.setItem('workingImages', JSON.stringify(newImageList));
+      setOpen(false);
     };
 
     const getCroppedArea = (data) => {
@@ -72,7 +72,6 @@ export default function CropImageModal( {imageIndex} ){
           currentImage,
           recievedAreaData
         )
-        setCroppedImage(croppedImage);
         console.log('cropComplete', { croppedImage })
         const workingImages = JSON.parse(sessionStorage.getItem('workingImages'));
         const updateWorkingImages = workingImages.map((item, index) => {
@@ -84,6 +83,7 @@ export default function CropImageModal( {imageIndex} ){
       } catch (e) {
       console.error(e)
       }
+      setOpen(false);
     }
 
 
@@ -117,11 +117,6 @@ export default function CropImageModal( {imageIndex} ){
             boxShadow: 5
           }}
         />
-          <p
-          style={{
-            padding:0,
-            marginTop: 5
-          }}>Click to crop</p>
     </Card>
       </Button>
         <Modal
