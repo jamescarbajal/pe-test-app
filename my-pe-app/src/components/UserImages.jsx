@@ -1,33 +1,26 @@
-import { useState, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import ImageUploading from 'react-images-uploading';
 import Grid from '@mui/material/Grid';
 import CropImageModal from './cropImageModal';
-import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
-import { Button } from '@mui/material';
+import { ImagesContext } from '../contexts/ImagesContext';
 
 export default function UserImages() {
 
   const orderData = JSON.parse(sessionStorage.getItem('orderDetails'));
   const imageCount = orderData.Quantity;
 
-  const [images, setImages] = useState(JSON.parse(sessionStorage.getItem('sessionImages')));
-
-  console.log('Images: ', images);
+  const [images, setImages] = useState(JSON.parse(sessionStorage.getItem('workingImages')));
+  const { editedImages, setEditedImages } = useContext(ImagesContext);
 
   const onChange = (imageList, addUpdateIndex) => {
-    const pulledArray = JSON.parse(sessionStorage.getItem('sessionImages'));
-    console.log('Pulled array: ', pulledArray);
-    if (pulledArray){
       setImages(imageList);
+      setEditedImages(imageList);
       sessionStorage.setItem('sessionImages', JSON.stringify(imageList));
-    } else {
-      setImages(imageList)
-      sessionStorage.setItem('sessionImages', JSON.stringify(imageList));
-    }
+      sessionStorage.setItem('workingImages', JSON.stringify(imageList));
   };
 
-  const sessionImageList = JSON.parse(sessionStorage.getItem('sessionImages'));
+  const previewImageList = JSON.parse(sessionStorage.getItem('workingImages'));
 
   const imagesRemaining = (data) => {
     if (data) { 
@@ -62,7 +55,7 @@ export default function UserImages() {
             alignItems: 'center',
             width:'90vw'
           }}>
-            <p>{imagesRemaining(images)} images remaining.</p>
+            <p>{imagesRemaining(images)} images remaining</p>
             <br/>
             <Box sx={{
               display: 'flex',
@@ -91,9 +84,9 @@ export default function UserImages() {
                 height:'fit-content',
                 pt: 2
              }}>
-            { sessionImageList ? 
+            { previewImageList ? 
               (
-                sessionImageList.map((image, index) => (
+                previewImageList.map((image, index) => (
                 <Grid key={index} size={{ xs: 2, sm: 4, md: 6 }}
                   sx={{
                       position:'relative',

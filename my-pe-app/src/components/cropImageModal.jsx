@@ -6,6 +6,8 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CircleCrop from './CircleCrop.jsx';
+import getCroppedImg from './ImageOutput.jsx';
+import { ImagesContext } from '../contexts/ImagesContext.jsx';
 
 
 
@@ -34,20 +36,46 @@ export default function CropImageModal( {imageIndex} ){
 
     const [isOpen, setOpen] = useState(false);
     const [workingImages, setWorkingImages] = useState([]);
+    const [croppedImage, setCroppedImage] = useState(null);
+    const [recievedAreaData, setReceivedAreaData] = useState(null);
 
     const handleOpen = () => setOpen(true);
-    const handleClose = () => {
-      setOpen(false);
-    }
+    const handleClose = () => setOpen(false);
 
     const previewImage = (e) => {
-      if (!workingImages) {
-        setWorkingImages(JSON.parse(sessionStorage.getItem('croppedImages')));
+        const workingImages = JSON.parse(sessionStorage.getItem('workingImages'));
         return workingImages[e].data_url;
-      }
-      else {
-        const sessionImages = JSON.parse(sessionStorage.getItem('sessionImages'));
-        return sessionImages[e].data_url;
+    }
+
+    const resetImage = (imageIndex) => {
+      const originalImage = JSON.parse(sessionStorage.getItem('sessionImages'));
+      const workingImageList = JSON.parse(sessionStorage.getItem('workingImages'));
+      const newArray = workingImageList.map((item, index) => {
+        if (index === imageIndex) {
+          return originalImage;
+        } else return item;
+      })
+      sessionStorage.setItem('workingImages', JSON.stringify(newArray));
+    };
+
+    const getCroppedArea = (data) => {
+      console.log('getCroppedArea data: ', data);
+      setReceivedAreaData(data);
+    }
+
+    const cropComplete = (data) => {
+      const sessionImages = JSON.parse(sessionStorage.getItem('sessionImages'));
+      const currentImage = sessionImages[imageIndex].data_url;
+      console.log('receivedAreaData passed: ', data);
+      try {
+        const croppedImage = getCroppedImg(
+          currentImage,
+          data
+        )
+        console.log('cropComplete', { croppedImage })
+        setCroppedImage(croppedImage)
+      } catch (e) {
+      console.error(e)
       }
     }
 
@@ -114,7 +142,7 @@ export default function CropImageModal( {imageIndex} ){
               maxHeight:'80%',
               width:'100%',
               }}>
-              <CircleCrop imageIndex={imageIndex} />
+              <CircleCrop imageIndex={imageIndex} getCroppedArea={getCroppedArea} />
             </Box>
             <Box sx={{
               display:'flex',
@@ -131,8 +159,18 @@ export default function CropImageModal( {imageIndex} ){
                 display: 'flex',
                 justifyContent:'space-evenly'
               }}>
-                <button style={{ width:100 }}>Reset</button>
-                <button style={{ width:100 }}>Crop</button>
+                <button 
+                style={{ width:100 }}
+                onClick={resetImage}
+                >
+                  Reset
+                  </button>
+                <button 
+                  style={{ width:100 }}
+                  // onClick={cropComplete(recievedAreaData)}
+                >
+                  Crop
+                  </button>
               </Box>
           </Box>
         </Modal>

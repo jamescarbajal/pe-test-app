@@ -4,17 +4,11 @@ export const ImagesContext = createContext([]);
 export const ImagesProvider = ({ children }) => {
   
   const [originalImages, setOriginalImages] = useState([]);
-  const [croppedImages, setCroppedImages] = useState([]);
+  const [editedImages, setEditedImages] = useState([]);
 
-  const imagesObject = {
-    originalImages,
-    setOriginalImages,
-    croppedImages,
-    setCroppedImages
-  }
 
   return (
-    <ImagesContext.Provider value={{ imagesObject }}>
+    <ImagesContext.Provider value={{ editedImages, setEditedImages }}>
       {children}
     </ImagesContext.Provider>
   );

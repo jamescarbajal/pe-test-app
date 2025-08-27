@@ -1,21 +1,23 @@
 import { useState, useEffect } from 'react';
 import Cropper from 'react-easy-crop';
+import getCroppedImg from './ImageOutput';
 
 
-export default function CircleCrop( {imageIndex} ) {
+export default function CircleCrop( {imageIndex, getCroppedArea} ) {
 
   const orderOptions = JSON.parse(sessionStorage.getItem('orderDetails'));
   const orderQty = orderOptions.Quantity;
 
-  const [crop, setCrop] = useState({ x: 0, y: 0 })
-  const [zoom, setZoom] = useState(1)
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
   const pulledArray = JSON.parse(sessionStorage.getItem('sessionImages'));
   const workingImageURL = pulledArray[imageIndex].data_url;
 
   const onCropAreaChange = (croppedArea, croppedAreaPixels) => {
-    // console.log(croppedArea, croppedAreaPixels)
-
+    setCroppedAreaPixels(croppedAreaPixels);
+    getCroppedArea(croppedAreaPixels);
   }
 
   return (
