@@ -48,32 +48,39 @@ export default function CropImageModal( {imageIndex} ){
     }
 
     const resetImage = (imageIndex) => {
-      const originalImage = JSON.parse(sessionStorage.getItem('sessionImages'));
+      const originalImages = JSON.parse(sessionStorage.getItem('sessionImages'));
+      console.log('originalImageIndex: ', originalImages[imageIndex]);
       const workingImageList = JSON.parse(sessionStorage.getItem('workingImages'));
       const newArray = workingImageList.map((item, index) => {
         if (index === imageIndex) {
-          return originalImage;
+          return originalImages[imageIndex];
         } else return item;
       })
       sessionStorage.setItem('workingImages', JSON.stringify(newArray));
     };
 
     const getCroppedArea = (data) => {
-      console.log('getCroppedArea data: ', data);
       setReceivedAreaData(data);
     }
 
-    const cropComplete = (data) => {
+    const cropComplete = async () => {
       const sessionImages = JSON.parse(sessionStorage.getItem('sessionImages'));
       const currentImage = sessionImages[imageIndex].data_url;
-      console.log('receivedAreaData passed: ', data);
+      console.log('receivedAreaData: ', recievedAreaData);
       try {
-        const croppedImage = getCroppedImg(
+        const croppedImage = await getCroppedImg(
           currentImage,
-          data
+          recievedAreaData
         )
+        setCroppedImage(croppedImage);
         console.log('cropComplete', { croppedImage })
-        setCroppedImage(croppedImage)
+        const workingImages = JSON.parse(sessionStorage.getItem('workingImages'));
+        const updateWorkingImages = workingImages.map((item, index) => {
+          if (index === imageIndex) {
+            return { data_url: croppedImage };
+          } else return item;
+        })
+        sessionStorage.setItem('workingImages', JSON.stringify(updateWorkingImages));      
       } catch (e) {
       console.error(e)
       }
@@ -167,7 +174,7 @@ export default function CropImageModal( {imageIndex} ){
                   </button>
                 <button 
                   style={{ width:100 }}
-                  // onClick={cropComplete(recievedAreaData)}
+                  onClick={cropComplete}
                 >
                   Crop
                   </button>

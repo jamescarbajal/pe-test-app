@@ -12,7 +12,7 @@ export default function CircleCrop( {imageIndex, getCroppedArea} ) {
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
-  const pulledArray = JSON.parse(sessionStorage.getItem('sessionImages'));
+  const pulledArray = JSON.parse(sessionStorage.getItem('workingImages'));
   const workingImageURL = pulledArray[imageIndex].data_url;
 
   const onCropAreaChange = (croppedArea, croppedAreaPixels) => {
