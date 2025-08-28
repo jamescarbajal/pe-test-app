@@ -5,7 +5,9 @@ import CropImageModal from './cropImageModal';
 import Box from '@mui/material/Box';
 import { ImagesContext } from '../contexts/ImagesContext';
 import { Button } from '@mui/material';
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 
 export default function UserImages() {
 
@@ -97,51 +99,62 @@ export default function UserImages() {
                       position:'relative',
                       display:'flex',
                       flexDirection:'column',
-                      justifyContent:'center',
+                      justifyContent: 'center',
                       alignItems:'center',
-                      height:'fit-content',
-                      maxWidth:200
+                      height: 280,
+                      width: 180,
+                      backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                      borderRadius: 5
                   }}>
-                    <Box sx={{
-                      display: 'relative',
-                      width: 'fit-content'
-                    }}>
-                      <Button onClick={() => onImageRemove(index)} 
-                        style={{
-                          display: 'abolute',
-                          top: 35,
-                          left: 80,
-                          color: 'red'
-                        }}>
-                          <RemoveCircleOutlineIcon sx={{ fontSize: 30 }} />
-                        </Button>
-                    </Box>
-                    <h4 style={{
-                          marginTop:0,
-                          marginBottom:0,
-                          color:'black'
-                    }}>
-                        Image {index + 1}
-                    </h4>
-                    <CropImageModal imageIndex={index}/>
                     <Box sx={{
                       display: 'flex',
                       flexDirection: 'row',
-                      justifyContent: 'space-evenly',
-                      width: 175,
-                      minWidth: 'fit-content'
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      width: '100%',
+                      maxHeight: 30,
+                      maxWidth: 200,
+                      m: 0,
+                      pt: 2
                     }}>
-                      <button
-                         
-                        style={{ 
-                          width:75,
-                          padding: 5
-                      }}>Duplicate</button>
-                      <button onClick={() => onImageUpdate(index)} 
-                        style={{ 
-                          width:75, 
-                          padding: 5
-                      }}>Replace</button>
+                    <h4 style={{
+                      flexGrow: 3,
+                        color:'black'
+                    }}>
+                        Image {index + 1}
+                    </h4>
+                      <Button onClick={() => onImageRemove(index)} 
+                        style={{
+                          m:0,
+                          p: 0,
+                          color: 'darkred'
+                        }}>
+                          <DeleteForeverIcon sx={{ fontSize: 30 }} />
+                      </Button>
+                    </Box>
+                    <CropImageModal imageIndex={index}/>
+                    <Box sx={{
+                      minWidth: 'fit-content',
+                      height: 45,
+                      m:0,
+                      p:0
+                    }}>
+                      <Button 
+                        style={{
+                          color: 'black',
+                          m:0,
+                          p:0
+                        }}>
+                          <ContentCopyIcon sx={{ fontSize: 30 }} />
+                      </Button>
+                      <Button onClick={() => onImageUpdate(index)}
+                        style={{
+                          color: 'black',
+                          m:0,
+                          p:0
+                        }}>
+                          <ChangeCircleIcon sx={{ fontSize: 30 }} />
+                      </Button>
                     </Box>
                 </Grid>
                 ))

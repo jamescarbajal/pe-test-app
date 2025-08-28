@@ -100,8 +100,7 @@ export default function CropImageModal( {imageIndex} ){
         display:'flex',
         flexDirection:'column',
         alignContent:'center',
-        justifyContent:'space-between',
-        height:'100%',
+        justifyContent:'flex-start',
         maxHeight:250
       }}>
         <CardMedia
@@ -159,7 +158,8 @@ export default function CropImageModal( {imageIndex} ){
                 maxWidth: 500,
                 height: 50,
                 display: 'flex',
-                justifyContent:'space-evenly'
+                justifyContent:'space-evenly',
+                m:0
               }}>
                 <button 
                 style={{ width:100 }}
