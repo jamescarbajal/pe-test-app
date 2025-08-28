@@ -41,23 +41,23 @@ export default function CropImageModal( {imageIndex} ){
     const handleClose = () => setOpen(false);
 
     const previewImage = (e) => {
-        const workingImages = JSON.parse(sessionStorage.getItem('workingImages'));
+        const workingImages = JSON.parse(sessionStorage.getItem('sessionImages'));
         return workingImages[e].data_url;
     }
 
-    const resetImage = () => {
-      const originalImages = JSON.parse(sessionStorage.getItem('sessionImages'));
-      console.log('originalImageIndex: ', originalImages[imageIndex]);
-      const oldImageList = JSON.parse(sessionStorage.getItem('workingImages'));
-      const newImageList = oldImageList.map((item, index) => {
-        if (index === imageIndex) {
-          console.log('Replacing image ', item);
-          return originalImages[imageIndex];
-        } else return item;
-      })
-      sessionStorage.setItem('workingImages', JSON.stringify(newImageList));
-      setOpen(false);
-    };
+    // const resetImage = () => {
+    //   const originalImages = JSON.parse(sessionStorage.getItem('sessionImages'));
+    //   console.log('originalImageIndex: ', originalImages[imageIndex]);
+    //   const oldImageList = JSON.parse(sessionStorage.getItem('workingImages'));
+    //   const newImageList = oldImageList.map((item, index) => {
+    //     if (index === imageIndex) {
+    //       console.log('Replacing image ', item);
+    //       return originalImages[imageIndex];
+    //     } else return item;
+    //   })
+    //   sessionStorage.setItem('workingImages', JSON.stringify(newImageList));
+    //   setOpen(false);
+    // };
 
     const getCroppedArea = (data) => {
       setReceivedAreaData(data);
@@ -163,7 +163,6 @@ export default function CropImageModal( {imageIndex} ){
               }}>
                 <button 
                 style={{ width:100 }}
-                onClick={resetImage}
                 >
                   Reset
                   </button>

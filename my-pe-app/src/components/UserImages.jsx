@@ -3,8 +3,7 @@ import ImageUploading from 'react-images-uploading';
 import Grid from '@mui/material/Grid';
 import CropImageModal from './cropImageModal';
 import Box from '@mui/material/Box';
-import { ImagesContext } from '../contexts/ImagesContext';
-import { Button } from '@mui/material';
+import { Button, Alert, AlertTitle } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
@@ -14,16 +13,17 @@ export default function UserImages() {
   const orderData = JSON.parse(sessionStorage.getItem('orderDetails'));
   const imageCount = orderData.Quantity;
 
-  const [images, setImages] = useState(JSON.parse(sessionStorage.getItem('workingImages')));
-  const { editedImages, setEditedImages } = useContext(ImagesContext);
-
-  const previewImages = JSON.parse(sessionStorage.getItem('workingImages'))
+  const [images, setImages] = useState(JSON.parse(sessionStorage.getItem('sessionImages')));
+  const [maxImageAlert, setMaxImageAlert] = useState(false);
+  const [canContinue, setCanContinue] = useState(false);
 
   const onChange = (imageList, addUpdateIndex) => {
+    if (imageList.length > imageCount){
+      setMaxImageAlert(true);
+    } else {
       sessionStorage.setItem('sessionImages', JSON.stringify(imageList));
-      sessionStorage.setItem('workingImages', JSON.stringify(imageList));
       setImages(imageList);
-      setEditedImages(imageList);
+    }
   };
 
   const imagesRemaining = (data) => {
@@ -33,7 +33,13 @@ export default function UserImages() {
   }
 
   useEffect( () => {
-  }, [images]);
+    if (JSON.parse(sessionStorage.getItem('sessionImages')).length == imageCount) {
+      setCanContinue(true);
+    }
+    if (JSON.parse(sessionStorage.getItem('sessionImages')).length < imageCount) {
+      setCanContinue(false);
+    }
+  }, [imageCount, onChange]);
 
   return (
     <div className="App">
@@ -41,7 +47,6 @@ export default function UserImages() {
         multiple
         value={images}
         onChange={onChange}
-        maxNumber={imageCount}
         dataURLKey="data_url"
       >
         {({
@@ -62,8 +67,43 @@ export default function UserImages() {
             alignItems: 'center',
             width:'90vw'
           }}>
-            <p>{imagesRemaining(images)} images remaining</p>
-            <br/>
+            <Button 
+              disabled={!canContinue}
+              onClick=''
+              variant='contained'
+              sx={{
+                position: 'sticky',
+                top: 10,
+                width: '100%',
+                maxWidth: 500,
+                zIndex: 100,
+                mb: 2,
+                border: '3px solid black'
+              }}
+            >
+              {canContinue ? 
+                <div style={{ color:'black', fontWeight: 700 }}>
+                  Continue
+                </div> 
+                :  
+                <div style={{ color: 'black', fontWeight: 700 }}>
+                  Please select {imagesRemaining(images)} more images
+                </div>
+              }
+            </Button>
+              {maxImageAlert && (
+                <Box sx={{
+                  mb: 2
+                }}>
+                  <Alert
+                    severity='warning'
+                    onClose={() => setMaxImageAlert(false)}
+                  >
+                    <AlertTitle>Too many images!</AlertTitle>
+                    For more than {imageCount} images, please select a larger order size!
+                  </Alert>
+                </Box>
+              )}
             <Box sx={{
               display: 'flex',
               flexDirection: 'row',
@@ -86,14 +126,14 @@ export default function UserImages() {
                 position:'relative',
                 display:'flex',
                 flexDirection:'row',
-                justifyContent:'center',
+                justifyContent:'flex-start',
                 width:'100%',
                 height:'fit-content',
                 pt: 2
              }}>
-            { previewImages ? 
+            { imageList ? 
               (
-                previewImages.map((image, index) => (
+                imageList.map((image, index) => (
                 <Grid key={index} size={{ xs: 2, sm: 4, md: 6 }}
                   sx={{
                       position:'relative',
@@ -102,8 +142,8 @@ export default function UserImages() {
                       justifyContent: 'center',
                       alignItems:'center',
                       height: 280,
-                      width: 180,
-                      backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                      maxWidth: 250,
+                      backgroundColor: 'rgba(131, 32, 32, 0.2)',
                       borderRadius: 5
                   }}>
                     <Box sx={{
