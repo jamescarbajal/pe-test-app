@@ -174,7 +174,10 @@ export default function UserImages() {
                     </Box>
                     <CropImageModal imageIndex={index}/>
                     <Box sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
                       minWidth: 'fit-content',
+                      width: 140,
                       height: 45,
                       m:0,
                       p:0
