@@ -26,6 +26,15 @@ export default function UserImages() {
     }
   };
 
+  const onImageCopy = (index) => {
+    if ( JSON.parse(sessionStorage.getItem('sessionImages')).length < imageCount) {
+          const oldArray = JSON.parse(sessionStorage.getItem('sessionImages'));
+      oldArray.splice(index + 1, 0, oldArray[index]);
+      sessionStorage.setItem('sessionImages', JSON.stringify(oldArray));
+      setImages(oldArray);
+    } else setMaxImageAlert(true);
+  }
+
   const imagesRemaining = (data) => {
     if (data) { 
       return (imageCount - data.length);
@@ -33,13 +42,15 @@ export default function UserImages() {
   }
 
   useEffect( () => {
-    if (JSON.parse(sessionStorage.getItem('sessionImages')).length == imageCount) {
-      setCanContinue(true);
+    if (sessionStorage.getItem('sessionImages')){
+      if (JSON.parse(sessionStorage.getItem('sessionImages')).length == imageCount) {
+        setCanContinue(true);
+      }
+      if (JSON.parse(sessionStorage.getItem('sessionImages')).length < imageCount) {
+        setCanContinue(false);
+      }
     }
-    if (JSON.parse(sessionStorage.getItem('sessionImages')).length < imageCount) {
-      setCanContinue(false);
-    }
-  }, [imageCount, onChange]);
+  }, [images, imageCount, onChange, onImageCopy]);
 
   return (
     <div className="App">
@@ -173,7 +184,8 @@ export default function UserImages() {
                       </Button>
                     </Box>
                     <CropImageModal imageIndex={index}/>
-                    <Box sx={{
+                    <Box 
+                    sx={{
                       display: 'flex',
                       justifyContent: 'space-between',
                       minWidth: 'fit-content',
@@ -183,6 +195,7 @@ export default function UserImages() {
                       p:0
                     }}>
                       <Button 
+                        onClick={() => onImageCopy(index)}
                         style={{
                           color: 'black',
                           m:0,
