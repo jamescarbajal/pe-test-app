@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -36,6 +36,7 @@ export default function CropImageModal( {imageIndex} ){
 
     const [isOpen, setOpen] = useState(false);
     const [recievedAreaData, setReceivedAreaData] = useState(null);
+    const { cropReset, setCropReset } = useContext(ImagesContext);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -58,6 +59,8 @@ export default function CropImageModal( {imageIndex} ){
     //   sessionStorage.setItem('workingImages', JSON.stringify(newImageList));
     //   setOpen(false);
     // };
+
+
 
     const getCroppedArea = (data) => {
       setReceivedAreaData(data);
@@ -162,13 +165,14 @@ export default function CropImageModal( {imageIndex} ){
                 m:0
               }}>
                 <button 
-                style={{ width:100 }}
+                  onClick={() => setCropReset(true)}
+                  style={{ width:100 }}
                 >
                   Reset
                   </button>
                 <button 
                   style={{ width:100 }}
-                  onClick={cropComplete}
+                  onClick={() => cropComplete}
                 >
                   Crop
                   </button>

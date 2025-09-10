@@ -1,9 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Cropper from 'react-easy-crop';
+import { ImagesContext } from '../contexts/ImagesContext';
 import getCroppedImg from './ImageOutput';
 
 
-export default function CircleCrop( {imageIndex, getCroppedArea, resetCrop} ) {
+export default function CircleCrop( {imageIndex, getCroppedArea } ) {
+
+  const { cropReset, setCropReset  } = useContext(ImagesContext);
 
   const orderOptions = JSON.parse(sessionStorage.getItem('orderDetails'));
   const orderQty = orderOptions.Quantity;
@@ -21,6 +24,11 @@ export default function CircleCrop( {imageIndex, getCroppedArea, resetCrop} ) {
   }
 
   useEffect( () => {
+    if (cropReset){
+      setCrop({x: 0, y:0, width: '100%', height: '100%'});
+      setZoom(1);
+      setCropReset(false);
+    };
   }, [pulledArray]);
 
   return (

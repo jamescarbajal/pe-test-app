@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react"
+import CloudinaryWidget from "../components/CloudinaryWidget";
 import { ImagesContext } from "../contexts/ImagesContext";
 import Box from "@mui/material/Box";
 import UserImages from "../components/UserImages";

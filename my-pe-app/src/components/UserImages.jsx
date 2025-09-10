@@ -41,6 +41,7 @@ export default function UserImages() {
     } else return imageCount;
   }
 
+
   useEffect( () => {
     if (sessionStorage.getItem('sessionImages')){
       if (JSON.parse(sessionStorage.getItem('sessionImages')).length == imageCount) {
