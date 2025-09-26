@@ -17,6 +17,7 @@ export default function QuantitySelect() {
     const newQty = e.target.value;
     const newArray = { ...sessionOrderDetails, Quantity: newQty };
     sessionStorage.setItem('orderDetails', JSON.stringify(newArray));
+    console.log('orderDetails in Quantity Select: ', newArray);
     setValue(newQty);
   };
 

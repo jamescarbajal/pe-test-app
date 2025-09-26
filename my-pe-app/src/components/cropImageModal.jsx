@@ -1,4 +1,5 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { getImages } from '../utils/idb-keyval'
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -34,17 +35,20 @@ const style = {
 
 export default function CropImageModal( {imageIndex} ){
 
+    const userImageData = async () => { await getImages('userImages')}
+
     const [isOpen, setOpen] = useState(false);
     const [recievedAreaData, setReceivedAreaData] = useState(null);
+
+    const [ preview, setPreview ] = useState('');
+
+    console.log('Pulled Image Data', userImageData);
+
     const { cropReset, setCropReset } = useContext(ImagesContext);
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const previewImage = (e) => {
-        const workingImages = JSON.parse(sessionStorage.getItem('sessionImages'));
-        return workingImages[e].data_url;
-    }
 
     // const resetImage = () => {
     //   const originalImages = JSON.parse(sessionStorage.getItem('sessionImages'));
@@ -89,6 +93,19 @@ export default function CropImageModal( {imageIndex} ){
       setOpen(false);
     }
 
+    useEffect( () => {
+
+    const fetchPreview = async (imageIndex) => {
+      try {
+        const checkImages = await getImages('userImages');
+        setPreview(checkImages[imageIndex].data_url);
+      } catch (err) {
+        console.log('Error fetching images: ', err);
+      }
+    };
+
+    fetchPreview(imageIndex);
+  }, [])
 
     return (
   <>
@@ -108,7 +125,7 @@ export default function CropImageModal( {imageIndex} ){
       }}>
         <CardMedia
           component="img"
-          image={previewImage(imageIndex)}
+          image={preview}
           alt="uploaded image"
           sx={{
             width:200,

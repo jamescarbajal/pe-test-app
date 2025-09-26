@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { storeImages } from '../utils/idb-keyval';
 import Paper from '@mui/material/Paper';
 import productKeychains from '../assets/images/keychain-example.jpg';
 import productPinbacks from '../assets/images/pinback-example.jpg';
@@ -11,6 +12,9 @@ import ProductSelectForm from '../components/productSelectForm';
 
 
 export default function Order() {
+
+    storeImages('userImages', undefined)
+
 
     const createObject = {
         Type: 'productMagnets',

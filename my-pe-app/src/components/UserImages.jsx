@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { storeImages, getImages } from '../utils/idb-keyval';
 import ImageUploading from 'react-images-uploading';
 import Grid from '@mui/material/Grid';
 import CropImageModal from './cropImageModal';
@@ -13,24 +14,26 @@ export default function UserImages() {
   const orderData = JSON.parse(sessionStorage.getItem('orderDetails'));
   const imageCount = orderData.Quantity;
 
-  const [images, setImages] = useState(JSON.parse(sessionStorage.getItem('sessionImages')));
+  const [images, setImages] = useState([]);
   const [maxImageAlert, setMaxImageAlert] = useState(false);
   const [canContinue, setCanContinue] = useState(false);
+
+  console.log('images = ', images);
 
   const onChange = (imageList, addUpdateIndex) => {
     if (imageList.length > imageCount){
       setMaxImageAlert(true);
     } else {
-      sessionStorage.setItem('sessionImages', JSON.stringify(imageList));
+      storeImages('userImages', imageList);
       setImages(imageList);
     }
   };
 
   const onImageCopy = (index) => {
-    if ( JSON.parse(sessionStorage.getItem('sessionImages')).length < imageCount) {
-          const oldArray = JSON.parse(sessionStorage.getItem('sessionImages'));
+    if ( getImages('userImages').length < imageCount) {
+      const oldArray = getImages('userImages');
       oldArray.splice(index + 1, 0, oldArray[index]);
-      sessionStorage.setItem('sessionImages', JSON.stringify(oldArray));
+      storeImages('userImages', oldArray);
       setImages(oldArray);
     } else setMaxImageAlert(true);
   }
@@ -43,17 +46,34 @@ export default function UserImages() {
 
 
   useEffect( () => {
-    if (sessionStorage.getItem('sessionImages')){
-      if (JSON.parse(sessionStorage.getItem('sessionImages')).length == imageCount) {
+    const countImages = getImages('userImages');
+    if (countImages){
+      if (getImages('userImages').length == imageCount) {
         setCanContinue(true);
       }
-      if (JSON.parse(sessionStorage.getItem('sessionImages')).length < imageCount) {
+      if (getImages('userImages').length < imageCount) {
         setCanContinue(false);
       }
-    }
+    };
+   
   }, [images, imageCount, onChange, onImageCopy]);
 
+
+  useEffect( () => {
+    const fetchImages = async () => {
+      try {
+        const checkImages = await getImages('userImages');
+        setImages(checkImages);
+      } catch (err) {
+        console.log('Error fetching images: ', err);
+      }
+    };
+
+    fetchImages();
+  }, [])
+
   return (
+
     <div className="App">
       <ImageUploading
         multiple
