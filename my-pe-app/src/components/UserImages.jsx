@@ -165,16 +165,27 @@ export default function UserImages() {
               width: 300,
               minWidth: 'fit-content'
             }}>
-              <button
+              <Button
+                variant='contained'
                 style={ (isDragging ? { color: 'blue', backgroundColor:'white' } : undefined) }
                 onClick={onImageUpload}
                 {...dragProps}
+                sx={{
+                  backgroundColor:'black'
+
+                  
+                }}
               >
                 Upload
-              </button>
-              <button onClick={onImageRemoveAll}>
+              </Button>
+              <Button 
+              variant='contained'
+              onClick={onImageRemoveAll}
+              sx={{
+                backgroundColor:'black'
+              }}>
                 Clear All
-              </button>
+              </Button>
             </Box>
             <Grid container spacing={{ xs: 3, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} sx={{ 
                 position:'relative',
