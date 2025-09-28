@@ -33,16 +33,11 @@ const style = {
     backgroundColor:'#E49999'
 };
 
-export default function CropImageModal( {imageIndex} ){
-
-    const userImageData = async () => { await getImages('userImages')}
+export default function CropImageModal( {imageIndex, dataURL} ){
 
     const [isOpen, setOpen] = useState(false);
     const [recievedAreaData, setReceivedAreaData] = useState(null);
-
-    const [ preview, setPreview ] = useState('');
-
-    console.log('Pulled Image Data', userImageData);
+    const [ preview, setPreview ] = useState(dataURL);
 
     const { cropReset, setCropReset } = useContext(ImagesContext);
 
@@ -95,17 +90,8 @@ export default function CropImageModal( {imageIndex} ){
 
     useEffect( () => {
 
-    const fetchPreview = async (imageIndex) => {
-      try {
-        const checkImages = await getImages('userImages');
-        setPreview(checkImages[imageIndex].data_url);
-      } catch (err) {
-        console.log('Error fetching images: ', err);
-      }
-    };
-
-    fetchPreview(imageIndex);
-  }, [])
+      setPreview(dataURL);
+  }, [dataURL])
 
     return (
   <>

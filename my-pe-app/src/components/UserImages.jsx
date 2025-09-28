@@ -4,12 +4,15 @@ import ImageUploading from 'react-images-uploading';
 import Grid from '@mui/material/Grid';
 import CropImageModal from './cropImageModal';
 import Box from '@mui/material/Box';
-import { Button, Alert, AlertTitle } from '@mui/material';
+import { Button, Alert, AlertTitle, Typography } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
+import { update } from 'idb-keyval';
 
 export default function UserImages() {
+
+
 
   const orderData = JSON.parse(sessionStorage.getItem('orderDetails'));
   const imageCount = orderData.Quantity;
@@ -18,7 +21,14 @@ export default function UserImages() {
   const [maxImageAlert, setMaxImageAlert] = useState(false);
   const [canContinue, setCanContinue] = useState(false);
 
-  console.log('images = ', images);
+    const checkIdbImages = async () => {
+      const checkImages = await getImages('userImages');
+      if (checkImages) {
+      setImages(checkImages);
+    } else {
+      setImages([])
+    }
+  };
 
   const onChange = (imageList, addUpdateIndex) => {
     if (imageList.length > imageCount){
@@ -26,50 +36,39 @@ export default function UserImages() {
     } else {
       storeImages('userImages', imageList);
       setImages(imageList);
+      imagesRemaining(imageCount);
     }
   };
 
   const onImageCopy = (index) => {
-    if ( getImages('userImages').length < imageCount) {
-      const oldArray = getImages('userImages');
-      oldArray.splice(index + 1, 0, oldArray[index]);
-      storeImages('userImages', oldArray);
-      setImages(oldArray);
-    } else setMaxImageAlert(true);
+    const currentImageCount = images.length;
+    if ( currentImageCount < imageCount ) {
+    const newImages = [...images.slice(0, index), images[index], ...images.slice(index)];
+      onChange(newImages);
+    } 
+    else setMaxImageAlert(true);
   }
 
   const imagesRemaining = (data) => {
-    if (data) { 
-      return (imageCount - data.length);
-    } else return imageCount;
-  }
-
-
-  useEffect( () => {
-    const countImages = getImages('userImages');
-    if (countImages){
-      if (getImages('userImages').length == imageCount) {
-        setCanContinue(true);
-      }
-      if (getImages('userImages').length < imageCount) {
-        setCanContinue(false);
-      }
-    };
-   
-  }, [images, imageCount, onChange, onImageCopy]);
-
+    console.log('Counting images...');
+    const userImages = images;
+      if (userImages){
+        if (userImages.length == data) {
+          setCanContinue(true);
+        }
+        if (userImages.length < data) {
+          setCanContinue(false);
+        }
+        return (data - userImages.length)
+      } else return data;
+  };
 
   useEffect( () => {
-    const fetchImages = async () => {
-      try {
-        const checkImages = await getImages('userImages');
-        setImages(checkImages);
-      } catch (err) {
-        console.log('Error fetching images: ', err);
-      }
-    };
+    imagesRemaining(imageCount);
+  }, [images, , onImageCopy, onChange])
 
-    fetchImages();
+  useEffect( () => {
+    checkIdbImages();
   }, [])
 
   return (
@@ -99,30 +98,53 @@ export default function UserImages() {
             alignItems: 'center',
             width:'90vw'
           }}>
-            <Button 
-              disabled={!canContinue}
-              onClick=''
-              variant='contained'
-              sx={{
-                position: 'sticky',
-                top: 10,
-                width: '100%',
-                maxWidth: 500,
-                zIndex: 100,
-                mb: 2,
-                border: '3px solid black'
-              }}
-            >
+            <Box
+            sx={{ mb:2 }}>
+              <Typography variant='h6'>Click each image to crop.</Typography>
+            </Box>
               {canContinue ? 
-                <div style={{ color:'black', fontWeight: 700 }}>
-                  Continue
-                </div> 
+                <Button 
+                  disabled={!canContinue}
+                  onClick=''
+                  sx={{
+                    position: 'sticky',
+                    top: 10,
+                    width: '100%',
+                    maxWidth: 500,
+                    height: 40,
+                    zIndex: 100,
+                    p:0,
+                    mb: 2,
+                    border: '3px solid black',
+                    backgroundColor: 'rgb(39, 85, 254)',
+                    fontWeight: 700
+                  }}>
+                    <p style={{ color:'black', fontWeight: 700, margin:0, padding:0 }}>
+                      Continue
+                    </p>
+              </Button>
                 :  
-                <div style={{ color: 'black', fontWeight: 700 }}>
-                  Please select {imagesRemaining(images)} more images
-                </div>
+              <Button 
+                disabled={canContinue}
+                onClick=''
+                sx={{
+                  position: 'sticky',
+                  top: 10,
+                  width: '100%',
+                  maxWidth: 500,
+                  height: 40,
+                  zIndex: 100,
+                  p:0,
+                  mb: 2,
+                  border: '3px solid black',
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  fontWeight: 700
+                }}>
+                <p style={{ color:'lightgrey', fontWeight: 700, margin:0, padding:0 }}>
+                  Please select {imagesRemaining(imageCount)} more images.
+                </p>
+              </Button>
               }
-            </Button>
               {maxImageAlert && (
                 <Box sx={{
                   mb: 2
@@ -144,7 +166,7 @@ export default function UserImages() {
               minWidth: 'fit-content'
             }}>
               <button
-                style={ (isDragging ? { color: 'red' } : undefined) }
+                style={ (isDragging ? { color: 'blue', backgroundColor:'white' } : undefined) }
                 onClick={onImageUpload}
                 {...dragProps}
               >
@@ -204,7 +226,7 @@ export default function UserImages() {
                           <DeleteForeverIcon sx={{ fontSize: 30 }} />
                       </Button>
                     </Box>
-                    <CropImageModal imageIndex={index}/>
+                    <CropImageModal imageIndex={index} dataURL={image.data_url}/>
                     <Box 
                     sx={{
                       display: 'flex',
