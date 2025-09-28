@@ -17,12 +17,19 @@ export default function Order() {
         storeImages('userImages', null)
     }
 
+    const pulledOrderDetails = sessionStorage.getItem('orderDetails')
 
-    const createObject = {
-        Type: 'productMagnets',
-        Quantity: '',
-      };
-      sessionStorage.setItem('orderDetails', JSON.stringify(createObject));
+    const checkOrderDetails = (data) => {
+        if (data == null || data == undefined) {
+            const createObject = {
+                Type: 'productMagnets',
+                Quantity: '',
+            }
+            return createObject;
+        } else return JSON.parse(data);
+    };
+
+    sessionStorage.setItem('orderDetails', JSON.stringify(checkOrderDetails(pulledOrderDetails)));
 
     const sessionOrderDetails = JSON.parse(sessionStorage.getItem('orderDetails'));
 

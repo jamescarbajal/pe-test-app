@@ -11,7 +11,13 @@ export default function QuantitySelect() {
 
   const sessionOrderDetails = JSON.parse(sessionStorage.getItem('orderDetails'));
 
-  const [ value, setValue ] = useState('');
+  const checkQuantity = (data) => {
+    if (data && data.Quantity > 0){
+      return data.Quantity;
+    } else return '';
+  }
+
+  const [ value, setValue ] = useState(checkQuantity(sessionOrderDetails));
 
   const handleChange = (e) => {
     const newQty = e.target.value;
@@ -20,6 +26,7 @@ export default function QuantitySelect() {
     console.log('orderDetails in Quantity Select: ', newArray);
     setValue(newQty);
   };
+
 
   return (
     <div>

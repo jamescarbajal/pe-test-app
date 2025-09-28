@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { getImages, storeImages } from '../utils/idb-keyval';
 import Cropper from 'react-easy-crop';
 import { ImagesContext } from '../contexts/ImagesContext';
 import getCroppedImg from './ImageOutput';
@@ -13,10 +14,8 @@ export default function CircleCrop( {imageIndex, getCroppedArea } ) {
 
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
+  const [workingURL, setWorkingURL] = useState(null)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-
-  const pulledArray = JSON.parse(sessionStorage.getItem('sessionImages'));
-  const workingImageURL = pulledArray[imageIndex].data_url;
 
   const onCropAreaChange = (croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -29,7 +28,17 @@ export default function CircleCrop( {imageIndex, getCroppedArea } ) {
       setZoom(1);
       setCropReset(false);
     };
-  }, [pulledArray]);
+    
+    const getImageURL = async (data) => {
+      const pulledArray = await getImages('userImages');
+      const currentURL = pulledArray[data].data_url;
+      console.log('currentURL =', currentURL);
+      setWorkingURL(currentURL)
+    }
+
+    getImageURL(imageIndex);
+
+  }, []);
 
   return (
     <div style={{ 
@@ -42,7 +51,7 @@ export default function CircleCrop( {imageIndex, getCroppedArea } ) {
       maxWidth:'100%', 
       }} >
         <Cropper
-          image={workingImageURL}
+          image={workingURL}
           showGrid={false}
           cropShape="round"
           crop={crop}

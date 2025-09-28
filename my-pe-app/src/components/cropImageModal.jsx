@@ -37,7 +37,7 @@ export default function CropImageModal( {imageIndex, dataURL} ){
 
     const [isOpen, setOpen] = useState(false);
     const [recievedAreaData, setReceivedAreaData] = useState(null);
-    const [ preview, setPreview ] = useState(dataURL);
+    const [preview, setPreview] = useState(dataURL);
 
     const { cropReset, setCropReset } = useContext(ImagesContext);
 
