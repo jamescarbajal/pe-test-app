@@ -10,17 +10,26 @@ import FormLabel from '@mui/material/FormLabel';
 import QuantitySelect from './QuantitySelect';
 
 
-export default function ProductSelectForm() {
+export default function ProductSelectForm({ onRadioChange }) {
 
-    const [ selectedOption, setSelectedOption ] = useState('productMagnets');
+  const sessionOrderDetails = JSON.parse(sessionStorage.getItem('orderDetails'));
+
+  const checkType = (data) => {
+    if (data && data.Type){
+      return data.Type;
+    } else return 'productMagnets';
+  }
+
+    const [ selectedOption, setSelectedOption ] = useState(checkType(sessionOrderDetails));
 
     const handleRadioSelect = (e) => {
       const value = e.target.value;
       const sessionOrderDetails = JSON.parse(sessionStorage.getItem('orderDetails'));
-      const updatedArray = { ...sessionOrderDetails, Type: value };
-      sessionStorage.setItem('orderDetails', JSON.stringify(updatedArray));
-      console.log('orderDetails in Product Select: ', updatedArray);
+      const updatedObject = { ...sessionOrderDetails, Type: value };
+      sessionStorage.setItem('orderDetails', JSON.stringify(updatedObject));
+      console.log('orderDetails Object in Product Select: ', updatedObject);
       setSelectedOption(value);
+      onRadioChange(value);
     };
 
     const [ showAlert, setShowAlert ] = useState(false)
@@ -36,6 +45,7 @@ export default function ProductSelectForm() {
     };
 
     useEffect( () => {
+
     }, [handleRadioSelect]);
     
 

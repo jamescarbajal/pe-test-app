@@ -10,7 +10,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import ProductSelectForm from '../components/productSelectForm';
 
 
-
 export default function Order() {
 
     if (!getImages('userImages')) {
@@ -31,17 +30,32 @@ export default function Order() {
 
     sessionStorage.setItem('orderDetails', JSON.stringify(checkOrderDetails(pulledOrderDetails)));
 
-    const sessionOrderDetails = JSON.parse(sessionStorage.getItem('orderDetails'));
-
-    const [ exampleImage, setExampleImage ] = useState(productMagnets)
-
+    const [exampleImage, setExampleImage] = useState('')
     const [loaded, setLoaded] = useState(false);
+    
     const handleImageLoad = () => {
         setLoaded(true);
     };
 
+    const checkType = (data) => {
+        if (data) {
+            if (data == 'productMagnets') {
+                setExampleImage(productMagnets);
+            }
+            if (data == 'productKeychains') {
+                setExampleImage(productKeychains);
+            }
+            if (data == 'productPinbacks') {
+                setExampleImage(productPinbacks);
+            }
+        } else setExampleImage(productMagnets);
+    }
+
     useEffect( () => {
-    }, [sessionOrderDetails]);
+
+        checkType(JSON.parse(sessionStorage.getItem('orderDetails')).Type);
+
+    }, [exampleImage, pulledOrderDetails]);
 
     return (
     <>
@@ -89,7 +103,7 @@ export default function Order() {
                         height:'100%',
                         m:2
                     }}>
-                        <ProductSelectForm />
+                        <ProductSelectForm onRadioChange={checkType}/>
                     </Paper>
                 </Box>
         </Box>
