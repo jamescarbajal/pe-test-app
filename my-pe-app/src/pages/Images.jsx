@@ -8,9 +8,6 @@ export default function ImageUpload(){
 
     const { originalImages, setOriginalImages, croppedImages, setCroppedImages } = useContext(ImagesContext);
 
-    const sessionFormData = JSON.parse(sessionStorage.getItem('orderDetails'));
-    const checkSessionImages = sessionStorage.getItem('sessionImages');
-
     useEffect( () => {
     }, []);
 

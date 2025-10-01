@@ -5,24 +5,44 @@ import { ImagesContext } from '../contexts/ImagesContext';
 import getCroppedImg from './ImageOutput';
 
 
-export default function CircleCrop( {imageIndex, getCroppedArea } ) {
+export default function CircleCrop( {imageIndex, getCroppedArea, getZoomInfo } ) {
 
   const { cropReset, setCropReset  } = useContext(ImagesContext);
 
   const orderOptions = JSON.parse(sessionStorage.getItem('orderDetails'));
   const orderQty = orderOptions.Quantity;
 
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [crop, setCrop] = useState({x: 0, y:0});
   const [zoom, setZoom] = useState(1);
   const [workingURL, setWorkingURL] = useState(null)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
+  const currentCropAndZoom = async (data) => {
+    const imageArray = await getImages('userImages')
+    const cropInfo = imageArray[data].cropData
+    const zoomInfo = imageArray[data].zoomData;
+    setCrop({
+      x: cropInfo.x,
+      y: cropInfo.y,
+      width: cropInfo.width,
+      height: cropInfo.height,
+    })
+    setZoom(zoomInfo);
+    console.log('Current Crop info: ', cropInfo, '\nCurrent zoom info: ', zoomInfo);
+  }
+
   const onCropAreaChange = (croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
     getCroppedArea(croppedAreaPixels);
+    getZoomInfo(zoom);
+    console.log('Zoom data: ', zoom);
   }
 
+
   useEffect( () => {
+
+    currentCropAndZoom(imageIndex);
+
     if (cropReset){
       setCrop({x: 0, y:0, width: '100%', height: '100%'});
       setZoom(1);
@@ -32,13 +52,16 @@ export default function CircleCrop( {imageIndex, getCroppedArea } ) {
     const getImageURL = async (data) => {
       const pulledArray = await getImages('userImages');
       const currentURL = pulledArray[data].data_url;
-      console.log('currentURL =', currentURL);
       setWorkingURL(currentURL)
     }
 
     getImageURL(imageIndex);
 
-  }, []);
+  }, [imageIndex, cropReset]);
+
+  useEffect( () => {
+    currentCropAndZoom(imageIndex);
+  }, [])
 
   return (
     <div style={{ 

@@ -12,10 +12,6 @@ import ProductSelectForm from '../components/productSelectForm';
 
 export default function Order() {
 
-    if (!getImages('userImages')) {
-        storeImages('userImages', null)
-    }
-
     const pulledOrderDetails = sessionStorage.getItem('orderDetails')
 
     const checkOrderDetails = (data) => {

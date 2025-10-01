@@ -30,12 +30,40 @@ export default function UserImages() {
     }
   };
 
+  const initializeCropAndZoom = async () => {
+    const imageArray = await getImages('userImages')
+    const updatedImages = await imageArray.map((obj, cropData, zoomData) => {
+      if (!cropData) {
+        return {
+            ...obj,
+            cropData: {
+            x: 0,
+            y: 0,
+            width: '100%',
+            height: '100%',
+          }
+        };
+      }
+      if (!zoomData){
+        return {
+        ...obj,
+        zoomData: 1
+      }
+    }
+      return obj;
+    });
+    const newUserImages = updatedImages;
+    storeImages('userImages', newUserImages);
+    console.log('Crop and Zoom Data Initialized!');
+  }
+
   const onChange = (imageList, addUpdateIndex) => {
     if (imageList.length > imageCount){
       setMaxImageAlert(true);
     } else {
       storeImages('userImages', imageList);
       setImages(imageList);
+      initializeCropAndZoom();
       imagesRemaining(imageCount);
     }
   };
@@ -65,11 +93,14 @@ export default function UserImages() {
 
   useEffect( () => {
     imagesRemaining(imageCount);
+    initializeCropAndZoom();
   }, [images, , onImageCopy, onChange])
 
   useEffect( () => {
     checkIdbImages();
   }, [])
+
+
 
   return (
 
@@ -125,7 +156,7 @@ export default function UserImages() {
               </Button>
                 :  
               <Button 
-                disabled={canContinue}
+                disabled={true}
                 onClick=''
                 sx={{
                   position: 'sticky',
@@ -237,7 +268,7 @@ export default function UserImages() {
                           <DeleteForeverIcon sx={{ fontSize: 30 }} />
                       </Button>
                     </Box>
-                    <CropImageModal imageIndex={index} dataURL={image.data_url}/>
+                    <CropImageModal imageIndex={index} dataURL={image.data_url} cropData={image.cropData} />
                     <Box 
                     sx={{
                       display: 'flex',

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { getImages } from '../utils/idb-keyval'
+import { storeImages, getImages } from '../utils/idb-keyval'
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -7,7 +7,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CircleCrop from './CircleCrop.jsx';
-import getCroppedImg from './ImageOutput.jsx';
+import ImageOutput from './ImageOutput.jsx';
 import { ImagesContext } from '../contexts/ImagesContext.jsx';
 
 
@@ -33,65 +33,46 @@ const style = {
     backgroundColor:'#E49999'
 };
 
-export default function CropImageModal( {imageIndex, dataURL} ){
+export default function CropImageModal( {imageIndex, dataURL, cropData } ){
 
     const [isOpen, setOpen] = useState(false);
     const [recievedAreaData, setReceivedAreaData] = useState(null);
-    const [preview, setPreview] = useState(dataURL);
-
-    const { cropReset, setCropReset } = useContext(ImagesContext);
+    const [receivedZoomData, setReceivedZoomData] = useState(null);
+    const [preview, setPreview] = useState('');
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
-
-    // const resetImage = () => {
-    //   const originalImages = JSON.parse(sessionStorage.getItem('sessionImages'));
-    //   console.log('originalImageIndex: ', originalImages[imageIndex]);
-    //   const oldImageList = JSON.parse(sessionStorage.getItem('workingImages'));
-    //   const newImageList = oldImageList.map((item, index) => {
-    //     if (index === imageIndex) {
-    //       console.log('Replacing image ', item);
-    //       return originalImages[imageIndex];
-    //     } else return item;
-    //   })
-    //   sessionStorage.setItem('workingImages', JSON.stringify(newImageList));
-    //   setOpen(false);
-    // };
-
-
 
     const getCroppedArea = (data) => {
       setReceivedAreaData(data);
     }
 
-    const cropComplete = async () => {
-      const sessionImages = JSON.parse(sessionStorage.getItem('sessionImages'));
-      const currentImage = sessionImages[imageIndex].data_url;
-      console.log('receivedAreaData: ', recievedAreaData);
-      try {
-        const croppedImage = await getCroppedImg(
-          currentImage,
-          recievedAreaData
-        )
-        console.log('cropComplete', { croppedImage })
-        const workingImages = JSON.parse(sessionStorage.getItem('workingImages'));
-        const updateWorkingImages = workingImages.map((item, index) => {
-          if (index === imageIndex) {
-            return { data_url: croppedImage };
-          } else return item;
-        })
-        sessionStorage.setItem('workingImages', JSON.stringify(updateWorkingImages));      
-      } catch (e) {
-      console.error(e)
-      }
-      setOpen(false);
+    const getZoomInfo = (data) => {
+      setReceivedZoomData(data);
+    }
+
+    const cropComplete = async (data) => {
+      const imageArray = await getImages('userImages')
+      const updatedImages = imageArray.map((obj, index) => {
+        if (index === data) {
+          return {
+            data_url: obj.data_url,
+            cropData: recievedAreaData,
+            zoomData: receivedZoomData
+          };
+        }
+        return obj;
+      });
+      const newUserImages = updatedImages;
+      storeImages('userImages', newUserImages);
+      handleClose();
     }
 
     useEffect( () => {
 
-      setPreview(dataURL);
-  }, [dataURL])
+      setPreview(dataURL)
+
+  }, [preview, dataURL, isOpen])
 
     return (
   <>
@@ -121,6 +102,7 @@ export default function CropImageModal( {imageIndex, dataURL} ){
             m:0,
             boxShadow: 5
           }}
+
         />
     </Card>
       </Button>
@@ -149,7 +131,7 @@ export default function CropImageModal( {imageIndex, dataURL} ){
               maxHeight:'80%',
               width:'100%',
               }}>
-              <CircleCrop imageIndex={imageIndex} getCroppedArea={getCroppedArea} />
+              <CircleCrop imageIndex={imageIndex} getCroppedArea={getCroppedArea} getZoomInfo={getZoomInfo}/>
             </Box>
             <Box sx={{
               display:'flex',
@@ -168,17 +150,17 @@ export default function CropImageModal( {imageIndex, dataURL} ){
                 m:0
               }}>
                 <button 
-                  onClick={() => setCropReset(true)}
+                  onClick={() => resetCrop}
                   style={{ width:100 }}
                 >
                   Reset
                   </button>
                 <button 
                   style={{ width:100 }}
-                  onClick={() => cropComplete}
+                  onClick={() => cropComplete(imageIndex)}
                 >
                   Crop
-                  </button>
+                </button>
               </Box>
           </Box>
         </Modal>
