@@ -12,8 +12,8 @@ export default function CircleCrop( {imageIndex, getCroppedArea, getZoomInfo } )
   const orderOptions = JSON.parse(sessionStorage.getItem('orderDetails'));
   const orderQty = orderOptions.Quantity;
 
-  const [crop, setCrop] = useState({x: 0, y:0});
-  const [zoom, setZoom] = useState(1);
+  const [crop, setCrop] = useState('');
+  const [zoom, setZoom] = useState('');
   const [workingURL, setWorkingURL] = useState(null)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 

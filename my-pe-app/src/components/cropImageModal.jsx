@@ -35,6 +35,8 @@ const style = {
 
 export default function CropImageModal( {imageIndex, dataURL, cropData } ){
 
+    const { cropReset, setCropReset } = useContext(ImagesContext);
+
     const [isOpen, setOpen] = useState(false);
     const [recievedAreaData, setReceivedAreaData] = useState(null);
     const [receivedZoomData, setReceivedZoomData] = useState(null);
@@ -66,6 +68,23 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
       const newUserImages = updatedImages;
       storeImages('userImages', newUserImages);
       handleClose();
+    }
+
+    const resetCrop = async (data) => {
+      const imageArray = await getImages('userImages');
+      const updatedArray = imageArray.map((item, index) => {
+        if (index === data) {
+          item.cropData = {
+            x: 0,
+            y: 0,
+            width: '100%',
+            height: '100%'
+          },
+          item.zoomData = 1
+        }
+        return item;
+      })
+      storeImages('userImages',updatedArray);
     }
 
     useEffect( () => {
@@ -150,7 +169,7 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
                 m:0
               }}>
                 <button 
-                  onClick={() => resetCrop}
+                  onClick={() => resetCrop(imageIndex)}
                   style={{ width:100 }}
                 >
                   Reset
