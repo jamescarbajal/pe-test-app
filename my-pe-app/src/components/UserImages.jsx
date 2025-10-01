@@ -32,8 +32,28 @@ export default function UserImages() {
 
   const initializeCropAndZoom = async () => {
     const imageArray = await getImages('userImages')
-    const updatedImages = await imageArray.map((obj, cropData, zoomData) => {
-      if (!cropData) {
+    const updatedImages = await imageArray.map((obj) => {
+      if (obj.cropData && obj.zoomData) {
+        return obj;
+      }
+      if (!obj.cropData && !obj.zoomData) {
+        return {
+            ...obj,
+            cropData: {
+            x: 0,
+            y: 0,
+            width: '100%',
+            height: '100%',
+          },
+          zoomData: 1
+        };
+      } else if (!obj.zoomData && obj.cropData ){
+        return {
+        ...obj,
+        zoomData: 1
+        }
+      } else if (!obj.cropData && obj.zoomData) {
+              if (!cropData) {
         return {
             ...obj,
             cropData: {
@@ -44,13 +64,8 @@ export default function UserImages() {
           }
         };
       }
-      if (!zoomData){
-        return {
-        ...obj,
-        zoomData: 1
       }
-    }
-      return obj;
+
     });
     const newUserImages = updatedImages;
     storeImages('userImages', newUserImages);
