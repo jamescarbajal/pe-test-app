@@ -9,10 +9,11 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import { update } from 'idb-keyval';
+import { ImagesContext } from '../contexts/ImagesContext';
 
 export default function UserImages() {
 
-
+  const { cropReset, setCropReset } = useContext(ImagesContext);
 
   const orderData = JSON.parse(sessionStorage.getItem('orderDetails'));
   const imageCount = orderData.Quantity;
@@ -101,14 +102,18 @@ export default function UserImages() {
       storeImages('userImages', imageList);
       setImages(imageList);
       initializeCropAndZoom();
+      initializePixelArea();
       imagesRemaining(imageCount);
     }
   };
 
-  const onImageCopy = (index) => {
-    const currentImageCount = images.length;
+  const onImageCopy = async (index) => {
+    const imageArray = await getImages('userImages');
+    const currentImageCount = imageArray.length;
     if ( currentImageCount < imageCount ) {
-    const newImages = [...images.slice(0, index), images[index], ...images.slice(index)];
+      const copiedObject = structuredClone(imageArray[index]);
+      const newImages = [...imageArray.slice(0, index), copiedObject, ...imageArray.slice(index)];
+      storeImages('userImages', newImages);
       onChange(newImages);
     } 
     else setMaxImageAlert(true);
@@ -131,7 +136,8 @@ export default function UserImages() {
     imagesRemaining(imageCount);
     initializeCropAndZoom();
     initializePixelArea();
-  }, [images, , onImageCopy, onChange])
+
+  }, [onImageCopy, onChange, imagesRemaining, cropReset])
 
   useEffect( () => {
     checkIdbImages();

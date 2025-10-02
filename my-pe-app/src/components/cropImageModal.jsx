@@ -96,24 +96,20 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
             width: '100%',
             height: '100%'
           },
-          item.pixelArea = {
-            x: 0,
-            y: 0,
-            width: 0,
-            height: 0
-          }
+          item.pixelArea = null,
           item.zoomData = 1
         }
         return item;
       })
       storeImages('userImages',updatedArray);
+      handleClose();
     }
 
     useEffect( () => {
 
     previewURL(imageIndex);
 
-  }, [resetCrop, croppedAreaPixels])
+  }, [cropComplete, resetCrop])
 
     return (
   <>
