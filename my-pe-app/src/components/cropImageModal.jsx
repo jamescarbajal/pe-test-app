@@ -7,7 +7,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CircleCrop from './CircleCrop.jsx';
-import ImageOutput from './ImageOutput.jsx';
+import getCroppedImg from './ImageOutput.jsx';
 import { ImagesContext } from '../contexts/ImagesContext.jsx';
 
 
@@ -40,13 +40,28 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
     const [isOpen, setOpen] = useState(false);
     const [recievedAreaData, setReceivedAreaData] = useState(null);
     const [receivedZoomData, setReceivedZoomData] = useState(null);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
     const [preview, setPreview] = useState('');
 
+    const previewURL = async (index) => {
+      const getImageData = await getImages('userImages');
+      const url = getImageData[index].data_url;
+      const crop = getImageData[index].cropData;
+      const pixel = getImageData[index].pixelArea;
+      const newImage = await getCroppedImg(url, pixel);
+      setPreview(newImage);
+    }
+
+    
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     const getCroppedArea = (data) => {
       setReceivedAreaData(data);
+    }
+
+    const getPixels = async (data) => {
+      setCroppedAreaPixels(data);
     }
 
     const getZoomInfo = (data) => {
@@ -60,7 +75,8 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
           return {
             data_url: obj.data_url,
             cropData: recievedAreaData,
-            zoomData: receivedZoomData
+            zoomData: receivedZoomData,
+            pixelArea: croppedAreaPixels
           };
         }
         return obj;
@@ -80,6 +96,12 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
             width: '100%',
             height: '100%'
           },
+          item.pixelArea = {
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0
+          }
           item.zoomData = 1
         }
         return item;
@@ -89,9 +111,9 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
 
     useEffect( () => {
 
-      setPreview(dataURL)
+    previewURL(imageIndex);
 
-  }, [preview, dataURL, isOpen])
+  }, [resetCrop, croppedAreaPixels])
 
     return (
   <>
@@ -150,7 +172,7 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
               maxHeight:'80%',
               width:'100%',
               }}>
-              <CircleCrop imageIndex={imageIndex} getCroppedArea={getCroppedArea} getZoomInfo={getZoomInfo}/>
+              <CircleCrop imageIndex={imageIndex} getCroppedArea={getCroppedArea} getZoomInfo={getZoomInfo} getAreaPixels={getPixels}/>
             </Box>
             <Box sx={{
               display:'flex',

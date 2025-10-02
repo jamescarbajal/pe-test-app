@@ -69,8 +69,30 @@ export default function UserImages() {
     });
     const newUserImages = updatedImages;
     storeImages('userImages', newUserImages);
-    console.log('Crop and Zoom Data Initialized!');
   }
+
+
+
+// ****************************************************
+
+
+  const initializePixelArea = async () => {
+    const imageArray = await getImages('userImages')
+    const updatedImages = await imageArray.map((obj) => {
+      if (obj.pixelArea) {
+        return obj;
+      } else return {
+            ...obj,
+            pixelArea: null
+      }
+    });
+    const newUserImages = updatedImages;
+    storeImages('userImages', newUserImages);
+  }
+
+
+// ****************************************************
+
 
   const onChange = (imageList, addUpdateIndex) => {
     if (imageList.length > imageCount){
@@ -93,7 +115,6 @@ export default function UserImages() {
   }
 
   const imagesRemaining = (data) => {
-    console.log('Counting images...');
     const userImages = images;
       if (userImages){
         if (userImages.length == data) {
@@ -109,6 +130,7 @@ export default function UserImages() {
   useEffect( () => {
     imagesRemaining(imageCount);
     initializeCropAndZoom();
+    initializePixelArea();
   }, [images, , onImageCopy, onChange])
 
   useEffect( () => {

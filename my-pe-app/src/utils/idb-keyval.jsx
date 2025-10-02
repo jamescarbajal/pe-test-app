@@ -4,7 +4,7 @@ import { get, set, update, del, clear, values } from 'idb-keyval';
 export async function storeImages(key, data) {
   try {
     await set(key, data);
-    console.log('Array of image blobs and crop data stored successfully:', key, data);
+    // console.log('Array of image blobs and crop data stored successfully:', key, data);
   } catch (error) {
     console.error('Failed to store data:', error);
   }
