@@ -46,7 +46,6 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
     const previewURL = async (index) => {
       const getImageData = await getImages('userImages');
       const url = getImageData[index].data_url;
-      const crop = getImageData[index].cropData;
       const pixel = getImageData[index].pixelArea;
       const newImage = await getCroppedImg(url, pixel);
       setPreview(newImage);
@@ -70,7 +69,7 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
 
     const cropComplete = async (data) => {
       const imageArray = await getImages('userImages')
-      const updatedImages = imageArray.map((obj, index) => {
+      const updatedImages = await imageArray.map((obj, index) => {
         if (index === data) {
           return {
             data_url: obj.data_url,
@@ -81,14 +80,13 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
         }
         return obj;
       });
-      const newUserImages = updatedImages;
-      storeImages('userImages', newUserImages);
+      await storeImages('userImages', updatedImages);
       handleClose();
     }
 
     const resetCrop = async (data) => {
       const imageArray = await getImages('userImages');
-      const updatedArray = imageArray.map((item, index) => {
+      const newArray = await imageArray.map((item, index) => {
         if (index === data) {
           item.cropData = {
             x: 0,
@@ -101,7 +99,8 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
         }
         return item;
       })
-      storeImages('userImages',updatedArray);
+      const updatedArray = await newArray;
+      await storeImages('userImages',updatedArray);
       handleClose();
     }
 

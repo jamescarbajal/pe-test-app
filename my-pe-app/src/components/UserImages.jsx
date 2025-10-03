@@ -69,7 +69,7 @@ export default function UserImages() {
 
     });
     const newUserImages = updatedImages;
-    storeImages('userImages', newUserImages);
+    await storeImages('userImages', newUserImages);
   }
 
 
@@ -88,22 +88,20 @@ export default function UserImages() {
       }
     });
     const newUserImages = updatedImages;
-    storeImages('userImages', newUserImages);
+    await storeImages('userImages', newUserImages);
   }
 
 
 // ****************************************************
 
 
-  const onChange = (imageList, addUpdateIndex) => {
+  const onChange = async (imageList, addUpdateIndex) => {
     if (imageList.length > imageCount){
       setMaxImageAlert(true);
     } else {
-      storeImages('userImages', imageList);
-      setImages(imageList);
-      initializeCropAndZoom();
-      initializePixelArea();
       imagesRemaining(imageCount);
+      await storeImages('userImages', imageList);
+      setImages(imageList);
     }
   };
 
@@ -113,11 +111,18 @@ export default function UserImages() {
     if ( currentImageCount < imageCount ) {
       const copiedObject = structuredClone(imageArray[index]);
       const newImages = [...imageArray.slice(0, index), copiedObject, ...imageArray.slice(index)];
-      storeImages('userImages', newImages);
       onChange(newImages);
     } 
     else setMaxImageAlert(true);
   }
+
+  const onImageRemove = async (indexToRemove) => {
+    const imageArray = await getImages('userImages');
+     const updatedArray = imageArray.filter((_, index) => index !== indexToRemove);
+     console.log('updatedArray: ', updatedArray)
+     onChange(updatedArray)
+  };
+
 
   const imagesRemaining = (data) => {
     const userImages = images;
@@ -137,12 +142,11 @@ export default function UserImages() {
     initializeCropAndZoom();
     initializePixelArea();
 
-  }, [onImageCopy, onChange, imagesRemaining, cropReset])
+  }, [images, onImageCopy, onChange, imagesRemaining, cropReset, onImageRemove])
 
   useEffect( () => {
     checkIdbImages();
   }, [])
-
 
 
   return (
@@ -159,7 +163,6 @@ export default function UserImages() {
           onImageUpload,
           onImageRemoveAll,
           onImageUpdate,
-          onImageRemove,
           isDragging,
           dragProps,
         }) => (
@@ -246,8 +249,6 @@ export default function UserImages() {
                 {...dragProps}
                 sx={{
                   backgroundColor:'black'
-
-                  
                 }}
               >
                 Upload

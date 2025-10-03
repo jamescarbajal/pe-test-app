@@ -11,7 +11,7 @@ export default function CircleCrop( {imageIndex, getCroppedArea, getZoomInfo, ge
   const orderOptions = JSON.parse(sessionStorage.getItem('orderDetails'));
   const orderQty = orderOptions.Quantity;
 
-  const [crop, setCrop] = useState({ x:0, y:0  });
+  const [crop, setCrop] = useState( { x:0, y:0 } );
   const [zoom, setZoom] = useState(1);
   const [workingURL, setWorkingURL] = useState(null)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
@@ -19,19 +19,20 @@ export default function CircleCrop( {imageIndex, getCroppedArea, getZoomInfo, ge
   const currentCropAndZoom = async (data) => {
     const imageArray = await getImages('userImages')
     const cropInfo = imageArray[data].cropData
-    const pixelInfo = imageArray[data].pixelArea;
     const zoomInfo = imageArray[data].zoomData;
-    console.log('cropInfo in circlecrop: ', cropInfo, '\npixelArea in circle crop: ', pixelInfo);
-    setCrop({
-      x: cropInfo.x,
-      y: cropInfo.y,
-      width: cropInfo.width,
-      height: cropInfo.height,
-    })
-    setZoom(zoomInfo);
+    if (cropInfo) {
+      setCrop({
+        x: cropInfo.x,
+        y: cropInfo.y
+      })
+    }
+    if (zoomInfo){
+      setZoom(zoomInfo);
+    }
+    setWorkingURL(imageArray[data].data_url);
   }
 
-  const onCropAreaChange = (croppedArea, croppedAreaPixels) => {
+  const onCropComplete = (croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
     getCroppedArea(crop);
     getAreaPixels(croppedAreaPixels);
@@ -41,24 +42,9 @@ export default function CircleCrop( {imageIndex, getCroppedArea, getZoomInfo, ge
 
   useEffect( () => {
 
-    if (cropReset){
-      setCrop({x: 0, y:0, width: '100%', height: '100%'});
-      setZoom(1);
-      currentCropAndZoom(imageIndex);
-      setCropReset(false);
-    };
-    
-    const getImageURL = async (data) => {
-      const pulledArray = await getImages('userImages');
-      const currentURL = pulledArray[data].data_url;
-      setWorkingURL(currentURL)
-    }
-
-    getImageURL(imageIndex);
-
     currentCropAndZoom(imageIndex);
 
-  }, [imageIndex, cropReset]);
+  }, []);
 
   return (
     <div style={{ 
@@ -78,7 +64,8 @@ export default function CircleCrop( {imageIndex, getCroppedArea, getZoomInfo, ge
           zoom={zoom}
           aspect={1}
           onCropChange={setCrop}
-          onCropAreaChange={onCropAreaChange}
+          onCropComplete={onCropComplete}
+          // onCropAreaChange={onCropAreaChange}
           onZoomChange={setZoom}
 
         />
