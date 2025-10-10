@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { update } from 'idb-keyval';
 import { getImages, storeImages } from '../utils/idb-keyval';
 import Cropper from 'react-easy-crop';
 import { ImagesContext } from '../contexts/ImagesContext';
@@ -16,7 +17,16 @@ export default function CircleCrop( {imageIndex, getCroppedArea, getZoomInfo, ge
   const [workingURL, setWorkingURL] = useState(null)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
-  const currentCropAndZoom = async (data) => {
+  const getInitialCrop = async (index) => {
+    const imageArray = await getImages('userImages');
+    if (!imageArray[index].cropData){
+      setCrop({ x:0, y:0 })
+    } else {
+      updateCropAndZoom(index);
+    }
+  }
+
+  const updateCropAndZoom = async (data) => {
     const imageArray = await getImages('userImages')
     const cropInfo = imageArray[data].cropData
     const zoomInfo = imageArray[data].zoomData;
@@ -32,7 +42,7 @@ export default function CircleCrop( {imageIndex, getCroppedArea, getZoomInfo, ge
     setWorkingURL(imageArray[data].data_url);
   }
 
-  const onCropComplete = (croppedArea, croppedAreaPixels) => {
+  const onCropComplete = async (croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
     getCroppedArea(crop);
     getAreaPixels(croppedAreaPixels);
@@ -42,7 +52,8 @@ export default function CircleCrop( {imageIndex, getCroppedArea, getZoomInfo, ge
 
   useEffect( () => {
 
-    currentCropAndZoom(imageIndex);
+    getInitialCrop(imageIndex);
+    updateCropAndZoom(imageIndex);
 
   }, []);
 
@@ -65,7 +76,6 @@ export default function CircleCrop( {imageIndex, getCroppedArea, getZoomInfo, ge
           aspect={1}
           onCropChange={setCrop}
           onCropComplete={onCropComplete}
-          // onCropAreaChange={onCropAreaChange}
           onZoomChange={setZoom}
 
         />

@@ -25,3 +25,28 @@ export async function getImages(key) {
     throw err; // Re-throw the error for further handling
   }
 }
+
+export async function storeCropData(key, data) {
+  try {
+    await set(key, data);
+    // console.log('Array of image blobs and crop data stored successfully:', key, data);
+  } catch (error) {
+    console.error('Failed to store data:', error);
+  }
+}
+
+export async function getCropData(key) {
+  try {
+    const value = await get(key);
+    if (value !== undefined) {
+      // console.log(`Retrieved object for key '${key}':`, value);
+      return value;
+    } else {
+      console.log(`No object found for key '${key}'.`);
+      return null; // Or handle as needed
+    }
+  } catch (err) {
+    console.error(`Error retrieving object for key '${key}':`, err);
+    throw err; // Re-throw the error for further handling
+  }
+}

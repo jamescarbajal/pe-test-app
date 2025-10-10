@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { storeImages, getImages } from '../utils/idb-keyval';
+import NumericInput from '../utils/number-input';
 import ImageUploading from 'react-images-uploading';
 import Grid from '@mui/material/Grid';
 import CropImageModal from './cropImageModal';
@@ -8,7 +9,6 @@ import { Button, Alert, AlertTitle, Typography } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
-import { update } from 'idb-keyval';
 import { ImagesContext } from '../contexts/ImagesContext';
 
 export default function UserImages() {
@@ -34,27 +34,12 @@ export default function UserImages() {
   const initializeCropAndZoom = async () => {
     const imageArray = await getImages('userImages')
     const updatedImages = await imageArray.map((obj) => {
-      if (obj.cropData && obj.zoomData) {
-        return obj;
-      }
-      if (!obj.cropData && !obj.zoomData) {
-        return {
-            ...obj,
-            cropData: {
-            x: 0,
-            y: 0,
-            width: '100%',
-            height: '100%',
-          },
-          zoomData: 1
-        };
-      } else if (!obj.zoomData && obj.cropData ){
+      if (!obj.zoomData || obj.zoomData == null || obj.zoomData == undefined){
         return {
         ...obj,
         zoomData: 1
         }
-      } else if (!obj.cropData && obj.zoomData) {
-              if (!cropData) {
+      } if (!obj.cropData || obj.cropData == null || obj.cropData == undefined) {
         return {
             ...obj,
             cropData: {
@@ -63,13 +48,11 @@ export default function UserImages() {
             width: '100%',
             height: '100%',
           }
-        };
       }
       }
-
+      return obj;
     });
-    const newUserImages = updatedImages;
-    await storeImages('userImages', newUserImages);
+    await storeImages('userImages', updatedImages);
   }
 
 
@@ -80,15 +63,15 @@ export default function UserImages() {
   const initializePixelArea = async () => {
     const imageArray = await getImages('userImages')
     const updatedImages = await imageArray.map((obj) => {
-      if (obj.pixelArea) {
-        return obj;
-      } else return {
+      if (!obj.pixelArea || obj.pixelArea == null || obj.pixelArea == undefined) {
+         return {
             ...obj,
             pixelArea: null
+         }
       }
+      return obj;
     });
-    const newUserImages = updatedImages;
-    await storeImages('userImages', newUserImages);
+    await storeImages('userImages', updatedImages);
   }
 
 
@@ -101,7 +84,10 @@ export default function UserImages() {
     } else {
       imagesRemaining(imageCount);
       await storeImages('userImages', imageList);
+      initializeCropAndZoom();
+      initializePixelArea();
       setImages(imageList);
+      setMaxImageAlert(false);
     }
   };
 
@@ -118,9 +104,9 @@ export default function UserImages() {
 
   const onImageRemove = async (indexToRemove) => {
     const imageArray = await getImages('userImages');
-     const updatedArray = imageArray.filter((_, index) => index !== indexToRemove);
-     console.log('updatedArray: ', updatedArray)
-     onChange(updatedArray)
+    const updatedArray = imageArray.filter((_, index) => index !== indexToRemove);
+    await storeImages('userImages', updatedArray);
+    onChange(updatedArray)
   };
 
 
@@ -138,11 +124,12 @@ export default function UserImages() {
   };
 
   useEffect( () => {
+
     imagesRemaining(imageCount);
     initializeCropAndZoom();
     initializePixelArea();
-
   }, [images, onImageCopy, onChange, imagesRemaining, cropReset, onImageRemove])
+
 
   useEffect( () => {
     checkIdbImages();
@@ -218,13 +205,19 @@ export default function UserImages() {
                   fontWeight: 700
                 }}>
                 <p style={{ color:'lightgrey', fontWeight: 700, margin:0, padding:0 }}>
-                  Please select {imagesRemaining(imageCount)} more images.
+                  {imagesRemaining(imageCount)} images remaining
                 </p>
               </Button>
               }
               {maxImageAlert && (
                 <Box sx={{
-                  mb: 2
+                  position: 'fixed',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: 350,
+                  mb: 2,
+                  zIndex: 1000
                 }}>
                   <Alert
                     severity='warning'
@@ -289,22 +282,23 @@ export default function UserImages() {
                     <Box sx={{
                       display: 'flex',
                       flexDirection: 'row',
-                      justifyContent: 'center',
+                      justifyContent: 'space-between',
                       alignItems: 'center',
                       width: '100%',
                       maxHeight: 30,
-                      maxWidth: 200,
+                      width: 150,
                       m: 0,
                       pt: 2
                     }}>
                     <h4 style={{
-                      flexGrow: 3,
-                        color:'black'
+                      width: 'fit-content',
+                      color:'black'
                     }}>
                         Image {index + 1}
                     </h4>
                       <Button onClick={() => onImageRemove(index)} 
-                        style={{
+                        sx={{
+                          left: 20,
                           m:0,
                           p: 0,
                           color: 'darkred'
@@ -316,30 +310,26 @@ export default function UserImages() {
                     <Box 
                     sx={{
                       display: 'flex',
-                      justifyContent: 'space-between',
+                      justifyContent: 'center',
                       minWidth: 'fit-content',
-                      width: 140,
+                      width: 240,
                       height: 45,
                       m:0,
                       p:0
                     }}>
-                      <Button 
-                        onClick={() => onImageCopy(index)}
-                        style={{
-                          color: 'black',
-                          m:0,
-                          p:0
-                        }}>
-                          <ContentCopyIcon sx={{ fontSize: 30 }} />
-                      </Button>
-                      <Button onClick={() => onImageUpdate(index)}
+                      <NumericInput 
+                      sx={{
+                        width: 250
+                      }} 
+                      />
+                      {/* <Button onClick={() => onImageUpdate(index)}
                         style={{
                           color: 'black',
                           m:0,
                           p:0
                         }}>
                           <ChangeCircleIcon sx={{ fontSize: 30 }} />
-                      </Button>
+                      </Button> */}
                     </Box>
                 </Grid>
                 ))

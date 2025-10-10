@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
-import { storeImages, getImages } from '../utils/idb-keyval'
+import { storeImages, getImages } from '../utils/idb-keyval';
+import { update } from 'idb-keyval';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -50,7 +51,6 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
       const newImage = await getCroppedImg(url, pixel);
       setPreview(newImage);
     }
-
     
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -76,11 +76,13 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
             cropData: recievedAreaData,
             zoomData: receivedZoomData,
             pixelArea: croppedAreaPixels
+            }
           };
-        }
         return obj;
       });
-      await storeImages('userImages', updatedImages);
+      await update('userImages', () => {
+        return updatedImages
+      })
       handleClose();
     }
 
@@ -108,7 +110,7 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
 
     previewURL(imageIndex);
 
-  }, [cropComplete, resetCrop])
+  }, [resetCrop])
 
     return (
   <>
