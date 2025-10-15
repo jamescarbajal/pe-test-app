@@ -1,19 +1,45 @@
 import { TextField, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Button } from '@mui/material';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import { storeImages, getImages } from './idb-keyval';
 
-export default function NumericInput() {
+export default function NumericInput( {imageIndex} ) {
   const [value, setValue] = useState(1); // Initialize the state for the input value
+  const [count, setCount] = useState(0);
+
+  const orderData = JSON.parse(sessionStorage.getItem('orderDetails'));
+  const maxCount = orderData.Quantity;
+
+  const checkForQty = async (data) => {
+    const imageArray = await getImages('userImages'); 
+    if (imageArray && imageArray[data].qty) {
+        setValue(imageArray[data].qty);
+    } else setValue(1);
+  }
+
+  const countPerImage = async (data) => {
+    const imageArray = await getImages('userImages');
+    const updatedArray = imageArray.map((obj, index) => {
+        if (index === data) {
+            return {
+                ...obj,
+                qty: value
+            }
+        }
+        return obj;
+    })
+    await storeImages('userImages', updatedArray);
+}
 
   // Function to handle incrementing the value
-  const handleIncrement = () => {
-    setValue(prevValue => Math.min(99, prevValue + 1));
+  const handleIncrement = (data) => {
+    setValue(prevValue => Math.min(orderData.Quantity, prevValue + 1));
   };
 
   // Function to handle decrementing the value
-  const handleDecrement = () => {
+  const handleDecrement = (data) => {
     setValue(prevValue => Math.max(1, prevValue - 1)); // Ensure value doesn't go below 0
   };
 
@@ -25,6 +51,15 @@ export default function NumericInput() {
     }
   };
 
+  useEffect( () => {
+    countPerImage(imageIndex);
+  }, [value])
+
+
+  useEffect( () => {
+    checkForQty(imageIndex);
+  }, []);
+
   return (
     <div>
     <Box sx={{ 
@@ -35,7 +70,7 @@ export default function NumericInput() {
         width: 180,
         textAlign:'center'
     }}>
-      <RemoveIcon onClick={handleDecrement}
+      <RemoveIcon onClick={() => handleDecrement(imageIndex)}
       sx={{
         height: 35,
         width: 40,
@@ -70,7 +105,7 @@ export default function NumericInput() {
         }
         }}
       />
-      <AddIcon onClick={handleIncrement}
+      <AddIcon onClick={() => handleIncrement(imageIndex)}
         sx={{
         height: 35,
         width: 40,

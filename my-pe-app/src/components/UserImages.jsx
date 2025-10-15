@@ -33,6 +33,9 @@ export default function UserImages() {
 
   const initializeCropAndZoom = async () => {
     const imageArray = await getImages('userImages')
+    if (imageArray.cropData && imageArray.zoomData){
+      return;
+    }
     const updatedImages = await imageArray.map((obj) => {
       if (!obj.zoomData || obj.zoomData == null || obj.zoomData == undefined){
         return {
@@ -83,11 +86,11 @@ export default function UserImages() {
       setMaxImageAlert(true);
     } else {
       imagesRemaining(imageCount);
-      await storeImages('userImages', imageList);
-      initializeCropAndZoom();
-      initializePixelArea();
-      setImages(imageList);
       setMaxImageAlert(false);
+      await storeImages('userImages', imageList);
+      await initializeCropAndZoom();
+      await initializePixelArea();
+      setImages(imageList);
     }
   };
 
@@ -126,14 +129,13 @@ export default function UserImages() {
   useEffect( () => {
 
     imagesRemaining(imageCount);
-    initializeCropAndZoom();
-    initializePixelArea();
+
   }, [images, onImageCopy, onChange, imagesRemaining, cropReset, onImageRemove])
 
 
   useEffect( () => {
     checkIdbImages();
-  }, [])
+  }, [onChange])
 
 
   return (
@@ -317,7 +319,7 @@ export default function UserImages() {
                       m:0,
                       p:0
                     }}>
-                      <NumericInput 
+                      <NumericInput imageIndex={index} maxCount={imageCount}
                       sx={{
                         width: 250
                       }} 

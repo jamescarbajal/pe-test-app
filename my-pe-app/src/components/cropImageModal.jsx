@@ -46,10 +46,12 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
 
     const previewURL = async (index) => {
       const getImageData = await getImages('userImages');
+      if (getImageData[index]) {
       const url = getImageData[index].data_url;
       const pixel = getImageData[index].pixelArea;
       const newImage = await getCroppedImg(url, pixel);
       setPreview(newImage);
+    }
     }
     
     const handleOpen = () => setOpen(true);
@@ -71,6 +73,7 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
       const imageArray = await getImages('userImages')
       const updatedImages = await imageArray.map((obj, index) => {
         if (index === data) {
+          console.log('Index passed into CropImageModal = ', data);
           return {
             data_url: obj.data_url,
             cropData: recievedAreaData,
@@ -80,9 +83,8 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
           };
         return obj;
       });
-      await update('userImages', () => {
-        return updatedImages
-      })
+      await storeImages('userImages', updatedImages);
+      await previewURL(data);
       handleClose();
     }
 
@@ -110,7 +112,7 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
 
     previewURL(imageIndex);
 
-  }, [resetCrop])
+  }, [resetCrop, cropComplete])
 
     return (
   <>
