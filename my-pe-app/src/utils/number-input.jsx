@@ -5,9 +5,8 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import { storeImages, getImages } from './idb-keyval';
 
-export default function NumericInput( {imageIndex} ) {
-  const [value, setValue] = useState(1); // Initialize the state for the input value
-  const [count, setCount] = useState(0);
+export default function NumericInput( {imageIndex, images, count} ) {
+  const [value, setValue] = useState(''); // Initialize the state for the input value
 
   const orderData = JSON.parse(sessionStorage.getItem('orderDetails'));
   const maxCount = orderData.Quantity;
@@ -19,19 +18,10 @@ export default function NumericInput( {imageIndex} ) {
     } else setValue(1);
   }
 
-  const countPerImage = async (data) => {
-    const imageArray = await getImages('userImages');
-    const updatedArray = imageArray.map((obj, index) => {
-        if (index === data) {
-            return {
-                ...obj,
-                qty: value
-            }
-        }
-        return obj;
-    })
-    await storeImages('userImages', updatedArray);
-}
+//   const countPerImage = async (data) => {
+//     const imageArray = await getImages('userImages');
+
+// }
 
   // Function to handle incrementing the value
   const handleIncrement = (data) => {
@@ -48,32 +38,46 @@ export default function NumericInput( {imageIndex} ) {
     const newValue = parseInt(e.target.value, 10);
     if (!isNaN(newValue)) { // Only update if it's a valid number
       setValue(newValue);
+      getValue(newValue);
     }
   };
 
   useEffect( () => {
-    countPerImage(imageIndex);
+    // countPerImage(imageIndex);
   }, [value])
 
 
   useEffect( () => {
     checkForQty(imageIndex);
-  }, []);
+  }, [imageIndex, images]);
+
+  useEffect( () => {
+    count(value);
+  }, [value, handleIncrement, handleDecrement])
 
   return (
-    <div>
+    <div
+    style={{
+      display:'flex',
+      justifyContent:'center',
+      minWidth:100,
+      width:"100%",
+      maxWidth:250
+    }}>
     <Box sx={{ 
         display: 'flex', 
         alignItems: 'center',
-        justifyContent: 'space-around',
+        justifyContent: 'space-evenly',
         height: 30,
-        width: 180,
-        textAlign:'center'
+        minWidth: 100,
+        width:"100%",
+        maxWidth:250,
+        textAlign:'center',
     }}>
       <RemoveIcon onClick={() => handleDecrement(imageIndex)}
       sx={{
-        height: 35,
-        width: 40,
+        height: 20,
+        width: 30,
         color: 'white',
         backgroundColor: 'black',
         borderRadius: 3,
@@ -87,7 +91,7 @@ export default function NumericInput( {imageIndex} ) {
       <Typography
         sx={{
             fontWeight: 700,
-            width: 30
+            width: 40
         }}
       >
         Qty:
@@ -107,8 +111,8 @@ export default function NumericInput( {imageIndex} ) {
       />
       <AddIcon onClick={() => handleIncrement(imageIndex)}
         sx={{
-        height: 35,
-        width: 40,
+        height: 20,
+        width: 30,
         color: 'white',
         backgroundColor: 'black',
         borderRadius: 3,

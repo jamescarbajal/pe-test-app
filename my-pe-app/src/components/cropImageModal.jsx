@@ -73,8 +73,8 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
       const imageArray = await getImages('userImages')
       const updatedImages = await imageArray.map((obj, index) => {
         if (index === data) {
-          console.log('Index passed into CropImageModal = ', data);
           return {
+            ...obj,
             data_url: obj.data_url,
             cropData: recievedAreaData,
             zoomData: receivedZoomData,
@@ -118,12 +118,15 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
   <>
       <Button onClick={handleOpen} 
       sx={{
-        width:200
+        minWidth:100,
+        width:"100%",
+        maxWidth: 250
        }}>
         <Card variant="solid" sx={{ 
         position:'relative',
         backgroundColor:'rgb(0,0,0,0)', 
         minWidth:'fit-content',
+        maxWidth:200,
         display:'flex',
         flexDirection:'column',
         alignContent:'center',
@@ -135,8 +138,9 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
           image={preview}
           alt="uploaded image"
           sx={{
-            width:200,
-            height:200,
+            minWidth:100,
+            width:"100%",
+            maxWidth:200,
             borderRadius:'50%',
             border: '2px solid black',
             m:0,

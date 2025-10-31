@@ -10,6 +10,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import { ImagesContext } from '../contexts/ImagesContext';
+import { set } from 'idb-keyval';
 
 export default function UserImages() {
 
@@ -21,6 +22,27 @@ export default function UserImages() {
   const [images, setImages] = useState([]);
   const [maxImageAlert, setMaxImageAlert] = useState(false);
   const [canContinue, setCanContinue] = useState(false);
+  const [userImageCount, setUserImageCount] = useState(0);
+  const [tally, setTally] = useState(0);
+
+
+  const handleQtyChange = async (data) => {
+    const imageArray = await getImages('userImages');
+    if(!imageArray){
+      return
+    }
+    const updatedArray = imageArray.map((obj, index) => {
+      return {
+          ...obj,
+          qty: data
+      }
+    })
+    await storeImages('userImages', updatedArray);
+    const totalQuantity = updatedArray.reduce((total, item) => total + item.qty, 0);
+    setTally(totalQuantity);
+    console.log('userImageCount updated!');
+  };
+
 
     const checkIdbImages = async () => {
       const checkImages = await getImages('userImages');
@@ -30,6 +52,21 @@ export default function UserImages() {
       setImages([])
     }
   };
+
+  const collectTally = async () => {
+    let sum = 0;
+    const imageArray = await getImages('userImages');
+    if(!imageArray){
+      return
+    }
+    const updatedArray = imageArray.map( (obj) => {
+      if(obj.qty){
+       sum += obj.qty;
+      }
+      return obj;
+    });
+    setTally(sum);
+  }
 
   const initializeCropAndZoom = async () => {
     const imageArray = await getImages('userImages')
@@ -114,29 +151,26 @@ export default function UserImages() {
 
 
   const imagesRemaining = (data) => {
-    const userImages = images;
-      if (userImages){
-        if (userImages.length == data) {
+        if (tally == data) {
           setCanContinue(true);
         }
-        if (userImages.length < data) {
+        if (tally < data || tally > data) {
           setCanContinue(false);
         }
-        return (data - userImages.length)
-      } else return data;
+        return (data - tally);
   };
-
-  useEffect( () => {
-
-    imagesRemaining(imageCount);
-
-  }, [images, onImageCopy, onChange, imagesRemaining, cropReset, onImageRemove])
 
 
   useEffect( () => {
     checkIdbImages();
-  }, [onChange])
+  }, [])
 
+  useEffect( () => {
+
+    imagesRemaining(imageCount);
+    console.log('images remaining is ', imagesRemaining(imageCount));
+
+  }, [tally, images, imageCount, userImageCount])
 
   return (
 
@@ -276,7 +310,7 @@ export default function UserImages() {
                       flexDirection:'column',
                       justifyContent: 'center',
                       alignItems:'center',
-                      height: 280,
+                      height: "fit-content",
                       maxWidth: 250,
                       backgroundColor: 'rgba(131, 32, 32, 0.2)',
                       borderRadius: 5
@@ -286,43 +320,30 @@ export default function UserImages() {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                       alignItems: 'center',
+                      minWidth:'fit-content',
                       width: '100%',
                       maxHeight: 30,
-                      width: 150,
-                      m: 0,
-                      pt: 2
+                      pl:1,
+                      pr:1
                     }}>
                     <h4 style={{
-                      width: 'fit-content',
-                      color:'black'
+                      display:'flex',
+                      flexGrow:6,
+                      color:'black',
+                      paddingLeft:5
                     }}>
                         Image {index + 1}
                     </h4>
-                      <Button onClick={() => onImageRemove(index)} 
-                        sx={{
-                          left: 20,
-                          m:0,
-                          p: 0,
-                          color: 'darkred'
-                        }}>
-                          <DeleteForeverIcon sx={{ fontSize: 30 }} />
-                      </Button>
+                          <DeleteForeverIcon 
+                            style={{ 
+                              display:'flex',
+                              flexGrow:1,
+                              fontSize: 30,
+                              color:"darkred"
+                            }} />
                     </Box>
                     <CropImageModal imageIndex={index} dataURL={image.data_url} cropData={image.cropData} />
-                    <Box 
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      minWidth: 'fit-content',
-                      width: 240,
-                      height: 45,
-                      m:0,
-                      p:0
-                    }}>
-                      <NumericInput imageIndex={index} maxCount={imageCount}
-                      sx={{
-                        width: 250
-                      }} 
+                    <NumericInput imageIndex={index} maxCount={imageCount} images={images} count={handleQtyChange}
                       />
                       {/* <Button onClick={() => onImageUpdate(index)}
                         style={{
@@ -332,7 +353,6 @@ export default function UserImages() {
                         }}>
                           <ChangeCircleIcon sx={{ fontSize: 30 }} />
                       </Button> */}
-                    </Box>
                 </Grid>
                 ))
               )
