@@ -8,29 +8,45 @@ import { storeImages, getImages } from './idb-keyval';
 export default function NumericInput( {imageIndex, images, count} ) {
   const [value, setValue] = useState(''); // Initialize the state for the input value
 
+
+
   const orderData = JSON.parse(sessionStorage.getItem('orderDetails'));
   const maxCount = orderData.Quantity;
 
-  const checkForQty = async (data) => {
-    const imageArray = await getImages('userImages'); 
-    if (imageArray && imageArray[data].qty) {
-        setValue(imageArray[data].qty);
+  const checkForQty = async (imageIndex) => {
+    const imageArray = await getImages('userImages');
+    if (imageArray && imageArray[imageIndex].qty) {
+        setValue(imageArray[imageIndex].qty);
     } else setValue(1);
+    console.log('Current image', imageIndex, 'value is: ', value);
+    console.log('Image', imageIndex, 'stored quantity is: ', imageArray[imageIndex].qty || value);
   }
 
-//   const countPerImage = async (data) => {
-//     const imageArray = await getImages('userImages');
-
-// }
+  const storeQuantity = async () => {
+    const imageArray = await getImages('userImages');
+    const updatedArray = imageArray.map((obj, index) => {
+      if ( index == imageIndex ) {
+        return {
+            ...obj,
+            qty: value
+        }
+      }
+      return obj;
+      })
+    storeImages('userImages', updatedArray);
+    console.log('Quantity stored for image', imageIndex, 'in number-input: ', value);
+}
 
   // Function to handle incrementing the value
   const handleIncrement = (data) => {
     setValue(prevValue => Math.min(orderData.Quantity, prevValue + 1));
+    storeQuantity();
   };
 
   // Function to handle decrementing the value
   const handleDecrement = (data) => {
-    setValue(prevValue => Math.max(1, prevValue - 1)); // Ensure value doesn't go below 0
+    setValue(prevValue => Math.max(1, prevValue - 1));
+    storeQuantity(); // Ensure value doesn't go below 0
   };
 
   // Function to handle direct input changes
@@ -43,7 +59,8 @@ export default function NumericInput( {imageIndex, images, count} ) {
   };
 
   useEffect( () => {
-    // countPerImage(imageIndex);
+    storeQuantity();
+    count(value);
   }, [value])
 
 
@@ -51,9 +68,9 @@ export default function NumericInput( {imageIndex, images, count} ) {
     checkForQty(imageIndex);
   }, [imageIndex, images]);
 
-  useEffect( () => {
-    count(value);
-  }, [value, handleIncrement, handleDecrement])
+  // useEffect( () => {
+  //   count(value);
+  // }, [value, handleIncrement, handleDecrement])
 
   return (
     <div

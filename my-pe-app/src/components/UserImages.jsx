@@ -26,46 +26,41 @@ export default function UserImages() {
   const [tally, setTally] = useState(0);
 
 
-  const handleQtyChange = async (data) => {
-    const imageArray = await getImages('userImages');
-    if(!imageArray){
-      return
-    }
-    const updatedArray = imageArray.map((obj, index) => {
-      return {
-          ...obj,
-          qty: data
-      }
-    })
-    await storeImages('userImages', updatedArray);
-    const totalQuantity = updatedArray.reduce((total, item) => total + item.qty, 0);
-    setTally(totalQuantity);
-    console.log('userImageCount updated!');
-  };
+  // const handleQtyChange = async (data) => {
+  //   const imageArray = await getImages('userImages');
+  //   if(!imageArray){
+  //     return
+  //   }
+  //   let sum = 0;
+  //   for (let i = 0; i < imageArray.length; i++){
+  //     sum += imageArray[i].qty;
+  //   }
+  //   setTally(sum);
+  //   return sum;
+  // };
 
 
-    const checkIdbImages = async () => {
-      const checkImages = await getImages('userImages');
+  const checkIdbImages = async () => {
+    const checkImages = await getImages('userImages');
       if (checkImages) {
-      setImages(checkImages);
-    } else {
-      setImages([])
-    }
+        setImages(checkImages);
+      } else {
+        setImages([])
+      }
+    console.log('checkIdbImages has run! Image array is: ',checkImages);
   };
 
-  const collectTally = async () => {
-    let sum = 0;
+  const collectTally = async (data) => {
     const imageArray = await getImages('userImages');
     if(!imageArray){
       return
     }
-    const updatedArray = imageArray.map( (obj) => {
-      if(obj.qty){
-       sum += obj.qty;
-      }
-      return obj;
-    });
-    setTally(sum);
+      const totalPrice = imageArray.reduce((accumulator, item) => {
+        return accumulator + item.qty;
+      }, 0);
+      setUserImageCount(data);
+      console.log('sum is: ', totalPrice);
+      setTally(totalPrice);
   }
 
   const initializeCropAndZoom = async () => {
@@ -74,7 +69,7 @@ export default function UserImages() {
       return;
     }
     const updatedImages = await imageArray.map((obj) => {
-      if (!obj.zoomData || obj.zoomData == null || obj.zoomData == undefined){
+      if (!obj || !obj.zoomData || obj.zoomData == null || obj.zoomData == undefined){
         return {
         ...obj,
         zoomData: 1
@@ -117,17 +112,27 @@ export default function UserImages() {
 
 // ****************************************************
 
+  const mergeArrays = (array1, array2) => {
+    const finalArray = [...array1];
+    for (let i = array1.length; i < array2.length; i++){
+      finalArray.push(array2[i]);
+    }
+    return finalArray;
+  }
 
   const onChange = async (imageList, addUpdateIndex) => {
+    const imageArray = await getImages('userImages');
     if (imageList.length > imageCount){
       setMaxImageAlert(true);
     } else {
       imagesRemaining(imageCount);
       setMaxImageAlert(false);
-      await storeImages('userImages', imageList);
+      const updatedArray = mergeArrays(imageArray, imageList);
+      console.log('updatedArray list: ', updatedArray)
+      await storeImages('userImages', updatedArray);
       await initializeCropAndZoom();
       await initializePixelArea();
-      setImages(imageList);
+      checkIdbImages();
     }
   };
 
@@ -151,6 +156,7 @@ export default function UserImages() {
 
 
   const imagesRemaining = (data) => {
+      console.log('tally is: ', tally);
         if (tally == data) {
           setCanContinue(true);
         }
@@ -163,14 +169,15 @@ export default function UserImages() {
 
   useEffect( () => {
     checkIdbImages();
+    console.log('checkIdbImages has run!');
   }, [])
 
   useEffect( () => {
-
+    collectTally();
     imagesRemaining(imageCount);
     console.log('images remaining is ', imagesRemaining(imageCount));
 
-  }, [tally, images, imageCount, userImageCount])
+  }, [tally, images, imageCount, userImageCount, onChange, onImageRemove])
 
   return (
 
@@ -334,7 +341,7 @@ export default function UserImages() {
                     }}>
                         Image {index + 1}
                     </h4>
-                          <DeleteForeverIcon 
+                          <DeleteForeverIcon onClick={() => onImageRemove(index)}
                             style={{ 
                               display:'flex',
                               flexGrow:1,
@@ -343,7 +350,7 @@ export default function UserImages() {
                             }} />
                     </Box>
                     <CropImageModal imageIndex={index} dataURL={image.data_url} cropData={image.cropData} />
-                    <NumericInput imageIndex={index} maxCount={imageCount} images={images} count={handleQtyChange}
+                    <NumericInput imageIndex={index} maxCount={imageCount} images={images} count={collectTally}
                       />
                       {/* <Button onClick={() => onImageUpdate(index)}
                         style={{
