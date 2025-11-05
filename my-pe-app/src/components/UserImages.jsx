@@ -154,14 +154,25 @@ export default function UserImages() {
     onChange(updatedArray)
   };
 
+  const onImageRemoveAll = () => {
+    setImages([]);
+    storeImages('userImages', []);
+  }
+
 
   const imagesRemaining = (data) => {
       console.log('tally is: ', tally);
         if (tally == data) {
           setCanContinue(true);
         }
+        if (tally < data){
+          setMaxImageAlert(false);
+        }
         if (tally < data || tally > data) {
           setCanContinue(false);
+        }
+        if (tally > data) {
+          setMaxImageAlert(true);
         }
         return (data - tally);
   };
@@ -191,7 +202,6 @@ export default function UserImages() {
         {({
           imageList,
           onImageUpload,
-          onImageRemoveAll,
           onImageUpdate,
           isDragging,
           dragProps,
@@ -248,14 +258,14 @@ export default function UserImages() {
                   fontWeight: 700
                 }}>
                 <p style={{ color:'lightgrey', fontWeight: 700, margin:0, padding:0 }}>
-                  {imagesRemaining(imageCount)} images remaining
+                  Added {tally} out of {imageCount} images
                 </p>
               </Button>
               }
               {maxImageAlert && (
                 <Box sx={{
                   position: 'fixed',
-                  top: '50%',
+                  top: '30%',
                   left: '50%',
                   transform: 'translate(-50%, -50%)',
                   width: 350,
@@ -350,7 +360,7 @@ export default function UserImages() {
                             }} />
                     </Box>
                     <CropImageModal imageIndex={index} dataURL={image.data_url} cropData={image.cropData} />
-                    <NumericInput imageIndex={index} maxCount={imageCount} images={images} count={collectTally}
+                    <NumericInput imageIndex={index} maxCount={imageCount} images={images} count={collectTally} canContinue={canContinue}
                       />
                       {/* <Button onClick={() => onImageUpdate(index)}
                         style={{

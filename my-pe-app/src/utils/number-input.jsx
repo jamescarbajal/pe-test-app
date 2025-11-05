@@ -5,7 +5,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import { storeImages, getImages } from './idb-keyval';
 
-export default function NumericInput( {imageIndex, images, count} ) {
+export default function NumericInput( {imageIndex, images, count, canContinue} ) {
   const [value, setValue] = useState(''); // Initialize the state for the input value
 
 
@@ -39,8 +39,10 @@ export default function NumericInput( {imageIndex, images, count} ) {
 
   // Function to handle incrementing the value
   const handleIncrement = (data) => {
+    if (!canContinue){
     setValue(prevValue => Math.min(orderData.Quantity, prevValue + 1));
     storeQuantity();
+    }
   };
 
   // Function to handle decrementing the value
