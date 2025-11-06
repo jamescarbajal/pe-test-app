@@ -26,20 +26,6 @@ export default function UserImages() {
   const [tally, setTally] = useState(0);
 
 
-  // const handleQtyChange = async (data) => {
-  //   const imageArray = await getImages('userImages');
-  //   if(!imageArray){
-  //     return
-  //   }
-  //   let sum = 0;
-  //   for (let i = 0; i < imageArray.length; i++){
-  //     sum += imageArray[i].qty;
-  //   }
-  //   setTally(sum);
-  //   return sum;
-  // };
-
-
   const checkIdbImages = async () => {
     const checkImages = await getImages('userImages');
       if (checkImages) {
@@ -136,16 +122,16 @@ export default function UserImages() {
     }
   };
 
-  const onImageCopy = async (index) => {
-    const imageArray = await getImages('userImages');
-    const currentImageCount = imageArray.length;
-    if ( currentImageCount < imageCount ) {
-      const copiedObject = structuredClone(imageArray[index]);
-      const newImages = [...imageArray.slice(0, index), copiedObject, ...imageArray.slice(index)];
-      onChange(newImages);
-    } 
-    else setMaxImageAlert(true);
-  }
+  // const onImageCopy = async (index) => {
+  //   const imageArray = await getImages('userImages');
+  //   const currentImageCount = imageArray.length;
+  //   if ( currentImageCount < imageCount ) {
+  //     const copiedObject = structuredClone(imageArray[index]);
+  //     const newImages = [...imageArray.slice(0, index), copiedObject, ...imageArray.slice(index)];
+  //     onChange(newImages);
+  //   } 
+  //   else setMaxImageAlert(true);
+  // }
 
   const onImageRemove = async (indexToRemove) => {
     const imageArray = await getImages('userImages');
@@ -180,13 +166,12 @@ export default function UserImages() {
 
   useEffect( () => {
     checkIdbImages();
-    console.log('checkIdbImages has run!');
+    initializeCropAndZoom();
   }, [])
 
   useEffect( () => {
     collectTally();
     imagesRemaining(imageCount);
-    console.log('images remaining is ', imagesRemaining(imageCount));
 
   }, [tally, images, imageCount, userImageCount, onChange, onImageRemove])
 

@@ -141,6 +141,7 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
             minWidth:100,
             width:"100%",
             maxWidth:200,
+            aspectRatio:'1/1',
             borderRadius:'50%',
             border: '2px solid black',
             m:0,

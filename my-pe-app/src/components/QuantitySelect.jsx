@@ -4,7 +4,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import Order from '../pages/Order';
 
 
 export default function QuantitySelect() {
