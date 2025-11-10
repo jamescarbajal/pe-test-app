@@ -7,9 +7,7 @@ import About from './pages/About.jsx'
 import PageNotFound from './pages/PageNotFound.jsx'
 import ImageUpload from './pages/Images.jsx'
 
-
 function App() {
-
 
   return (
     <>

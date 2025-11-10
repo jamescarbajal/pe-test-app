@@ -7,7 +7,7 @@ import { ImagesContext } from '../contexts/ImagesContext';
 
 export default function CircleCrop( {imageIndex, getCroppedArea, getZoomInfo, getAreaPixels } ) {
 
-  const { cropReset, setCropReset  } = useContext(ImagesContext);
+  const { originalImages, setOriginalImages, imageData, setImageData, croppedImages, setCropedImages, cropReset, setCropReset  } = useContext(ImagesContext);
 
   const orderOptions = JSON.parse(sessionStorage.getItem('orderDetails'));
   const orderQty = orderOptions.Quantity;
@@ -18,18 +18,17 @@ export default function CircleCrop( {imageIndex, getCroppedArea, getZoomInfo, ge
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
   const getInitialCrop = async (index) => {
-    const imageArray = await getImages('userImages');
-    if (!imageArray[index].cropData){
+    if (!originalImages[index].cropData){
       setCrop({ x:0, y:0 })
     } else {
       updateCropAndZoom(index);
     }
   }
 
-  const updateCropAndZoom = async (data) => {
-    const imageArray = await getImages('userImages')
-    const cropInfo = imageArray[data].cropData
-    const zoomInfo = imageArray[data].zoomData;
+  const updateCropAndZoom = (data) => {
+   if (imageData && imageData[data]){
+    const cropInfo = imageData[data].cropData
+    const zoomInfo = imageData[data].zoomData;
     if (cropInfo) {
       setCrop({
         x: cropInfo.x,
@@ -39,7 +38,8 @@ export default function CircleCrop( {imageIndex, getCroppedArea, getZoomInfo, ge
     if (zoomInfo){
       setZoom(zoomInfo);
     }
-    setWorkingURL(imageArray[data].data_url);
+  }
+  setWorkingURL(originalImages[data].data_url);
   }
 
   const onCropComplete = async (croppedArea, croppedAreaPixels) => {

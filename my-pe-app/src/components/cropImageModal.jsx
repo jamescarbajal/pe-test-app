@@ -1,6 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import { storeImages, getImages } from '../utils/idb-keyval';
-import { update } from 'idb-keyval';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -10,7 +8,6 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import CircleCrop from './CircleCrop.jsx';
 import getCroppedImg from './ImageOutput.jsx';
 import { ImagesContext } from '../contexts/ImagesContext.jsx';
-
 
 
 const style = {
@@ -36,7 +33,7 @@ const style = {
 
 export default function CropImageModal( {imageIndex, dataURL, cropData } ){
 
-    const { cropReset, setCropReset } = useContext(ImagesContext);
+    const { originalImages, setOriginalImages, imageData, setImageData, croppedImages, setCroppedImages, cropReset, setCropReset } = useContext(ImagesContext);
 
     const [isOpen, setOpen] = useState(false);
     const [recievedAreaData, setReceivedAreaData] = useState(null);
@@ -45,13 +42,13 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
     const [preview, setPreview] = useState('');
 
     const previewURL = async (index) => {
-      const getImageData = await getImages('userImages');
-      if (getImageData[index]) {
-      const url = getImageData[index].data_url;
-      const pixel = getImageData[index].pixelArea;
+      const url = originalImages[index].data_url;
+      let pixel = null;
+      if(imageData && imageData[index]){
+        pixel = imageData[index].pixelArea
+        }
       const newImage = await getCroppedImg(url, pixel);
       setPreview(newImage);
-    }
     }
     
     const handleOpen = () => setOpen(true);
@@ -69,13 +66,21 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
       setReceivedZoomData(data);
     }
 
-    const cropComplete = async (data) => {
-      const imageArray = await getImages('userImages')
-      const updatedImages = await imageArray.map((obj, index) => {
+    const cropComplete = (data) => {
+      const updatedImages = originalImages.map((obj, index) => {
         if (index === data) {
           return {
             ...obj,
             data_url: obj.data_url,
+            }
+          };
+        return obj;
+      });
+      setOriginalImages(updatedImages);
+      const updatedImageData = imageData.map((obj, index) => {
+        if (index === data) {
+          return {
+            ...obj,
             cropData: recievedAreaData,
             zoomData: receivedZoomData,
             pixelArea: croppedAreaPixels
@@ -83,14 +88,12 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
           };
         return obj;
       });
-      await storeImages('userImages', updatedImages);
-      await previewURL(data);
+      setImageData(updatedImageData);
       handleClose();
     }
 
     const resetCrop = async (data) => {
-      const imageArray = await getImages('userImages');
-      const newArray = await imageArray.map((item, index) => {
+      const newArray = imageData.map((item, index) => {
         if (index === data) {
           item.cropData = {
             x: 0,
@@ -103,8 +106,7 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
         }
         return item;
       })
-      const updatedArray = await newArray;
-      await storeImages('userImages',updatedArray);
+      setImageData(newArray);
       handleClose();
     }
 

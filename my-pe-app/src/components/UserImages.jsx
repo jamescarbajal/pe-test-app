@@ -7,14 +7,11 @@ import CropImageModal from './cropImageModal';
 import Box from '@mui/material/Box';
 import { Button, Alert, AlertTitle, Typography } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import { ImagesContext } from '../contexts/ImagesContext';
-import { set } from 'idb-keyval';
 
 export default function UserImages() {
 
-  const { cropReset, setCropReset } = useContext(ImagesContext);
+  const { originalImages, setOriginalImages, imageTally, setImageTally, imageData, setImageData, croppedImages, setCroppedImages } = useContext(ImagesContext);
 
   const orderData = JSON.parse(sessionStorage.getItem('orderDetails'));
   const imageCount = orderData.Quantity;
@@ -23,38 +20,41 @@ export default function UserImages() {
   const [maxImageAlert, setMaxImageAlert] = useState(false);
   const [canContinue, setCanContinue] = useState(false);
   const [userImageCount, setUserImageCount] = useState(0);
-  const [tally, setTally] = useState(0);
 
+  const initializeImageData = () => {
+      const initialArray = Array.from({ length: imageCount }, () => ({}));
+      initialArray.forEach( obj => {
+        obj.qty = 0
+      });
+      setImageData(initialArray);
+      console.log('imageData initialized! ', imageData);
+  }
 
-  const checkIdbImages = async () => {
-    const checkImages = await getImages('userImages');
-      if (checkImages) {
-        setImages(checkImages);
+  const checkForExistingImages = () => {
+      if (originalImages) {
+        setImages(originalImages);
       } else {
         setImages([])
       }
-    console.log('checkIdbImages has run! Image array is: ',checkImages);
   };
 
   const collectTally = async (data) => {
-    const imageArray = await getImages('userImages');
-    if(!imageArray){
+    if(!imageData){
       return
     }
-      const totalPrice = imageArray.reduce((accumulator, item) => {
+      const totalCount = await imageData.reduce((accumulator, item) => {
         return accumulator + item.qty;
       }, 0);
-      setUserImageCount(data);
-      console.log('sum is: ', totalPrice);
-      setTally(totalPrice);
+      if(!totalCount){
+        setImageTally(0)
+      } else setImageTally(totalCount);
   }
 
-  const initializeCropAndZoom = async () => {
-    const imageArray = await getImages('userImages')
-    if (imageArray.cropData && imageArray.zoomData){
+  const initializeCropAndZoom = () => {
+    if (!imageData){
       return;
     }
-    const updatedImages = await imageArray.map((obj) => {
+    const updatedImages = imageData.map((obj) => {
       if (!obj || !obj.zoomData || obj.zoomData == null || obj.zoomData == undefined){
         return {
         ...obj,
@@ -73,17 +73,14 @@ export default function UserImages() {
       }
       return obj;
     });
-    await storeImages('userImages', updatedImages);
+    setImageData(updatedImages);
   }
-
-
 
 // ****************************************************
 
 
-  const initializePixelArea = async () => {
-    const imageArray = await getImages('userImages')
-    const updatedImages = await imageArray.map((obj) => {
+  const initializePixelArea = () => {
+    const updatedImages = imageData.map((obj) => {
       if (!obj.pixelArea || obj.pixelArea == null || obj.pixelArea == undefined) {
          return {
             ...obj,
@@ -92,7 +89,7 @@ export default function UserImages() {
       }
       return obj;
     });
-    await storeImages('userImages', updatedImages);
+    setImageData(updatedImages);
   }
 
 
@@ -106,19 +103,15 @@ export default function UserImages() {
     return finalArray;
   }
 
-  const onChange = async (imageList, addUpdateIndex) => {
-    const imageArray = await getImages('userImages');
+  const onChange = (imageList, addUpdateIndex) => {
     if (imageList.length > imageCount){
       setMaxImageAlert(true);
     } else {
       imagesRemaining(imageCount);
       setMaxImageAlert(false);
-      const updatedArray = mergeArrays(imageArray, imageList);
-      console.log('updatedArray list: ', updatedArray)
-      await storeImages('userImages', updatedArray);
-      await initializeCropAndZoom();
-      await initializePixelArea();
-      checkIdbImages();
+      const updatedArray = mergeArrays(originalImages, imageList);
+      setOriginalImages(updatedArray);
+      checkForExistingImages();
     }
   };
 
@@ -134,53 +127,62 @@ export default function UserImages() {
   // }
 
   const onImageRemove = async (indexToRemove) => {
-    const imageArray = await getImages('userImages');
-    const updatedArray = imageArray.filter((_, index) => index !== indexToRemove);
-    await storeImages('userImages', updatedArray);
-    onChange(updatedArray)
+    const updatedArray = originalImages.filter((_, index) => index !== indexToRemove);
+    setOriginalImages(updatedArray);
+    const updatedImageData = await imageData.filter((_, index) => index !== indexToRemove);
+    await updatedImageData.push({ qty: 0 });
+    setImageData(updatedImageData);
+    console.log('data after image remove:', imageData);
+    collectTally();
   };
 
   const onImageRemoveAll = () => {
     setImages([]);
-    storeImages('userImages', []);
+    setOriginalImages([]);
+    setImageTally(0);
+    setImageData();
+    initializeImageData();
   }
 
 
   const imagesRemaining = (data) => {
-      console.log('tally is: ', tally);
-        if (tally == data) {
+        if (imageTally == data) {
           setCanContinue(true);
         }
-        if (tally < data){
+        if (imageTally < data){
           setMaxImageAlert(false);
         }
-        if (tally < data || tally > data) {
+        if (imageTally < data || imageTally > data) {
           setCanContinue(false);
         }
-        if (tally > data) {
+        if (imageTally > data) {
           setMaxImageAlert(true);
         }
-        return (data - tally);
+        return (data - imageTally);
   };
 
 
   useEffect( () => {
-    checkIdbImages();
-    initializeCropAndZoom();
+    checkForExistingImages();
+    initializeImageData();
   }, [])
 
   useEffect( () => {
-    collectTally();
     imagesRemaining(imageCount);
+    collectTally();
+    console.log('useEffect refresh: ', imageData);
+  }, [originalImages, images, imageData, imageCount, userImageCount, onChange, onImageRemove]);
 
-  }, [tally, images, imageCount, userImageCount, onChange, onImageRemove])
+  useEffect( () => {
+    imagesRemaining
+  }, [imageTally])
 
   return (
 
     <div className="App">
       <ImageUploading
         multiple
-        value={images}
+        value={originalImages}
         onChange={onChange}
         dataURLKey="data_url"
       >
@@ -243,7 +245,7 @@ export default function UserImages() {
                   fontWeight: 700
                 }}>
                 <p style={{ color:'lightgrey', fontWeight: 700, margin:0, padding:0 }}>
-                  Added {tally} out of {imageCount} images
+                  {imageCount - imageTally} images remaining
                 </p>
               </Button>
               }

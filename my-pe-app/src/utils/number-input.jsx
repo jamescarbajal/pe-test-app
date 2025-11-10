@@ -1,5 +1,6 @@
 import { TextField, Typography } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { ImagesContext } from '../contexts/ImagesContext';
 import { Box, Button } from '@mui/material';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
@@ -8,23 +9,19 @@ import { storeImages, getImages } from './idb-keyval';
 export default function NumericInput( {imageIndex, images, count, canContinue} ) {
   const [value, setValue] = useState(''); // Initialize the state for the input value
 
-
+  const { originalImages, setOriginalImages, imageTally, setImageTally, imageData, setImageData, croppedImages, setCroppedImages } = useContext(ImagesContext);
 
   const orderData = JSON.parse(sessionStorage.getItem('orderDetails'));
   const maxCount = orderData.Quantity;
 
   const checkForQty = async (imageIndex) => {
-    const imageArray = await getImages('userImages');
-    if (imageArray && imageArray[imageIndex].qty) {
-        setValue(imageArray[imageIndex].qty);
+    if (imageData && imageData[imageIndex] && imageData[imageIndex].qty) {
+        setValue(imageData[imageIndex].qty);
     } else setValue(1);
-    console.log('Current image', imageIndex, 'value is: ', value);
-    console.log('Image', imageIndex, 'stored quantity is: ', imageArray[imageIndex].qty || value);
   }
 
   const storeQuantity = async () => {
-    const imageArray = await getImages('userImages');
-    const updatedArray = imageArray.map((obj, index) => {
+    const updatedArray = await imageData.map((obj, index) => {
       if ( index == imageIndex ) {
         return {
             ...obj,
@@ -33,22 +30,19 @@ export default function NumericInput( {imageIndex, images, count, canContinue} )
       }
       return obj;
       })
-    storeImages('userImages', updatedArray);
-    console.log('Quantity stored for image', imageIndex, 'in number-input: ', value);
+    setImageData(updatedArray);
 }
 
   // Function to handle incrementing the value
   const handleIncrement = (data) => {
     if (!canContinue){
     setValue(prevValue => Math.min(orderData.Quantity, prevValue + 1));
-    storeQuantity();
     }
   };
 
   // Function to handle decrementing the value
   const handleDecrement = (data) => {
-    setValue(prevValue => Math.max(1, prevValue - 1));
-    storeQuantity(); // Ensure value doesn't go below 0
+    setValue(prevValue => Math.max(1, prevValue - 1)); // Ensure value doesn't go below 0
   };
 
   // Function to handle direct input changes
@@ -56,19 +50,18 @@ export default function NumericInput( {imageIndex, images, count, canContinue} )
     const newValue = parseInt(e.target.value, 10);
     if (!isNaN(newValue)) { // Only update if it's a valid number
       setValue(newValue);
-      getValue(newValue);
+      
     }
   };
 
   useEffect( () => {
     storeQuantity();
-    count(value);
-  }, [value])
+  }, [value, originalImages])
 
 
   useEffect( () => {
     checkForQty(imageIndex);
-  }, [imageIndex, images]);
+  }, [originalImages, imageData]);
 
   // useEffect( () => {
   //   count(value);

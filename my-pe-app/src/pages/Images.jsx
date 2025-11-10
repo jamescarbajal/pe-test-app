@@ -5,8 +5,6 @@ import UserImages from "../components/UserImages";
 
 export default function ImageUpload(){
 
-    const { originalImages, setOriginalImages, croppedImages, setCroppedImages } = useContext(ImagesContext);
-
     useEffect( () => {
     }, []);
 
@@ -23,7 +21,7 @@ export default function ImageUpload(){
             justifyContent:'start',
             alignItems:'center',
             p:2
-            }}>
+        }}>
             <UserImages />
         </Box>
 
