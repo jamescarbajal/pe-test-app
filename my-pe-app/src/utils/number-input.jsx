@@ -50,7 +50,6 @@ export default function NumericInput( {imageIndex, images, count, canContinue} )
     const newValue = parseInt(e.target.value, 10);
     if (!isNaN(newValue)) { // Only update if it's a valid number
       setValue(newValue);
-      
     }
   };
 

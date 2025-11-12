@@ -75,7 +75,14 @@ export default function Order() {
                     m:2,
                 }}>
                 {!loaded && (
-                    <Box>
+                    <Box 
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: 425
+                        }}
+                    >
                         <CircularProgress color="secondary"/>
                     </Box>
                 )}

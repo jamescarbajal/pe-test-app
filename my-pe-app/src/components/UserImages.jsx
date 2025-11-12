@@ -161,21 +161,19 @@ export default function UserImages() {
         return (data - imageTally);
   };
 
-
   useEffect( () => {
     checkForExistingImages();
     initializeImageData();
-  }, [])
+  }, []);
 
   useEffect( () => {
     imagesRemaining(imageCount);
-    collectTally();
     console.log('useEffect refresh: ', imageData);
   }, [originalImages, images, imageData, imageCount, userImageCount, onChange, onImageRemove]);
 
   useEffect( () => {
-    imagesRemaining
-  }, [imageTally])
+    collectTally();
+  }, [imageData]);
 
   return (
 

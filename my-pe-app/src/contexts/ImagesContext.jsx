@@ -12,9 +12,6 @@ export const ImagesProvider = ({ children }) => {
 
   useEffect( () => {
 
-    console.log('Current originalImages: ', originalImages);
-    console.log('ImageData: ', imageData);
-
   }, [originalImages, setOriginalImages])
 
   return (
