@@ -19,7 +19,6 @@ export default function UserImages() {
   const [images, setImages] = useState([]);
   const [maxImageAlert, setMaxImageAlert] = useState(false);
   const [canContinue, setCanContinue] = useState(false);
-  const [userImageCount, setUserImageCount] = useState(0);
 
   const initializeImageData = () => {
       const initialArray = Array.from({ length: imageCount }, () => ({}));
@@ -103,7 +102,7 @@ export default function UserImages() {
     return finalArray;
   }
 
-  const onChange = (imageList, addUpdateIndex) => {
+  const onChange = async (imageList, addUpdateIndex) => {
     if (imageList.length > imageCount){
       setMaxImageAlert(true);
     } else {
@@ -169,7 +168,7 @@ export default function UserImages() {
   useEffect( () => {
     imagesRemaining(imageCount);
     console.log('useEffect refresh: ', imageData);
-  }, [originalImages, images, imageData, imageCount, userImageCount, onChange, onImageRemove]);
+  }, [originalImages, images, imageData, imageCount, onChange, onImageRemove]);
 
   useEffect( () => {
     collectTally();

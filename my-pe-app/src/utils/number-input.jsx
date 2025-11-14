@@ -1,18 +1,32 @@
 import { TextField, Typography } from '@mui/material';
 import { useState, useEffect, useContext } from 'react';
 import { ImagesContext } from '../contexts/ImagesContext';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
-import { storeImages, getImages } from './idb-keyval';
 
 export default function NumericInput( {imageIndex, images, count, canContinue} ) {
-  const [value, setValue] = useState(''); // Initialize the state for the input value
+  const [value, setValue] = useState(1); // Initialize the state for the input value
 
   const { originalImages, setOriginalImages, imageTally, setImageTally, imageData, setImageData, croppedImages, setCroppedImages } = useContext(ImagesContext);
 
   const orderData = JSON.parse(sessionStorage.getItem('orderDetails'));
   const maxCount = orderData.Quantity;
+
+  // const initializeQuantity = async () => {
+  //   if (imageData[imageIndex] === 0 && originalImages[imageIndex]){
+  //     const updatedArray = await imageData.map( (obj, index) => {
+  //       if (index === imageIndex){
+  //         return {
+  //           ...obj,
+  //           qty: 1
+  //         }
+  //       }
+  //       return obj;
+  //     })
+  //     setImageData(updatedArray);
+  //   }
+  // }
 
   const checkForQty = async (imageIndex) => {
     if (imageData && imageData[imageIndex] && imageData[imageIndex].qty) {
@@ -21,16 +35,9 @@ export default function NumericInput( {imageIndex, images, count, canContinue} )
   }
 
   const storeQuantity = async () => {
-    const updatedArray = await imageData.map((obj, index) => {
-      if ( index == imageIndex ) {
-        return {
-            ...obj,
-            qty: value
-        }
-      }
-      return obj;
-      })
-    setImageData(updatedArray);
+    const newArray = [...imageData];
+    newArray[imageIndex].qty = value;
+    await setImageData(newArray);
 }
 
   // Function to handle incrementing the value
