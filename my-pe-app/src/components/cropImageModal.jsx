@@ -8,6 +8,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import CircleCrop from './CircleCrop.jsx';
 import getCroppedImg from './ImageOutput.jsx';
 import { ImagesContext } from '../contexts/ImagesContext.jsx';
+import { CircularProgress } from '@mui/material';
 
 
 const style = {
@@ -39,6 +40,11 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
     const [recievedAreaData, setReceivedAreaData] = useState(null);
     const [receivedZoomData, setReceivedZoomData] = useState(null);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+    const [loaded, setLoaded] = useState(false);
+    
+    const handleImageLoad = () => {
+        setLoaded(true);
+    };
     const [preview, setPreview] = useState('');
 
     const previewURL = async (index) => {
@@ -135,11 +141,25 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
         justifyContent:'flex-start',
         maxHeight:250
       }}>
+      {!loaded && (
+        <Box 
+          sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height:150
+          }}
+        >
+          <CircularProgress color="secondary"/>
+        </Box>
+      )}
         <CardMedia
+          onLoad={handleImageLoad}
           component="img"
           image={preview}
           alt="uploaded image"
           sx={{
+            display: !loaded ? 'none' : 'block',
             minWidth:100,
             width:"100%",
             maxWidth:200,
@@ -149,7 +169,6 @@ export default function CropImageModal( {imageIndex, dataURL, cropData } ){
             m:0,
             boxShadow: 5
           }}
-
         />
     </Card>
       </Button>

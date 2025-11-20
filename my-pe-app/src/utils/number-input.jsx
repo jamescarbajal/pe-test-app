@@ -13,6 +13,14 @@ export default function NumericInput( {imageIndex, images, count, canContinue} )
   const orderData = JSON.parse(sessionStorage.getItem('orderDetails'));
   const maxCount = orderData.Quantity;
 
+    const checkForQty = (data) => {
+      if (imageData && imageData[data] && imageData[data].qty) {
+        const currentValue = imageData[data].qty;
+          setValue(currentValue);
+      }
+      console.log('Image', data,'value is', value);
+    }
+
   // const initializeQuantity = async () => {
   //   if (imageData[imageIndex] === 0 && originalImages[imageIndex]){
   //     const updatedArray = await imageData.map( (obj, index) => {
@@ -28,11 +36,7 @@ export default function NumericInput( {imageIndex, images, count, canContinue} )
   //   }
   // }
 
-  const checkForQty = async (imageIndex) => {
-    if (imageData && imageData[imageIndex] && imageData[imageIndex].qty) {
-        setValue(imageData[imageIndex].qty);
-    } else setValue(1);
-  }
+
 
   const storeQuantity = async () => {
     const newArray = [...imageData];
@@ -66,7 +70,9 @@ export default function NumericInput( {imageIndex, images, count, canContinue} )
 
 
   useEffect( () => {
+
     checkForQty(imageIndex);
+
   }, [originalImages, imageData]);
 
   // useEffect( () => {

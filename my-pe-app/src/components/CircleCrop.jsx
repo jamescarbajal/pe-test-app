@@ -3,6 +3,8 @@ import { update } from 'idb-keyval';
 import { getImages, storeImages } from '../utils/idb-keyval';
 import Cropper from 'react-easy-crop';
 import { ImagesContext } from '../contexts/ImagesContext';
+import { Box } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 
 
 export default function CircleCrop( {imageIndex, getCroppedArea, getZoomInfo, getAreaPixels } ) {
@@ -16,6 +18,11 @@ export default function CircleCrop( {imageIndex, getCroppedArea, getZoomInfo, ge
   const [zoom, setZoom] = useState(1);
   const [workingURL, setWorkingURL] = useState(null)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+
+  const handleImageLoad = () => {
+        setLoaded(true);
+    };
 
   const getInitialCrop = async (index) => {
     if (!originalImages[index].cropData){
@@ -67,7 +74,20 @@ export default function CircleCrop( {imageIndex, getCroppedArea, getZoomInfo, ge
       width: 700,
       maxWidth:'100%', 
       }} >
+      {!loaded && (
+        <Box 
+            sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: 425
+            }}
+        >
+        <CircularProgress color="secondary"/>
+        </Box>
+      )}
         <Cropper
+          onMediaLoaded={handleImageLoad}
           image={workingURL}
           showGrid={false}
           cropShape="round"

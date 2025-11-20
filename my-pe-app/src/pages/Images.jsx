@@ -1,12 +1,7 @@
-import { useState, useEffect, useContext } from "react"
-import { ImagesContext } from "../contexts/ImagesContext";
 import Box from "@mui/material/Box";
 import UserImages from "../components/UserImages";
 
 export default function ImageUpload(){
-
-    useEffect( () => {
-    }, []);
 
     return(
         

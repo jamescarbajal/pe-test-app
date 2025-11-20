@@ -21,11 +21,13 @@ export default function UserImages() {
   const [canContinue, setCanContinue] = useState(false);
 
   const initializeImageData = () => {
+    if (!imageData){
       const initialArray = Array.from({ length: imageCount }, () => ({}));
       initialArray.forEach( obj => {
         obj.qty = 0
       });
       setImageData(initialArray);
+    }
       console.log('imageData initialized! ', imageData);
   }
 
@@ -147,14 +149,17 @@ export default function UserImages() {
   const imagesRemaining = (data) => {
         if (imageTally == data) {
           setCanContinue(true);
+          setMaxImageAlert(false);
         }
         if (imageTally < data){
           setMaxImageAlert(false);
         }
-        if (imageTally < data || imageTally > data) {
+        if (imageTally < data) {
           setCanContinue(false);
+          setMaxImageAlert(false);
         }
         if (imageTally > data) {
+          setCanContinue(false);
           setMaxImageAlert(true);
         }
         return (data - imageTally);
@@ -343,7 +348,8 @@ export default function UserImages() {
                               color:"darkred"
                             }} />
                     </Box>
-                    <CropImageModal imageIndex={index} dataURL={image.data_url} cropData={image.cropData} />
+                    <CropImageModal
+                     imageIndex={index} dataURL={image.data_url} cropData={image.cropData} />
                     <NumericInput imageIndex={index} maxCount={imageCount} images={images} count={collectTally} canContinue={canContinue}
                       />
                       {/* <Button onClick={() => onImageUpdate(index)}
