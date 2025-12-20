@@ -18,7 +18,6 @@ export default function NumericInput( {imageIndex, images, count, canContinue} )
         const currentValue = imageData[data].qty;
           setValue(currentValue);
       }
-      console.log('Image', data,'value is', value);
     }
 
   // const initializeQuantity = async () => {
@@ -37,11 +36,13 @@ export default function NumericInput( {imageIndex, images, count, canContinue} )
   // }
 
 
-
-  const storeQuantity = async () => {
+  const storeQuantity = () => {
+    if(!imageData){
+      return
+    }
     const newArray = [...imageData];
     newArray[imageIndex].qty = value;
-    await setImageData(newArray);
+    setImageData(newArray);
 }
 
   // Function to handle incrementing the value

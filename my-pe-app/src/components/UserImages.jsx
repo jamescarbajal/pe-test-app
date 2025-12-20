@@ -172,7 +172,7 @@ export default function UserImages() {
 
   useEffect( () => {
     imagesRemaining(imageCount);
-    console.log('useEffect refresh: ', imageData);
+    console.log('imageData: ', imageData);
   }, [originalImages, images, imageData, imageCount, onChange, onImageRemove]);
 
   useEffect( () => {
@@ -187,6 +187,8 @@ export default function UserImages() {
         value={originalImages}
         onChange={onChange}
         dataURLKey="data_url"
+        resolutionType='absolute'
+        accept="image/jpeg, image/png, image/heic, image/svg, image/tiff "
       >
         {({
           imageList,
@@ -254,23 +256,33 @@ export default function UserImages() {
               {maxImageAlert && (
                 <Box sx={{
                   position: 'fixed',
-                  top: '30%',
+                  top: '40%',
                   left: '50%',
                   transform: 'translate(-50%, -50%)',
+                  height: 50,
                   width: 350,
-                  mb: 2,
                   zIndex: 1000
                 }}>
                   <Alert
                     severity='warning'
-                    onClose={() => setMaxImageAlert(false)}
+                    sx={{
+                      position: 'sticky',
+                      height: 70,
+                      fontSize: 12,
+                      boxShadow: 3
+                    }}
                   >
-                    <AlertTitle>Too many images!</AlertTitle>
-                    For more than {imageCount} images, please select a larger order size!
+                    <AlertTitle
+                    sx={{
+                      fontSize: 15
+                    }}>Too many images!</AlertTitle>
+                    Please reduce quantity or increase order size
                   </Alert>
                 </Box>
               )}
             <Box sx={{
+              mt:1,
+              mb:1,
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'space-evenly',
